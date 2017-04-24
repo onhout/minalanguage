@@ -1,0 +1,16 @@
+env
+venv
+*.pyc
+node_modules
+.env
+.idea
+db.sqlite3
+.DS_Store
+# Elastic Beanstalk Files
+static/*
+.elasticbeanstalk/*
+data.json
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+user_profiles_photos
+elasticsearch*/

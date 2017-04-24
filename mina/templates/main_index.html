@@ -1,0 +1,15 @@
+{% extends 'Global.html' %}
+{% load render_bundle from webpack_loader %}
+{% block title %}Main Page{% endblock %}
+{% block content %}
+    <div class="main-entry">
+        <div id="bg">
+            <img src="http://wallpapercave.com/wp/6fVBDMW.jpg" alt="">
+        </div>
+        <div class="login">
+            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-social btn-lg btn-facebook btn-block"><i class="fa fa-facebook"></i>Sign in with Facebook</a>
+            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-social btn-lg btn-google btn-block"><i class="fa fa-google"></i>Sign in with Google</a>
+        </div>
+    </div>
+    {% render_bundle 'main' %}
+{% endblock %}

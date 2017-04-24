@@ -1,0 +1,52 @@
+{
+  "name": "minana",
+  "version": "1.0.0",
+  "description": "Mina Language",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.production.config.js --progress --colors"
+  },
+  "keywords": [
+    "minana"
+  ],
+  "author": "Peter Liu",
+  "license": "MIT",
+  "dependencies": {
+    "blueimp-file-upload": "^9.17.0",
+    "bootstrap": "^3.3.7",
+    "bootstrap-social": "^5.1.1",
+    "bower": "^1.8.0",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.1.1",
+    "jquery-ui": "^1.12.1",
+    "webpack": "^1.14.0",
+    "webpack-bundle-tracker": "^0.2.0",
+    "webpack-stream": "^3.2.0"
+  },
+  "devDependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel": "^6.5.2",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-transform-react-jsx": "^6.8.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "css-loader": "^0.26.1",
+    "del": "^2.2.2",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-less": "^3.3.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-plumber": "^1.1.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.8",
+    "gulp-watch": "^4.3.11",
+    "less": "^2.7.2",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7"
+  }
+}
