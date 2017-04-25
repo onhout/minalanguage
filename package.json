@@ -17,8 +17,10 @@
     "bootstrap-social": "^5.1.1",
     "bower": "^1.8.0",
     "font-awesome": "^4.7.0",
+    "fullcalendar": "^3.3.1",
     "jquery": "^3.1.1",
     "jquery-ui": "^1.12.1",
+    "moment": "^2.18.1",
     "webpack": "^1.14.0",
     "webpack-bundle-tracker": "^0.2.0",
     "webpack-stream": "^3.2.0"

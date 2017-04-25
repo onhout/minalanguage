@@ -1,6 +1,7 @@
-{% extends 'Global.html' %}
+{% extends 'Nav.html' %}
 {% load render_bundle from webpack_loader %}
 {% block title %}Main Page{% endblock %}
 {% block content %}
-    hello: {{ user }}
+    <h1 class="text-center">Hello, {{ user.get_full_name }}</h1>
+
 {% endblock %}

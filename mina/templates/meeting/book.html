@@ -1,0 +1,11 @@
+{% extends 'Nav.html' %}
+{% load render_bundle from webpack_loader %}
+{% block title %}Main Page{% endblock %}
+{% block content %}
+    <h1 class="text-center">Book a meeting</h1>
+    <div class="col-md-8 col-md-offset-2">
+        <div id="calendar"></div>
+    </div>
+
+    {% render_bundle 'main' %}
+{% endblock %}
