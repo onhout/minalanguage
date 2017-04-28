@@ -3,15 +3,22 @@
 {% block title %}Main Page{% endblock %}
 {% block content %}
     <h1 class="text-center">Book a meeting</h1>
-    <div class="col-md-8 col-md-offset-2 calendar-container">
-        <div id="calendar"></div>
-        <div class="clearfix">
-            <h4 class="pull-left">Duration: <span id="duration">0</span> hour(s)</h4>
-            <a href="#" id="pay_btn" class="btn btn-primary pull-right" style="margin-top: 5px;" disabled>Pay $<span
-                    class="initial_dollar">0</span> <i class="fa fa-arrow-right"></i></a>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 calendar-container">
+            <div id="calendar"></div>
+            <div class="clearfix">
+                <h4 class="pull-left">Duration: <span id="duration">0</span> hour(s)</h4>
+                <a href="#" id="pay_btn" class="btn btn-primary pull-right" style="margin-top: 5px;" disabled>Pay $<span
+                        class="initial_dollar">0</span> <i class="fa fa-arrow-right"></i></a>
+            </div>
+            <a href="#" id="super_btn" class="btn btn-primary" style="margin-top: 5px;">Super insane button<span
+                        class="initial_dollar">0</span> <i class="fa fa-arrow-right"></i></a>
         </div>
-
     </div>
-
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="errors"></div>
+        </div>
+    </div>
     {% render_bundle 'main' %}
 {% endblock %}

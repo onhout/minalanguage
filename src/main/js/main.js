@@ -1,13 +1,16 @@
 var eventsArray = [];
 var newEvent = new Object();
+var ALERT = require('../../globals/Alert.js').default;
+var CSRF_TOKEN = require('../../globals/csrf_token.js').default;
 
 newEvent.title = "some text";
-newEvent.start = moment("04-25-2017 11:00:00", "MM-DD-YYYY hh:mm:ss");
-newEvent.end = moment("04-25-2017 16:00:00", "MM-DD-YYYY hh:mm:ss");
+newEvent.start = moment("04-28-2017 11:00:00", "MM-DD-YYYY hh:mm:ss");
+newEvent.end = moment("04-28-2017 16:00:00", "MM-DD-YYYY hh:mm:ss");
 newEvent.allDay = false;
 
 
 $(function () {
+    var csrftoken = CSRF_TOKEN.getCookie('csrftoken');
     var eventList = [];
     var calendar = $('#calendar').fullCalendar({
         defaultView: 'agendaWeek',
@@ -39,49 +42,53 @@ $(function () {
         },
         eventOverlap: false,
         height: 'auto',
-        color: 'yellow',
-        textColor: 'black',
         timezone: "local",
-        viewRender: function (view, element) {
-            var b = $('#calendar').fullCalendar('getDate');
-            // console.log(b);
-            $('#calendar').fullCalendar('renderEvent', newEvent);
-        },
+        firstDay: moment().day(),
         select: function (start, end, jsEvent, view) {
-            var eventData;
-            if (confirm('Do you want to book from ' +
-                    moment(start).format('MM/DD hh:mm:ss') + ' to ' +
-                    moment(end).format('MM/DD hh:mm:ss') + '?')) {
-                eventData = {
-                    title: 'Booked',
-                    start: start,
-                    end: end
-                };
-                if (!checkOverlap(eventData)) {
-                    calculateDuration(start, end, eventData);
-                    $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+            if (moment(start).subtract(1, 'hour') > moment()) {
+                var eventData;
+                if (confirm('Do you want to book from ' +
+                        moment(start).format('MM/DD hh:mm:ss') + ' to ' +
+                        moment(end).format('MM/DD hh:mm:ss') + '?')) {
+                    eventData = {
+                        title: 'Booked',
+                        start: start,
+                        end: end
+                    };
+                    if (!checkOverlap(eventData)) {
+                        calculateDuration(eventData);
+                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    } else {
+                        $('.errors').append(new ALERT('Meeting overlapped'));
+                        $('#calendar').fullCalendar('unselect');
+                    }
                 } else {
                     $('#calendar').fullCalendar('unselect');
                 }
+                $('#calendar').fullCalendar('unselect');
             } else {
+                $('.errors').append(new ALERT('Cannot book previous dates or one hour before start time, sorry.'));
                 $('#calendar').fullCalendar('unselect');
             }
-            $('#calendar').fullCalendar('unselect');
-        }
+        },
+        events: '/meetings/get_meetings',
+        startParam: 'from_date',
+        endParam: 'to_date'
     });
 
-    function calculateDuration(start, end, eventData) {
+    function calculateDuration(eventData) {
         eventList.push(eventData);
+        var totalDurationHours = 0;
+        var totalDurationMinutes = 0;
         $.each(eventList, function (i, event) {
             var differenceInMs = moment(event.end).diff(moment(event.start)); // diff yields milliseconds
             var duration = moment.duration(differenceInMs);
-
+            totalDurationHours += duration.asHours();
+            totalDurationMinutes += duration.asMinutes();
         });
-        var differenceInMs = moment(eventData.end).diff(moment(eventData.start)); // diff yields milliseconds
-        var duration = moment.duration(differenceInMs);
-        $('#duration').text(duration.asHours());
+        $('#duration').text(totalDurationHours);
         $('#pay_btn').attr('disabled', false);
-        $('.initial_dollar').text(duration.asMinutes());
+        $('.initial_dollar').text(totalDurationMinutes);
     }
 
     function checkOverlap(event) {
@@ -96,11 +103,30 @@ $(function () {
 
             return (Math.round(estart) / 1000 < Math.round(end) / 1000 && Math.round(eend) > Math.round(start));
         });
-
         return overlap.length
     }
 
-    $('#calendar').fullCalendar('renderEvent', newEvent);
+    $('#super_btn').click(function () {
+        if (eventList.length > 0) {
+            $.each(eventList, function (i, v) {
+                console.log(v.start.format('MM-DD-YYYY hh:mm:ss'));
+                $.ajax({
+                    type: 'POST',
+                    url: '/meetings/book/',
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        book_type: 'in-person',
+                        class_location: 'Anywhere',
+                        booked_time_start: v.start.format('YYYY-MM-DD HH:mm:ss'),
+                        booked_time_end: v.end.format('YYYY-MM-DD HH:mm:ss'),
+                    }
+                })
+            })
+        }
+    });
+
+    // $('#calendar').fullCalendar('renderEvent',events, true);
+
 });
 
 
