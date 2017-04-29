@@ -44,7 +44,7 @@ $(function () {
         firstDay: moment().day(),
         unselectAuto: false,
         select: function (start, end, jsEvent, view) {
-            if (moment(start).subtract(1, 'hour') > moment()) {
+            if (moment(start).subtract(2, 'hour') > moment()) {
                 var eventData;
                 var modal = new MODAL('Confirm', '');
                 var select = $('<select class="form-control" id="booking_type">' +
@@ -75,7 +75,7 @@ $(function () {
                     calendar.fullCalendar('unselect');
                 });
             } else {
-                $('.errors').append(new ALERT('Cannot book previous dates or one hour before start time, sorry.'));
+                $('.errors').append(new ALERT('Cannot book previous dates or two hour before start time, sorry.'));
                 calendar.fullCalendar('unselect');
             }
         },
@@ -83,8 +83,8 @@ $(function () {
         startParam: 'from_date',
         endParam: 'to_date',
         eventDrop: function (event, delta, revertFunc) {
-            if (moment(event.start).subtract(1, 'hour') < moment()) {
-                $('.errors').append(new ALERT('Cannot move to previous dates or one hour before start time, sorry.'));
+            if (moment(event.start).subtract(2, 'hour') < moment()) {
+                $('.errors').append(new ALERT('Cannot move to previous dates or two hour before start time, sorry.'));
                 revertFunc()
             } else {
                 $.ajax({
