@@ -1,18 +1,16 @@
-var eventsArray = [];
-var newEvent = new Object();
 var ALERT = require('../../globals/Alert.js').default;
 var CSRF_TOKEN = require('../../globals/csrf_token.js').default;
-
-newEvent.title = "some text";
-newEvent.start = moment("04-28-2017 11:00:00", "MM-DD-YYYY hh:mm:ss");
-newEvent.end = moment("04-28-2017 16:00:00", "MM-DD-YYYY hh:mm:ss");
-newEvent.allDay = false;
-
+var PAYMENT = require('./payment.js').default;
+var MODAL = require('../../globals/Modal.js').default;
 
 $(function () {
+    var totalMinutes = 0;
+    var totalHours = 0;
+    var payment = new PAYMENT;
     var csrftoken = CSRF_TOKEN.getCookie('csrftoken');
     var eventList = [];
-    var calendar = $('#calendar').fullCalendar({
+    var calendar = $('#calendar');
+    calendar.fullCalendar({
         defaultView: 'agendaWeek',
         theme: true,
         header: {
@@ -44,31 +42,41 @@ $(function () {
         height: 'auto',
         timezone: "local",
         firstDay: moment().day(),
+        unselectAuto: false,
         select: function (start, end, jsEvent, view) {
             if (moment(start).subtract(1, 'hour') > moment()) {
                 var eventData;
-                if (confirm('Do you want to book from ' +
-                        moment(start).format('MM/DD hh:mm:ss') + ' to ' +
-                        moment(end).format('MM/DD hh:mm:ss') + '?')) {
+                var modal = new MODAL('Confirm', '');
+                var select = $('<select class="form-control" id="booking_type">' +
+                    '<option value="">--Select Meeting Type--</option>' +
+                    '<option value="online">Online</option>' +
+                    '<option value="in-person">In Person</option>' +
+                    '</select>');
+                modal.modal_body = $('<h4>Do you want to book from ' +
+                    moment(start).format('MM/DD hh:mm:ss') + ' to ' +
+                    moment(end).format('MM/DD hh:mm:ss') + '?</h4>').append(select);
+                modal.run_modal(function () {
                     eventData = {
-                        title: 'Booked',
+                        book_type: $('#booking_type').val() ? $('#booking_type').val() : 'online',
+                        title: 'Booked - (' + ($('#booking_type').val() ? $('#booking_type').val() : 'online') + ')',
                         start: start,
-                        end: end
+                        end: end,
                     };
                     if (!checkOverlap(eventData)) {
                         calculateDuration(eventData);
-                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                        calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
                     } else {
                         $('.errors').append(new ALERT('Meeting overlapped'));
-                        $('#calendar').fullCalendar('unselect');
+                        calendar.fullCalendar('unselect');
                     }
-                } else {
-                    $('#calendar').fullCalendar('unselect');
-                }
-                $('#calendar').fullCalendar('unselect');
+
+                });
+                $('#modal-confirm-time').on('hide.bs.modal', function () {
+                    calendar.fullCalendar('unselect');
+                });
             } else {
                 $('.errors').append(new ALERT('Cannot book previous dates or one hour before start time, sorry.'));
-                $('#calendar').fullCalendar('unselect');
+                calendar.fullCalendar('unselect');
             }
         },
         events: '/meetings/get_meetings',
@@ -85,17 +93,27 @@ $(function () {
             var duration = moment.duration(differenceInMs);
             totalDurationHours += duration.asHours();
             totalDurationMinutes += duration.asMinutes();
+            event.start = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
+            event.end = moment(event.end).format('YYYY-MM-DD HH:mm:ss');
         });
         $('#duration').text(totalDurationHours);
         $('#pay_btn').attr('disabled', false);
         $('.initial_dollar').text(totalDurationMinutes);
+        totalMinutes = totalDurationMinutes;
+        totalHours = totalDurationHours;
+
+        payment.pay_obj = {
+            name: "Mina's Language Class",
+            description: totalDurationHours + ' hours booking',
+            amount: totalDurationMinutes * 100
+        };
     }
 
     function checkOverlap(event) {
         var start = new Date(event.start);
         var end = new Date(event.end);
 
-        var overlap = $('#calendar').fullCalendar('clientEvents', function (ev) {
+        var overlap = calendar.fullCalendar('clientEvents', function (ev) {
             if (ev == event)
                 return false;
             var estart = new Date(ev.start);
@@ -107,25 +125,28 @@ $(function () {
     }
 
     $('#super_btn').click(function () {
-        if (eventList.length > 0) {
-            $.each(eventList, function (i, v) {
-                console.log(v.start.format('MM-DD-YYYY hh:mm:ss'));
-                $.ajax({
-                    type: 'POST',
-                    url: '/meetings/book/',
-                    data: {
-                        csrfmiddlewaretoken: csrftoken,
-                        book_type: 'in-person',
-                        class_location: 'Anywhere',
-                        booked_time_start: v.start.format('YYYY-MM-DD HH:mm:ss'),
-                        booked_time_end: v.end.format('YYYY-MM-DD HH:mm:ss'),
-                    }
-                })
-            })
-        }
+
     });
 
-    // $('#calendar').fullCalendar('renderEvent',events, true);
+    payment.token_function = function (token) {
+        if (eventList.length > 0 && token) {
+            $.ajax({
+                type: 'POST',
+                url: '/meetings/book/',
+                data: {
+                    csrfmiddlewaretoken: csrftoken,
+                    booking: JSON.stringify({
+                        stripeToken: token,
+                        bookings: eventList,
+                        cost: totalMinutes * 100
+                    })
+                }
+            });
+            window.location.reload()
+        }
+    };
+
+    payment.create();
 
 });
 

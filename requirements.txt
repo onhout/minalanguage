@@ -25,4 +25,5 @@ requests-oauthlib==0.8.0
 six==1.10.0
 social-auth-app-django==1.1.0
 social-auth-core==1.2.0
+stripe==1.54.0
 tini==3.0.1

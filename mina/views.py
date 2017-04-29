@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from datetime import datetime
+import json
 from .forms import BookingForm
+import stripe
 from .models import Booking
 
 
@@ -29,29 +30,52 @@ def user_logout(request):
 
 @login_required
 def book_meeting(request):
-    if request.POST and request.user.is_authenticated:
-        book_form = BookingForm(request.POST)
-        if book_form.is_valid():
-            form = book_form.save(commit=False)
-            form.user = request.user
-            form.save()
-            return redirect('book_meeting')
+    stripe.api_key = 'sk_test_diYxzPnCnRNeO2xsGiamiwLb'
+    if request.method == "POST" and request.user.is_authenticated:
+        json_loads = json.loads(request.POST.get('booking'))
+        charge = stripe.Charge.create(
+            source=json_loads["stripeToken"]['id'],
+            currency="usd",
+            description="Mina's Language Class",
+            amount=json_loads["cost"],
+            metadata={"order_from": request.user.get_full_name()}
+        )
+
+        for booking in json_loads["bookings"]:
+            book_form = BookingForm(booking)
+            if book_form.is_valid():
+                form = book_form.save(commit=False)
+                form.client_ip = json_loads["stripeToken"]["client_ip"]
+                form.transaction_id = charge["id"]
+                form.transaction_amount = charge["amount"]
+                form.user = request.user
+                form.save()
+        return redirect('book_meeting')
     return render(request, 'meeting/book.html', {})
+
+
+@login_required
+def list_meetings(request):
+    meeting_list = Booking.objects.filter(user=request.user)
+
+    return render(request, 'meeting/list.html', {
+        'meetings': meeting_list
+    })
 
 
 @login_required
 def get_all_meetings(request):
     if request.GET.get('from_date') and request.GET.get('to_date'):
         meetings = Booking.objects.filter(user=request.user,
-                                          booked_time_start__gte=request.GET.get('from_date'),
-                                          booked_time_end__lte=request.GET.get('to_date'))
+                                          start__gte=request.GET.get('from_date'),
+                                          end__lte=request.GET.get('to_date'))
         sxs = serializers.serialize('json', meetings,
-                                    fields=('book_type', 'booked_time_start', 'booked_time_end', 'class_location'))
+                                    fields=('book_type', 'start', 'end', 'class_location'))
         dataobj = []
         for meeting in meetings:
             extendability = {
-                "start": meeting.booked_time_start.strftime('%Y-%m-%d %H:%M:%S'),
-                "end": meeting.booked_time_end.strftime('%Y-%m-%d %H:%M:%S'),
+                "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
+                "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
                 "type": meeting.book_type,
                 "location": meeting.class_location,
                 "title": 'Unavailable',

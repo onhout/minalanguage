@@ -12,12 +12,17 @@ class Booking(models.Model):
         ('in-person', 'In Person')
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booked_user')
-    book_type = models.CharField(max_length=10, choices=TYPE)
-    booked_time_start = models.DateTimeField()
-    booked_time_end = models.DateTimeField()
-    class_location = models.CharField(max_length=255)
+    book_type = models.CharField(max_length=10, choices=TYPE, null=True, blank=True)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    class_location = models.CharField(max_length=255, null=True, blank=True, default="Walnut Creek, CA")
+    transaction_id = models.CharField(max_length=50, null=True, blank=True)
+    transaction_amount = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['start']
 
 
 def user_directory_path(instance, filename):
