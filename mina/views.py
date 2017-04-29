@@ -1,11 +1,12 @@
+import json
+from datetime import datetime
+import stripe
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-import json
+
 from .forms import BookingForm
-import stripe
 from .models import Booking
 
 
@@ -66,25 +67,56 @@ def list_meetings(request):
 @login_required
 def get_all_meetings(request):
     if request.GET.get('from_date') and request.GET.get('to_date'):
-        meetings = Booking.objects.filter(user=request.user,
-                                          start__gte=request.GET.get('from_date'),
+        meetings = Booking.objects.filter(start__gte=request.GET.get('from_date'),
                                           end__lte=request.GET.get('to_date'))
-        sxs = serializers.serialize('json', meetings,
-                                    fields=('book_type', 'start', 'end', 'class_location'))
         dataobj = []
+        print(datetime.now())
         for meeting in meetings:
-            extendability = {
-                "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
-                "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
-                "type": meeting.book_type,
-                "location": meeting.class_location,
-                "title": 'Unavailable',
-                "allDay": False,
-                "color": "#555555"
-            }
+            if meeting.user == request.user and meeting.start > datetime.now():
+                extendability = {
+                    "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
+                    "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
+                    "type": meeting.book_type,
+                    "location": meeting.class_location,
+                    "title": 'Booked - (%s)' % meeting.book_type,
+                    "allDay": False,
+                    "startEditable": True,
+                    "meeting_id": meeting.id
+                }
+            else:
+                extendability = {
+                    "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
+                    "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
+                    "type": meeting.book_type,
+                    "location": meeting.class_location,
+                    "title": 'Unavailable',
+                    "allDay": False,
+                    "color": "#555555",
+                }
             if request.user.is_superuser:
                 extendability['title'] = meeting.user.get_full_name()
             dataobj.append(extendability)
     else:
         dataobj = {'data': 'None'}
     return JsonResponse(dataobj, safe=False)
+
+
+@login_required
+def change_meeting(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        meeting = Booking.objects.get(id=request.GET.get('meeting_id'))
+        meeting_obj = {
+            "start": request.POST.get('start'),
+            "end": request.POST.get('end'),
+            "book_type": meeting.book_type,
+            "class_location": meeting.class_location,
+            "transaction_amount": meeting.transaction_amount,
+            "transaction_id": meeting.transaction_id
+        }
+        book_form = BookingForm(meeting_obj, instance=meeting)
+        if book_form.is_valid():
+            book_form.save()
+            data = {'status': "success"}
+        else:
+            data = {'status': 'failed'}
+        return JsonResponse(data)

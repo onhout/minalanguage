@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from uuid import uuid4
 
 
 # Create your models here.
@@ -11,6 +12,7 @@ class Booking(models.Model):
         ('online', 'Online'),
         ('in-person', 'In Person')
     )
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booked_user')
     book_type = models.CharField(max_length=10, choices=TYPE, null=True, blank=True)
     start = models.DateTimeField()

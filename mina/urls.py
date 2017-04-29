@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^$', views.user_home, name='user_home'),
     url(r'^meetings/book/$', views.book_meeting, name='book_meeting'),
     url(r'^meetings/list/$', views.list_meetings, name='list_meetings'),
+    url(r'^meetings/edit$', views.change_meeting, name='change_meeting'),
     url(r'^meetings/get_meetings', views.get_all_meetings, name='get_all_meetings'),
 ]

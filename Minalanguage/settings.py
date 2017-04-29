@@ -116,6 +116,8 @@ LANGUAGE_CODE = 'en-us'
 
 USE_I18N = True
 
+TIME_ZONE = "America/Los_Angeles"
+
 USE_L10N = True
 
 USE_TZ = False

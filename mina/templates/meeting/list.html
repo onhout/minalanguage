@@ -2,7 +2,6 @@
 {% load render_bundle from webpack_loader %}
 {% block title %}List meetings{% endblock %}
 {% block content %}
-    {% load humanize %}
     <h1 class="text-center">Hello, {{ user.get_full_name }}. Here's your list of events</h1>
     <table class="table table-hover">
         <thead>
@@ -17,7 +16,7 @@
         <tbody>
         {% for meeting in meetings %}
             <tr>
-                <td>{{ meeting.start|naturaltime }}</td>
+                <td>{{ meeting.start }}</td>
                 <td>{{ meeting.end }}</td>
                 <td>{{ meeting.class_location }}</td>
                 <td>{{ meeting.book_type }}</td>

@@ -10,7 +10,7 @@ $(function () {
     var csrftoken = CSRF_TOKEN.getCookie('csrftoken');
     var eventList = [];
     var calendar = $('#calendar');
-    calendar.fullCalendar({
+    var calendarOptions = {
         defaultView: 'agendaWeek',
         theme: true,
         header: {
@@ -81,8 +81,31 @@ $(function () {
         },
         events: '/meetings/get_meetings',
         startParam: 'from_date',
-        endParam: 'to_date'
-    });
+        endParam: 'to_date',
+        eventDrop: function (event, delta, revertFunc) {
+            if (moment(event.start).subtract(1, 'hour') < moment()) {
+                $('.errors').append(new ALERT('Cannot move to previous dates or one hour before start time, sorry.'));
+                revertFunc()
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/meetings/edit?meeting_id=' + event.meeting_id,
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        start: moment(event.start).format('YYYY-MM-DD HH:mm:ss'),
+                        end: moment(event.end).format('YYYY-MM-DD HH:mm:ss')
+                    }
+                }).done(function (data) {
+                    if (data.status == 'success') {
+                        $('.errors').append(new ALERT('Time changed successfully', 'success'));
+                    } else {
+                        $('.errors').append(new ALERT('Error occurred', 'warning'));
+                    }
+                })
+            }
+
+        }
+    };
 
     function calculateDuration(eventData) {
         eventList.push(eventData);
@@ -124,9 +147,7 @@ $(function () {
         return overlap.length
     }
 
-    $('#super_btn').click(function () {
-
-    });
+    calendar.fullCalendar(calendarOptions);
 
     payment.token_function = function (token) {
         if (eventList.length > 0 && token) {
@@ -141,8 +162,9 @@ $(function () {
                         cost: totalMinutes * 100
                     })
                 }
+            }).done(function () {
+                window.location.reload()
             });
-            window.location.reload()
         }
     };
 

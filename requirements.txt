@@ -1,6 +1,9 @@
 ansicolors==1.0.2
 appdirs==1.4.3
+asn1crypto==0.22.0
+cffi==1.10.0
 configparser==3.5.0
+cryptography==1.8.1
 defusedxml==0.5.0
 Django==1.11
 django-gulp==2.5.1
@@ -9,11 +12,15 @@ django-webpack-loader==0.4.1
 env-tools==2.0.0
 futures==3.0.5
 httplib2==0.10.3
+idna==2.5
+ndg-httpsclient==0.4.2
 oauth2==1.9.0.post1
 oauthlib==2.0.2
 packaging==16.8
 psutil==4.3.0
+pycparser==2.17
 PyJWT==1.5.0
+pyOpenSSL==17.0.0
 pyparsing==2.2.0
 python-decouple==3.0
 python-openid==2.2.5
@@ -27,3 +34,4 @@ social-auth-app-django==1.1.0
 social-auth-core==1.2.0
 stripe==1.54.0
 tini==3.0.1
+urllib3==1.21

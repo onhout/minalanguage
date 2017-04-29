@@ -1,7 +1,7 @@
 class Alert {
-    constructor(message) {
+    constructor(message, level) {
         var alert = $('<div/>', {
-            'class': 'alert alert-danger alert-dismissible',
+            'class': 'alert alert-'+level || 'danger'+' alert-dismissible',
             'role': 'alert'
         });
         var closeButton = $('<button/>', {
