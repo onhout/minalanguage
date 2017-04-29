@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import stripe
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -70,9 +70,8 @@ def get_all_meetings(request):
         meetings = Booking.objects.filter(start__gte=request.GET.get('from_date'),
                                           end__lte=request.GET.get('to_date'))
         dataobj = []
-        print(datetime.now())
         for meeting in meetings:
-            if meeting.user == request.user and meeting.start > datetime.now():
+            if meeting.user == request.user and (meeting.start+timedelta(hours=2)) > datetime.now():
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
