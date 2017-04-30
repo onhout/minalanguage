@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timedelta
-
+import os
 import stripe
 from decouple import config
 from django.contrib.auth import logout as auth_logout
@@ -35,7 +35,10 @@ def user_logout(request):
 
 @login_required
 def book_meeting(request):
-    stripe.api_key = config('STRIPE_SECRET_KEY')
+    if 'STRIPE_SECRET_KEY' in os.environ:
+        stripe.api_key = os.environ['STRIPE_SECRET_KEY']
+    else:
+        stripe.api_key = config('STRIPE_SECRET_KEY')
     try:
         next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
     except:
