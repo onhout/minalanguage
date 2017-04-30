@@ -66,7 +66,7 @@ $(function () {
                         calculateDuration(eventData);
                         calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
                     } else {
-                        $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after unavailable time', 'danger'));
+                        $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after another event', 'danger'));
                         calendar.fullCalendar('unselect');
                     }
 
@@ -87,7 +87,7 @@ $(function () {
                 $('.errors').append(new ALERT('Cannot move to previous dates or two hour before start time, sorry.', 'danger'));
                 revertFunc()
             } else if (checkOverlap(event)) {
-                $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after unavailable time', 'danger'));
+                $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after another event', 'danger'));
                 revertFunc()
             } else {
                 $.ajax({
