@@ -1,15 +1,14 @@
-var csrf_token = require('../../globals/Utils/csrf_token').default;
-var Alert = require('../../globals/Parts/Alert').default;
+var csrf_token = require('../../globals/csrf_token').default;
+var Alert = require('../../globals/Alert').default;
 
-class ImageUpload {
+class FileUpload {
     constructor(element) {
-        var id_image = $(element);
-        id_image.click();
+        var id_file = $(element);
+        id_file.click();
 
-        id_image.fileupload({
+        id_file.fileupload({
             dataType: 'json',
             sequentialUploads: true,
-            acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
             start: function (e) {
                 $('.progress').show();
             },
@@ -20,89 +19,77 @@ class ImageUpload {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
                 var strProgress = progress + "%";
                 $(".progress-bar").css({"width": strProgress});
+                $(".progress-text").text(strProgress)
             },
             done: function (e, data) {  /* PROCESS THE RESPONSE FROM THE SERVER */
-                if (data.result.is_valid) {
-                    console.log(data.result)
-                    var imageTableRow = new ImageTableRow(data, csrf_token);
-                    $('#product_gallery tbody').prepend(imageTableRow);
-                    if (data.result.total_image_num = 7) {
-                        $('.js-upload-photos').addClass('disabled');
-                    }
-                } else if (!data.result.is_valid && data.result.total_image_num >= 8) {
-                    $('#product_gallery').before(new Alert('Maximum 8 pictures are allowed'));
-                    $('.js-upload-photos').addClass('disabled');
-                    return false;
+                if (data.result.status == 'success') {
+                    var fileTableRow = new FileTableRow(data, csrf_token);
+                    $('#file_table tbody').prepend(fileTableRow);
                 }
             }
         })
     }
 
-    static deleteFN(image_id, csrftoken, SELF) {
+    static deleteFN(file_id, csrftoken, SELF) {
         return function (e) {
             e.preventDefault();
             var self = this || SELF;
-            var href = '/products/image/delete/' + image_id + '/';
+            var href = '/file/delete/' + file_id + '/';
             $.post(href, csrftoken, function (data) {
                 if (data.success) {
                     $(self).closest('tr').remove();
-                    if ($('.js-upload-photos').hasClass('disabled')) {
-                        $('.js-upload-photos').removeClass('disabled')
+                    if ($('.js-upload-files').hasClass('disabled')) {
+                        $('.js-upload-files').removeClass('disabled')
                     }
                 }
             })
         }
     }
 
-    static makePrimaryPhoto(image_id, csrftoken, SELF) {
-        return function (e) {
-            e.preventDefault();
-            var self = this || SELF;
-            var href = '/products/image/set_primary/' + image_id + '/';
-            $.post(href, csrftoken, function (data) {
-                if (data.success) {
-                    $(self).closest('tr').css('background-color:red');
-                    $(self).hide();
-                    $('.make_primary_photo').not(self).show()
-                }
-            })
-        }
-    }
+    // static makePrimaryPhoto(file_id, csrftoken, SELF) {
+    //     return function (e) {
+    //         e.preventDefault();
+    //         var self = this || SELF;
+    //         var href = '/products/file/set_primary/' + file_id + '/';
+    //         $.post(href, csrftoken, function (data) {
+    //             if (data.success) {
+    //                 $(self).closest('tr').css('background-color:red');
+    //                 $(self).hide();
+    //                 $('.make_primary_photo').not(self).show()
+    //             }
+    //         })
+    //     }
+    // }
 }
 
-class ImageTableRow {
+class FileTableRow {
 
     constructor(data, csrfToken) {
         var self = this;
         this.row = $('<tr>');
-        this.imgLink = $('<a>', {
-            href: data.result.url
+        this.link = $('<a>', {
+            href: data.result.url,
+            text: data.result.file_name
         });
-        this.img = $('<img>',
-            {
-                'class': 'img-responsive img-rounded',
-                'src': data.result.url,
-                'style': 'max-height:56px'
-            });
-        this.updated = $('<td>' + data.result.updated_at + '</td>');
+        this.updated = $('<td>' + data.result.uploaded_at + '</td>');
         this.deleteBtn = $('<a/>',
             {
-                'class': 'btn btn-danger btn-raised delete_photo',
+                'class': 'btn btn-danger delete_file',
                 'text': 'Delete'
-            }).click(ImageUpload.deleteFN(data.result.image_id,
+            }).click(FileUpload.deleteFN(data.result.file_id,
             {csrfmiddlewaretoken: '' + csrfToken.getCookie('csrftoken')}));
-        this.makePrimaryBtn = $('<a/>', {
-            'class': 'btn btn-info btn-raised make_primary_photo',
-            'text': 'Make Primary'
-        }).click(ImageUpload.makePrimaryPhoto(data.result.image_id,
-            {csrfmiddlewaretoken: '' + csrfToken.getCookie('csrftoken')}));
+        // this.makePrimaryBtn = $('<a/>', {
+        //     'class': 'btn btn-info btn-raised make_primary_photo',
+        //     'text': 'Make Primary'
+        // }).click(FileUpload.makePrimaryPhoto(data.result.file_id,
+        //     {csrfmiddlewaretoken: '' + csrfToken.getCookie('csrftoken')}));
         this._row = this.row
-            .append($('<td>').append(this.imgLink.append(this.img)))
+            .append($('<td>').append(this.link))
             .append(this.updated)
-            .append($('<td>').append(this.deleteBtn).append(this.makePrimaryBtn));
+            .append($('<td>').append(this.deleteBtn));
 
         return this._row;
     }
 }
 
-export default ImageUpload
+export default FileUpload

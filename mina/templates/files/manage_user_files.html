@@ -1,0 +1,47 @@
+{% extends 'Nav.html' %}
+{% load render_bundle from webpack_loader %}
+{% block title %}Files{% endblock %}
+{% block content %}
+    <h1 class="text-center">Manage {{ this_user.get_full_name }}'s files</h1>
+    <div class="panel panel-default">
+        <div class="panel-heading">File List</div>
+        <div class="panel-body">
+            <button type="button"
+                    class="btn btn-primary js-upload-files">
+                <span class="glyphicon glyphicon-cloud-upload"></span> Upload Files
+            </button>
+
+            <div class="progress" hidden style="margin-top: 5px">
+                <div class="progress-bar" role="progressbar" style="width: 0;"></div>
+                <p class="text-center progress-text"></p>
+            </div>
+
+            <input id="id_file" type="file" name="file" multiple
+                   style="display: none;"
+                   data-url="{% url 'upload_files' this_user.id %}"
+                   data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+        </div>
+        <table class="table table-bordered table-striped table-hover" id="file_table">
+            <thead>
+            <tr>
+                <th>File</th>
+                <th>Date Uploaded</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in file_list %}
+                <tr>
+                    <td><a href="/{{ file.file }}">{{ file.name }}</a></td>
+                    <td>{{ file.created_at }}</td>
+                    <td><a href="{% url 'delete_file' file.id %}"
+                           data-csrftoken='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                           data-file_id="{{ file.id }}"
+                           class="btn btn-danger delete_file">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% render_bundle 'files' %}
+{% endblock %}

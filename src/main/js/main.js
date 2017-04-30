@@ -56,11 +56,14 @@ $(function () {
                     moment(start).format('MM/DD hh:mm:ss') + ' to ' +
                     moment(end).format('MM/DD hh:mm:ss') + '?</h4>').append(select);
                 modal.run_modal(function () {
+                    var differenceInMs = moment(end).diff(moment(start)); // diff yields milliseconds
+                    var duration = moment.duration(differenceInMs);
                     eventData = {
                         book_type: $('#booking_type').val() ? $('#booking_type').val() : 'online',
                         title: 'Booked - (' + ($('#booking_type').val() ? $('#booking_type').val() : 'online') + ')',
                         start: start,
                         end: end,
+                        transaction_amount: duration.asMinutes()
                     };
                     if (!checkOverlap(eventData)) {
                         calculateDuration(eventData);
@@ -178,7 +181,7 @@ $(function () {
         if (eventList.length > 0 && token) {
             $.ajax({
                 type: 'POST',
-                url: '/meetings/book/',
+                url: '/',
                 data: {
                     csrfmiddlewaretoken: csrftoken,
                     booking: JSON.stringify({

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_delete
+from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 from uuid import uuid4
 
@@ -29,7 +29,7 @@ class Booking(models.Model):
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return './static/files/user_{0}/{1}'.format(instance.user.id, filename)
+    return './static/files/user_{0}/{1}'.format(instance.to_user.id, filename)
 
 
 class Files(models.Model):
@@ -37,6 +37,7 @@ class Files(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     file = models.FileField(upload_to=user_directory_path)
+    name = models.CharField(max_length=255, null=True, blank=True)
 
 
 @receiver(post_delete, sender=Files)

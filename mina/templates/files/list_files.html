@@ -3,8 +3,8 @@
 {% block title %}File List{% endblock %}
 {% block content %}
     <h1 class="text-center">Hello, {{ user.get_full_name }}. Here's your list of files</h1>
-    {% if files %}
-        <table class="table table-hover table-striped">
+    {% if file_list %}
+        <table class="table table-hover table-striped table-bordered">
             <thead>
             <tr>
                 <th>File</th>
@@ -12,9 +12,9 @@
             </tr>
             </thead>
             <tbody>
-            {% for file in files %}
+            {% for file in file_list %}
                 <tr>
-                    <td>{{ file.file }}</td>
+                    <td><a href="/{{ file.file }}">{{ file.name }}</a></td>
                     <td>{{ file.updated_at }}</td>
                 </tr>
             {% endfor %}

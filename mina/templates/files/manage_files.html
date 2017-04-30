@@ -1,0 +1,42 @@
+{% extends 'Nav.html' %}
+{% load render_bundle from webpack_loader %}
+{% block title %}Files{% endblock %}
+{% block content %}
+    <h1 class="text-center">Manage User Files</h1>
+    <div class="panel panel-default">
+        <div class="panel-heading">User List</div>
+        <div class="panel-body"></div>
+        {% if user_list %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Username/Email</th>
+                    <th>Date joined</th>
+                    <th>Total Files</th>
+                    <th>Total Paid</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in user_list %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.date_joined }}</td>
+                        <td>{{ user.totalFiles }}</td>
+                        <td>${{ user.totalPaid.totalPaid }}</td>
+                        <td><a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    {% render_bundle 'files' %}
+{% endblock %}

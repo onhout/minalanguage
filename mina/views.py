@@ -5,11 +5,13 @@ import stripe
 from decouple import config
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from .forms import BookingForm
-from .models import Booking
+from .forms import BookingForm, FileForm
+from .models import Booking, Files
 
 
 # Create your views here.
@@ -34,7 +36,10 @@ def user_logout(request):
 @login_required
 def book_meeting(request):
     stripe.api_key = config('STRIPE_SECRET_KEY')
-    next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
+    try:
+        next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
+    except:
+        next_meeting = 'none'
     if request.method == "POST" and request.user.is_authenticated:
         json_loads = json.loads(request.POST.get('booking'))
         charge = stripe.Charge.create(
@@ -51,7 +56,7 @@ def book_meeting(request):
                 form = book_form.save(commit=False)
                 form.client_ip = json_loads["stripeToken"]["client_ip"]
                 form.transaction_id = charge["id"]
-                form.transaction_amount = charge["amount"]
+                form.transaction_amount = booking["transaction_amount"]
                 form.user = request.user
                 form.save()
         return redirect('book_meeting')
@@ -143,16 +148,65 @@ def change_meeting(request):
 
 @login_required
 def file_list(request):
+    files = Files.objects.filter(to_user=request.user)
     return render(request, 'files/list_files.html', {
-
+        "file_list": files
     })
 
 
 @login_required
-def files(request):
+def manage_files(request):
     if request.user.is_superuser:
-        return render(request, 'files/files.html', {
-
+        users = User.objects.exclude(id=request.user.id)
+        for user in users:
+            user.totalFiles = Files.objects.filter(to_user=user).count()
+            user.totalPaid = Booking.objects.filter(user=user).aggregate(totalPaid=Sum('transaction_amount'))
+        return render(request, 'files/manage_files.html', {
+            'user_list': users
         })
     else:
         return redirect('/')
+
+
+@login_required
+def manage_user_files(request, user_id):
+    if request.user.is_superuser:
+        user = User.objects.get(id=user_id)
+        files = Files.objects.filter(to_user=user)
+        return render(request, 'files/manage_user_files.html', {
+            "file_list": files,
+            "this_user": user
+        })
+    else:
+        return redirect('/')
+
+
+@login_required
+def upload_files(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == "POST" and request.user.is_superuser:
+        file_form = FileForm(request.POST, request.FILES)
+        if file_form.is_valid():
+            form = file_form.save(commit=False)
+            form.name = request.FILES['file'].name
+            form.to_user = user
+            form.save()
+            data = {
+                'status': 'success',
+                'file_name': request.FILES['file'].name,
+                'uploaded_at': datetime.now().strftime('%B %d, %Y, %I:%M %p'),
+                'url': '/' + str(form.file),
+                'file_id': form.id
+            }
+        else:
+            data = {'status': 'failed'}
+        return JsonResponse(data)
+    return redirect('/')
+
+
+@login_required
+def delete_file(request, file_id):
+    if request.user.is_superuser:
+        Files.objects.get(id=file_id).delete()
+        data = {'success': True}
+        return JsonResponse(data)

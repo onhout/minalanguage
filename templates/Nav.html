@@ -10,7 +10,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Minana</a>
+                <a class="navbar-brand" href="/">Mina's Language</a>
             </div>
 
             <div class="collapse navbar-collapse" id="budsdeal-nav">
@@ -27,12 +27,14 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav">
-                    <li><a href="{% url 'file_list' %}">My Files</a></li>
-                </ul>
+
                 {% if user.is_superuser %}
                     <ul class="nav navbar-nav">
-                        <li><a href="{% url 'files' %}">Manage Files</a></li>
+                        <li><a href="{% url 'manage_files' %}">Manage Files</a></li>
+                    </ul>
+                {% else %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'file_list' %}">My Files</a></li>
                     </ul>
                 {% endif %}
 
