@@ -66,7 +66,7 @@ $(function () {
                         calculateDuration(eventData);
                         calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
                     } else {
-                        $('.errors').append(new ALERT('Meeting overlapped'));
+                        $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after unavailable time', 'danger'));
                         calendar.fullCalendar('unselect');
                     }
 
@@ -75,7 +75,7 @@ $(function () {
                     calendar.fullCalendar('unselect');
                 });
             } else {
-                $('.errors').append(new ALERT('Cannot book previous dates or two hour before start time, sorry.'));
+                $('.errors').append(new ALERT('Cannot book previous dates or two hour before start time, sorry.', 'danger'));
                 calendar.fullCalendar('unselect');
             }
         },
@@ -84,7 +84,10 @@ $(function () {
         endParam: 'to_date',
         eventDrop: function (event, delta, revertFunc) {
             if (moment(event.start).subtract(2, 'hour') < moment()) {
-                $('.errors').append(new ALERT('Cannot move to previous dates or two hour before start time, sorry.'));
+                $('.errors').append(new ALERT('Cannot move to previous dates or two hour before start time, sorry.', 'danger'));
+                revertFunc()
+            } else if (checkOverlap(event)) {
+                $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after unavailable time', 'danger'));
                 revertFunc()
             } else {
                 $.ajax({
@@ -137,15 +140,37 @@ $(function () {
         var end = new Date(event.end);
 
         var overlap = calendar.fullCalendar('clientEvents', function (ev) {
+            var evEnd = moment(ev.end).add(30, 'minute');
+            var evStart = moment(ev.start).subtract(30, 'minute');
             if (ev == event)
                 return false;
-            var estart = new Date(ev.start);
-            var eend = new Date(ev.end);
+            var estart = new Date(evStart);
+            var eend = new Date(evEnd);
 
             return (Math.round(estart) / 1000 < Math.round(end) / 1000 && Math.round(eend) > Math.round(start));
         });
         return overlap.length
     }
+
+    $('#super_btn').click(function () {
+        if (eventList.length > 0) {
+            $.each(eventList, function (i, v) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/meetings/superbook/',
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        start: moment(v.start).format('YYYY-MM-DD HH:mm:ss'),
+                        end: moment(v.end).format('YYYY-MM-DD HH:mm:ss'),
+                        book_type: 'in-person',
+                        class_location: 'None'
+                    }
+                })
+            })
+            window.location.reload()
+        }
+
+    });
 
     calendar.fullCalendar(calendarOptions);
 

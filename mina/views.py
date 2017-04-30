@@ -1,6 +1,8 @@
 import json
 from datetime import datetime, timedelta
+
 import stripe
+from decouple import config
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -19,9 +21,9 @@ def user_login(request):
         return render(request, 'user_login.html', {})
 
 
-@login_required
-def user_home(request):
-    return render(request, 'home.html', {})
+# @login_required
+# def user_home(request):
+#     return render(request, 'home.html', {})
 
 
 def user_logout(request):
@@ -31,7 +33,8 @@ def user_logout(request):
 
 @login_required
 def book_meeting(request):
-    stripe.api_key = 'sk_test_diYxzPnCnRNeO2xsGiamiwLb'
+    stripe.api_key = config('STRIPE_SECRET_KEY')
+    next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
     if request.method == "POST" and request.user.is_authenticated:
         json_loads = json.loads(request.POST.get('booking'))
         charge = stripe.Charge.create(
@@ -52,7 +55,21 @@ def book_meeting(request):
                 form.user = request.user
                 form.save()
         return redirect('book_meeting')
-    return render(request, 'meeting/book.html', {})
+    return render(request, 'meeting/book.html', {
+        'next_meeting': next_meeting
+    })
+
+
+@login_required
+def super_book_meeting(request):
+    if request.method == 'POST' and request.user.is_superuser:
+        book_form = BookingForm(request.POST)
+        if book_form.is_valid():
+            form = book_form.save(commit=False)
+            form.user = request.user
+            form.save()
+            return JsonResponse({"status": "success"})
+        return JsonResponse({"status": "failed"})
 
 
 @login_required
@@ -71,7 +88,8 @@ def get_all_meetings(request):
                                           end__lte=request.GET.get('to_date'))
         dataobj = []
         for meeting in meetings:
-            if meeting.user == request.user and (meeting.start+timedelta(hours=2)) > datetime.now():
+            if (meeting.user == request.user and (meeting.start + timedelta(hours=2)) > datetime.now()) or (
+                    request.user.is_superuser):
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
@@ -93,7 +111,9 @@ def get_all_meetings(request):
                     "color": "#555555",
                 }
             if request.user.is_superuser:
-                extendability['title'] = meeting.user.get_full_name()
+                extendability['title'] = "Booked %s - %s" % (meeting.book_type, meeting.user.get_full_name())
+            if request.user.is_superuser and meeting.user == request.user:
+                extendability['color'] = '#654321'
             dataobj.append(extendability)
     else:
         dataobj = {'data': 'None'}
@@ -119,3 +139,20 @@ def change_meeting(request):
         else:
             data = {'status': 'failed'}
         return JsonResponse(data)
+
+
+@login_required
+def file_list(request):
+    return render(request, 'files/list_files.html', {
+
+    })
+
+
+@login_required
+def files(request):
+    if request.user.is_superuser:
+        return render(request, 'files/files.html', {
+
+        })
+    else:
+        return redirect('/')

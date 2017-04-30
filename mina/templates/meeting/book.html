@@ -2,10 +2,16 @@
 {% load render_bundle from webpack_loader %}
 {% block title %}Main Page{% endblock %}
 {% block content %}
+    {% load humanize %}
     <script src="https://checkout.stripe.com/checkout.js"></script>
-    <h1 class="text-center">Book a meeting</h1>
+    <h1 class="text-center">Book / edit a meeting</h1>
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 calendar-container">
+        <div class="col-md-10 col-md-offset-1">
+            <h3 class="text-warning">Next meeting: {{ next_meeting.start | naturaltime }}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 calendar-container">
             <div id="calendar"></div>
             <div class="clearfix">
                 <h4 class="pull-left">Duration: <span id="duration">0</span> hour(s)</h4>
@@ -14,10 +20,13 @@
                         style="margin-top: 5px;" disabled>Pay $<span
                         class="initial_dollar">0</span> <i class="fa fa-arrow-right"></i></button>
             </div>
+            {% if user.is_superuser %}
+            <button id="super_btn" class="btn btn-danger pull-right" style="margin-top: 5px;">SUPER BUTTON</button>
+            {% endif %}
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <div class="errors"></div>
         </div>
     </div>

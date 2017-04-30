@@ -3,14 +3,14 @@
 {% block title %}List meetings{% endblock %}
 {% block content %}
     <h1 class="text-center">Hello, {{ user.get_full_name }}. Here's your list of events</h1>
-    <table class="table table-hover">
+    {% if meetings %}
+    <table class="table table-hover table-striped">
         <thead>
         <tr>
             <th>Begin Time</th>
             <th>End Time</th>
             <th>Class Location</th>
             <th>Meeting Type</th>
-            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -20,12 +20,13 @@
                 <td>{{ meeting.end }}</td>
                 <td>{{ meeting.class_location }}</td>
                 <td>{{ meeting.book_type }}</td>
-                <td><a href="#" class="btn btn-danger btn-raised">Change</a></td>
             </tr>
-
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+        <h1>Nothing yet! Book some meetings!</h1>
+    {% endif %}
 
 
 {% endblock %}

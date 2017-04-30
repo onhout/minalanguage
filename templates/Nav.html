@@ -22,14 +22,19 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'book_meeting' %}">Book a meeting</a></li>
-                            <li><a href="{% url 'list_meetings' %}">List/Cancel a meeting</a></li>
+                            <li><a href="{% url 'book_meeting' %}">Book/edit a meeting</a></li>
+                            <li><a href="{% url 'list_meetings' %}">Meeting list</a></li>
                         </ul>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="#">My Files</a></li>
+                    <li><a href="{% url 'file_list' %}">My Files</a></li>
                 </ul>
+                {% if user.is_superuser %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'files' %}">Manage Files</a></li>
+                    </ul>
+                {% endif %}
 
                 <ul class="nav navbar-nav navbar-right">
                     {% if user and not user.is_anonymous %}

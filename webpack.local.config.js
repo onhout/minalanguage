@@ -8,6 +8,7 @@ module.exports = {
 
     entry: {
         main: ['main/js/main','main/less/main.less'],
+        files: ['main/js/files','main/less/files.less'],
         vendor:[
             'jquery',
             'globals/index.less',

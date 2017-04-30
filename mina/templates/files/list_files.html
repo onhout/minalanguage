@@ -1,0 +1,27 @@
+{% extends 'Nav.html' %}
+{% load render_bundle from webpack_loader %}
+{% block title %}File List{% endblock %}
+{% block content %}
+    <h1 class="text-center">Hello, {{ user.get_full_name }}. Here's your list of files</h1>
+    {% if files %}
+        <table class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th>File</th>
+                <th>Date Uploaded</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>{{ file.file }}</td>
+                    <td>{{ file.updated_at }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3 class="text-center">Nothing yet!</h3>
+    {% endif %}
+    {% render_bundle 'files' %}
+{% endblock %}
