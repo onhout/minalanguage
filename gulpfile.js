@@ -2,12 +2,12 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     gwebpack = require('webpack-stream'),
-    gautoprefixer = require('gulp-autoprefixer'),
-    gless = require('gulp-less'),
-    gminifycss = require('gulp-minify-css'),
-    gconcat = require('gulp-concat'),
+    gs3 = require('gulp-s3-upload'),
     gdel = require('del'),
     gplumber = require('gulp-plumber');
+
+
+
 
 var errorHandler = function(){
     // default appearance
@@ -46,6 +46,23 @@ gulp.task('webpack', function () {
 //         .pipe(gautoprefixer(autoprefixerOptions))
 //         .pipe(gulp.dest('/static/'))
 // });
+
+var config = {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+};
+
+gulp.task("upload", function() {
+    gulp.src("./static/**")
+        .pipe(gs3(config)({
+            Bucket: 'minalanguage', //  Required
+            ACL:    'public-read-write'       //  Needs to be user-defined
+        }, {
+            // S3 Constructor Options, ie:
+            maxRetries: 5
+        }))
+    ;
+});
 
 gulp.task('watch', function () {
     gulp.watch(['./src/**'], ['clean-dist', 'webpack']);

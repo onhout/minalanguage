@@ -23,7 +23,7 @@ module.exports = {
 
     output: {
         path: path.resolve('./static/dist/'),
-        publicPath: '/static/dist/',
+        publicPath: 'https://s3-us-west-1.amazonaws.com/minalanguage/dist/',
         chunkFilename: '[id]-[hash].chunk.js',
         filename: "[name]-[hash].js",
     },

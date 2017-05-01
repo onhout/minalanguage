@@ -10,5 +10,4 @@ $(function () {
         var ID = $(this).data('file_id');
         return File_Upload.deleteFN(ID, $(this).data('csrftoken'), $(this))(e)
     });
-
-})
+});

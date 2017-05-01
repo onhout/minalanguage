@@ -4,7 +4,8 @@
   "description": "Mina Language",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.production.config.js --progress --colors"
+    "build": "webpack --config webpack.production.config.js --progress --colors",
+    "postbuild": "gulp upload"
   },
   "keywords": [
     "minana"
@@ -43,6 +44,7 @@
     "gulp-less": "^3.3.0",
     "gulp-minify-css": "^1.2.4",
     "gulp-plumber": "^1.1.0",
+    "gulp-s3-upload": "^1.6.4",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
