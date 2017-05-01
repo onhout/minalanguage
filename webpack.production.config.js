@@ -47,8 +47,6 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-[hash].js', Infinity),
     ],
 
-    devtool: 'cheap-module-source-map',
-
     module: {
         loaders: [
             {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'}, // to transform JSX into JS
