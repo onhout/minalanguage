@@ -45,21 +45,6 @@ class FileUpload {
             })
         }
     }
-
-    // static makePrimaryPhoto(file_id, csrftoken, SELF) {
-    //     return function (e) {
-    //         e.preventDefault();
-    //         var self = this || SELF;
-    //         var href = '/products/file/set_primary/' + file_id + '/';
-    //         $.post(href, csrftoken, function (data) {
-    //             if (data.success) {
-    //                 $(self).closest('tr').css('background-color:red');
-    //                 $(self).hide();
-    //                 $('.make_primary_photo').not(self).show()
-    //             }
-    //         })
-    //     }
-    // }
 }
 
 class FileTableRow {
@@ -78,11 +63,6 @@ class FileTableRow {
                 'text': 'Delete'
             }).click(FileUpload.deleteFN(data.result.file_id,
             {csrfmiddlewaretoken: '' + csrfToken.getCookie('csrftoken')}));
-        // this.makePrimaryBtn = $('<a/>', {
-        //     'class': 'btn btn-info btn-raised make_primary_photo',
-        //     'text': 'Make Primary'
-        // }).click(FileUpload.makePrimaryPhoto(data.result.file_id,
-        //     {csrfmiddlewaretoken: '' + csrfToken.getCookie('csrftoken')}));
         this._row = this.row
             .append($('<td>').append(this.link))
             .append(this.updated)

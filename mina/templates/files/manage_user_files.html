@@ -32,7 +32,7 @@
             <tbody>
             {% for file in file_list %}
                 <tr>
-                    <td><a href="/{{ file.file }}">{{ file.name }}</a></td>
+                    <td><a href="http://minalanguage.s3.amazonaws.com/{{ file.file }}">{{ file.name }}</a></td>
                     <td>{{ file.created_at }}</td>
                     <td><a href="{% url 'delete_file' file.id %}"
                            data-csrftoken='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'

@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 from uuid import uuid4
+import os
 
 
 # Create your models here.
@@ -28,8 +29,9 @@ class Booking(models.Model):
 
 
 def user_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return './static/files/user_{0}/{1}'.format(instance.to_user.id, filename)
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid4(), ext)
+    return os.path.join('./files/', filename)
 
 
 class Files(models.Model):

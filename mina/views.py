@@ -198,7 +198,7 @@ def upload_files(request, user_id):
                 'status': 'success',
                 'file_name': request.FILES['file'].name,
                 'uploaded_at': datetime.now().strftime('%B %d, %Y, %I:%M %p'),
-                'url': '/' + str(form.file),
+                'url': 'http://minalanguage.s3.amazonaws.com/' + str(form.file),
                 'file_id': form.id
             }
         else:
