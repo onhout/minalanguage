@@ -145,7 +145,6 @@ else:
     AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = config('S3_BUCKET_NAME')
 MEDIA_URL = 'http://%s.s3.amazonaws.com/uploads/' % AWS_STORAGE_BUCKET_NAME
-STATIC_URL = 'http://%s.s3.amazonaws.com/static/' % AWS_STORAGE_BUCKET_NAME
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # Static files (CSS, JavaScript, Images)
@@ -156,7 +155,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")
-# STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
