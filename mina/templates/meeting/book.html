@@ -16,12 +16,13 @@
         <div class="col-md-10 col-md-offset-1 calendar-container">
             <div id="calendar"></div>
             <div class="clearfix">
-                <h4 class="pull-left">Duration: <span id="duration">0</span> hour(s)</h4>
+                <button id="reset_btn" class="btn btn-default" style="margin-top: 5px;">Reset Calendar</button>
 
                 <button id="pay_btn" class="btn btn-primary pull-right"
                         style="margin-top: 5px;" disabled>Pay $<span
                         class="initial_dollar">0</span> <i class="fa fa-arrow-right"></i></button>
             </div>
+            <h4 class="pull-left">Duration: <span id="duration">0</span> hour(s)</h4>
             {% if user.is_superuser %}
                 <button id="super_btn" class="btn btn-danger pull-right" style="margin-top: 5px;">SUPER BUTTON</button>
             {% endif %}

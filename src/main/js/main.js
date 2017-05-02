@@ -114,6 +114,7 @@ $(function () {
     };
 
     function calculateDuration(eventData) {
+        eventData.id = 'temp';
         eventList.push(eventData);
         var totalDurationHours = 0;
         var totalDurationMinutes = 0;
@@ -173,6 +174,14 @@ $(function () {
             window.location.reload()
         }
 
+    });
+
+    $('#reset_btn').click(function () {
+        calendar.fullCalendar('removeEvents', 'temp');
+        eventList = [];
+        $('#duration').text('0');
+        $('#pay_btn').attr('disabled', true);
+        $('.initial_dollar').text('0');
     });
 
     calendar.fullCalendar(calendarOptions);
