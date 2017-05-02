@@ -160,7 +160,7 @@ def file_list(request):
 @login_required
 def manage_files(request):
     if request.user.is_superuser:
-        users = User.objects.exclude(id=request.user.id)
+        users = User.objects.exclude(id=request.user.id).order_by('first_name')
         for user in users:
             user.totalFiles = Files.objects.filter(to_user=user).count()
             user.totalPaid = Booking.objects.filter(user=user).aggregate(totalPaid=Sum('transaction_amount'))
@@ -175,7 +175,7 @@ def manage_files(request):
 def manage_user_files(request, user_id):
     if request.user.is_superuser:
         user = User.objects.get(id=user_id)
-        files = Files.objects.filter(to_user=user)
+        files = Files.objects.filter(to_user=user).order_by('-created_at')
         return render(request, 'files/manage_user_files.html', {
             "file_list": files,
             "this_user": user

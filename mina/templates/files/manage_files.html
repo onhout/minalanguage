@@ -10,7 +10,6 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th class="hidden-xs">ID</th>
                     <th>First name</th>
                     <th class="hidden-xs">Last name</th>
                     <th class="hidden-xs">Username/Email</th>
@@ -22,17 +21,20 @@
                 </thead>
                 <tbody>
                 {% for user in user_list %}
-                    <tr>
-                        <td class="hidden-xs">{{ user.id }}</td>
-                        <td>{{ user.first_name }}</td>
-                        <td class="hidden-xs">{{ user.last_name }}</td>
-                        <td class="hidden-xs">{{ user.username }}</td>
-                        <td class="hidden-xs">{{ user.date_joined }}</td>
-                        <td class="hidden-xs">{{ user.totalFiles }}</td>
-                        <td class="hidden-xs">${{ user.totalPaid.totalPaid }}</td>
-                        <td><a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
-                        </td>
-                    </tr>
+                    {% if not user.is_superuser %}
+                        <tr>
+                            <td>{{ user.first_name }}</td>
+                            <td class="hidden-xs">{{ user.last_name }}</td>
+                            <td class="hidden-xs">{{ user.username }}</td>
+                            <td class="hidden-xs">{{ user.date_joined }}</td>
+                            <td class="hidden-xs">{{ user.totalFiles }}</td>
+                            <td class="hidden-xs">
+                                ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}
+                            </td>
+                            <td><a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
