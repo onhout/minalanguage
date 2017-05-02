@@ -4,26 +4,34 @@
 {% block content %}
     <h1 class="text-center">Hello, {{ user.get_full_name }}. Here's your list of events</h1>
     {% if meetings %}
-    <table class="table table-hover table-striped">
-        <thead>
-        <tr>
-            <th>Begin Time</th>
-            <th>End Time</th>
-            <th>Class Location</th>
-            <th>Meeting Type</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for meeting in meetings %}
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
             <tr>
-                <td>{{ meeting.start }}</td>
-                <td>{{ meeting.end }}</td>
-                <td>{{ meeting.class_location }}</td>
-                <td>{{ meeting.book_type }}</td>
+                <th>Begin Time</th>
+                <th>End Time</th>
+                <th>Class Location</th>
+                <th>Meeting Type</th>
+                {% if user.is_superuser %}
+                    <th>Student</th>
+                    <th>Action</th>
+                {% endif %}
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for meeting in meetings %}
+                <tr>
+                    <td>{{ meeting.start }}</td>
+                    <td>{{ meeting.end }}</td>
+                    <td>{{ meeting.class_location }}</td>
+                    <td>{{ meeting.book_type }}</td>
+                    {% if user.is_superuser %}
+                        <td>{{ meeting.user.get_full_name }}</td>
+                        <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <h1>Nothing yet! Book some meetings!</h1>
     {% endif %}

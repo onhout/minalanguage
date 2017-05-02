@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta
+
 import os
 import stripe
 from decouple import config
@@ -69,6 +70,14 @@ def book_meeting(request):
 
 
 @login_required
+def remove_meeting(request, booking_id):
+    if request.user.is_superuser:
+        Booking.objects.get(id=booking_id).delete()
+        return redirect('list_meetings')
+    return redirect('/')
+
+
+@login_required
 def super_book_meeting(request):
     if request.method == 'POST' and request.user.is_superuser:
         book_form = BookingForm(request.POST)
@@ -82,8 +91,10 @@ def super_book_meeting(request):
 
 @login_required
 def list_meetings(request):
-    meeting_list = Booking.objects.filter(user=request.user)
-
+    if request.user.is_superuser:
+        meeting_list = Booking.objects.all()
+    else:
+        meeting_list = Booking.objects.filter(user=request.user)
     return render(request, 'meeting/list.html', {
         'meetings': meeting_list
     })

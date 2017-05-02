@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^meetings/list/$', views.list_meetings, name='list_meetings'),
     url(r'^meetings/superbook/$', views.super_book_meeting, name='super_book_meeting'),
     url(r'^meetings/edit$', views.change_meeting, name='change_meeting'),
+    url(r'^meetings/remove/(?P<booking_id>[\w-]+)', views.remove_meeting, name='remove_meeting'),
     url(r'^meetings/get_meetings', views.get_all_meetings, name='get_all_meetings'),
 ]
