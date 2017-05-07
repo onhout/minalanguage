@@ -7,6 +7,7 @@ from decouple import config
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -57,12 +58,25 @@ def book_meeting(request):
         for booking in json_loads["bookings"]:
             book_form = BookingForm(booking)
             if book_form.is_valid():
+                message = "New person booked you: %s, %s session, from %s to %s, paid: $%s" \
+                          % (request.user.get_full_name(),
+                             booking["book_type"],
+                             booking["start"],
+                             booking["end"],
+                             booking["transaction_amount"])
+                send_mail(
+                    'Someone booked you baby',
+                    message,
+                    'mina@minajeong.com',
+                    ['zxoct11@gmail.com'],
+                    fail_silently=False, )
                 form = book_form.save(commit=False)
                 form.client_ip = json_loads["stripeToken"]["client_ip"]
                 form.transaction_id = charge["id"]
                 form.transaction_amount = booking["transaction_amount"]
                 form.user = request.user
                 form.save()
+
         return redirect('book_meeting')
     return render(request, 'meeting/book.html', {
         'next_meeting': next_meeting
@@ -153,6 +167,17 @@ def change_meeting(request):
         }
         book_form = BookingForm(meeting_obj, instance=meeting)
         if book_form.is_valid():
+            message = "%s changed a meeting, %s session, from %s to %s" \
+                      % (request.user.get_full_name(),
+                         meeting.book_type,
+                         request.POST.get('start'),
+                         request.POST.get('end'))
+            send_mail(
+                'Meeting has changed baby',
+                message,
+                'mina@minajeong.com',
+                ['zxoct11@gmail.com'],
+                fail_silently=False, )
             book_form.save()
             data = {'status': "success"}
         else:
