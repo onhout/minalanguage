@@ -3,12 +3,20 @@
 {% block title %}Main Page{% endblock %}
 {% block content %}
     <div class="main-entry">
-        <div id="bg">
-            <img src="http://wallpapercave.com/wp/6fVBDMW.jpg" alt="">
-        </div>
+        {#        <div id="bg">#}
+        {#            <img src="https://s3-us-west-1.amazonaws.com/minalanguage/media/pink+dust.png" alt="">#}
+        {#        </div>#}
+
+
         <div class="login">
-            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-social btn-lg btn-facebook btn-block"><i class="fa fa-facebook"></i>Sign in with Facebook</a>
-            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-social btn-lg btn-google btn-block"><i class="fa fa-google"></i>Sign in with Google</a>
+            <img src="https://s3-us-west-1.amazonaws.com/minalanguage/media/minalogo2.png" class="img-responsive"/>
+            <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+                <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-social btn-lg btn-facebook btn-block"><i
+                        class="fa fa-facebook"></i>Sign in with Facebook</a>
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-social btn-lg btn-google btn-block"><i
+                        class="fa fa-google"></i>Sign in with Google</a>
+            </div>
+
         </div>
     </div>
     {% render_bundle 'main' %}
