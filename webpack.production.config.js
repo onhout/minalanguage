@@ -11,6 +11,7 @@ module.exports = {
         files: ['main/js/files','main/less/files.less'],
         vendor:[
             'jquery',
+            'jquery-ui-dist/jquery-ui',
             'globals/index.less',
             'globals/index.js',
             'bootstrap',
