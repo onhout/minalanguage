@@ -28,6 +28,6 @@ require('./calendar.js');
                 window.location.hash = hash;
             });
         }
-
+ 
     });
 })(jQuery);

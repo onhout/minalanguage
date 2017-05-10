@@ -16,7 +16,6 @@ html, body {
 
 body {
   font-size: 15px;
-  line-height: 1.52;
   color: @text-color;
   font-weight: 400;
 }
@@ -371,6 +370,9 @@ h2 {
   border-radius: 0 80px 99px 99px;
   -moz-border-radius: 0 80px 99px 99px;
   -webkit-border-radius: 0 80px 99px 99px;
+  display:block;
+  margin-left: auto;
+  margin-right:auto;
   h3 {
     font-size: 36px;
     color: white;
@@ -383,9 +385,9 @@ h2 {
     line-height: 20px;
     padding-top: 15px;
   }
-  i {
-    font-size: 150px;
-    margin-top: 35px;
+  .icon {
+    font-size: 85px;
+    margin-top: 55px;
     color: rgb(255, 255, 255);
   }
 }
@@ -668,6 +670,7 @@ Contact Us
 Footer
 ************************************/
 .footer {
+  margin-top: 15px;
   padding: 60px 0 20px;
   background: #111;
   color: #ccc;
