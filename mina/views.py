@@ -22,7 +22,8 @@ def user_login(request):
     if request.user.is_authenticated and not request.user.is_anonymous:
         return redirect('/')
     else:
-        return render(request, 'index.html', {})
+        return render(request, 'index.html', {
+        })
 
 
 # @login_required

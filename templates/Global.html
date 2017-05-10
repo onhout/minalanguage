@@ -11,7 +11,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/imagehover.css/1.0/css/imagehover.min.css" rel="stylesheet">
 </head>
 <body>
-{% block navbar %}{% endblock %}
-{% block content %}{% endblock %}
+{% include 'Nav.html' %}
+{% block main_page %}{% endblock %}
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
 </body>
 </html>
