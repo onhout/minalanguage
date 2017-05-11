@@ -171,7 +171,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")
 if DEBUG == True:
     STATIC_URL = '/static/'
 else:
-    STATIC_URL = 'http://minalanguage.s3.amazonaws.com/admin/'
+    STATIC_URL = 'http://minalanguage.s3.amazonaws.com/'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
