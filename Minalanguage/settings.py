@@ -25,7 +25,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = '=%$oh_4*5$-6h%s(_%&7k&*$9mauf2lh2g=l$+yjrxa-l&^vr('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # SET IT TO FALSE FOR PROD MODE
+DEBUG = False # SET IT TO FALSE FOR PROD MODE
 USE_TZ = False
 
 ALLOWED_HOSTS = ['*']
@@ -183,9 +183,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-LOGIN_URL = '/login'
+LOGIN_URL = '/'
 LOGOUT_URL = '/logout'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/home'
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',

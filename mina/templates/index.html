@@ -2,6 +2,7 @@
 {% load render_bundle from webpack_loader %}
 {% block title %}Main Page{% endblock %}
 {% block main_page %}
+
     <!--/ Navigation bar-->
     <!--Modal box-->
     <div class="modal fade" id="login" role="dialog">
@@ -34,10 +35,15 @@
     {% include 'main_parts/1.html' %}
     <!--/ Banner-->
     <!--Feature-->
-    {% include 'main_parts/2.html' %}
+    <div class="alternate-odd">
+        {% include 'main_parts/2.html' %}
+    </div>
+
     <!--/ feature-->
     <!--Organisations-->
-    {% include 'main_parts/3.html' %}
+    <div class="alternate-even">
+        {% include 'main_parts/3.html' %}
+    </div>
     <!--/ Organisations-->
     <!--Cta-->
     {#    <section id="cta-2">#}
@@ -59,22 +65,33 @@
     {#    </section>#}
     <!--/ Cta-->
     <!--work-shop-->
-    {% include 'main_parts/4.html' %}
+{#    <div class="alternate-odd">#}
+{#        {% include 'main_parts/4.html' %}#}
+{#    </div>#}
     <!--/ work-shop-->
     <!--Faculity member-->
-    {% include 'main_parts/5.html' %}
+    <div class="alternate-odd">
+        {% include 'main_parts/5.html' %}
+    </div>
     <!--/ Faculity member-->
     <!--Testimonial-->
     {% include 'main_parts/6.html' %}
     <!--/ Testimonial-->
     <!--Courses-->
-    {% include 'main_parts/7.html' %}
+    <div class="alternate-even">
+        {% include 'main_parts/7.html' %}
+    </div>
     <!--/ Courses-->
     <!--Pricing-->
-    {% include 'main_parts/8.html' %}
+    <div class="alternate-odd">
+        {% include 'main_parts/8.html' %}
+    </div>
     <!--/ Pricing-->
     <!--Contact-->
-    {% include 'main_parts/9.html' %}
+    <div class="alternate-even">
+        {% include 'main_parts/9.html' %}
+    </div>
+
     <!--/ Contact-->
     {% render_bundle 'main' %}
 {% endblock %}

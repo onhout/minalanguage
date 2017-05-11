@@ -7,9 +7,8 @@
                         <h2 class="text-dec">Hello.</h2>
                     </div>
                     <div class="intro-para text-center quote">
-                        <p class="big-text">Learning Today . . . Leading Tomorrow.</p>
-                        <p class="small-text">Welcome to Mina's Language!
-                            <br>Whether you want to learn Korean or Chinese
+                        <p class="big-text">Welcome to Mina's Language!</p>
+                        <p class="small-text">Whether you want to learn Korean or Chinese
                             <br>I will teach you the fastest way to learn the two most popular language in the
                             world!</p>
                         {#                            <a href="#" class="btn">GET A QUOTE</a>#}
@@ -21,4 +20,16 @@
             </div>
         </div>
     </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/typed.js/1.1.7/typed.min.js'></script>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Typed.new(".text-dec", {
+            strings: ["Hello.", "你好。", "안녕하세요?"],
+            typeSpeed: 100,
+            backDelay: 1000,
+            showCursor: false,
+            loop:true,
+        });
+    });
+</script>

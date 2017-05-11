@@ -9,6 +9,8 @@
 @main-color: #705E6F;
 @active-color: #7D6680;
 @text-color: #645267;
+@alternate-odd: #FFF;
+@alternate-even: #e7ecee;
 
 html, body {
   font-family: 'Josefin Sans', sans-serif;
@@ -59,6 +61,13 @@ a {
   :hover, :focus {
     color: @main-color;
   }
+}
+
+.alternate-odd{
+  background-color: @alternate-odd;
+}
+.alternate-even{
+  background-color: @alternate-even;
 }
 
 /***********************************
@@ -138,7 +147,7 @@ Navigation bar
 Banner
 ************************************/
 .banner {
-  background: url('https://unsplash.it/1920/680') no-repeat center top;
+  background: url('https://s3-us-west-1.amazonaws.com/minalanguage/media/bg-banner.JPG') no-repeat center top;
   background-size: cover;
   min-height: 580px;
   position: relative;
@@ -358,165 +367,112 @@ h2 {
  Organisations
 ************************************/
 #organisations {
-  background-color: rgb(247, 247, 247);
-}
+  .orga-stru {
+    background-color: @main-color;
+    width: 109px;
+    height: auto;
+    padding: 10px 10px 25px 10px;
+    text-align: center;
+    border-radius: 0 80px 99px 99px;
+    -moz-border-radius: 0 80px 99px 99px;
+    -webkit-border-radius: 0 80px 99px 99px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    h3 {
+      font-size: 36px;
+      color: white;
+      font-weight: bold;
+    }
+    p {
+      font-size: 14px;
+      color: white;
+      font-weight: normal;
+      line-height: 20px;
+      padding-top: 15px;
+    }
+    .icon {
+      font-size: 85px;
+      margin-top: 55px;
+      color: rgb(255, 255, 255);
+    }
+  }
 
-.orga-stru {
-  background-color: @main-color;
-  width: 109px;
-  height: auto;
-  padding: 10px 10px 25px 10px;
-  text-align: center;
-  border-radius: 0 80px 99px 99px;
-  -moz-border-radius: 0 80px 99px 99px;
-  -webkit-border-radius: 0 80px 99px 99px;
-  display:block;
-  margin-left: auto;
-  margin-right:auto;
-  h3 {
-    font-size: 36px;
-    color: white;
+  h3.det-txt {
+    font-size: 40px;
     font-weight: bold;
+    text-transform: uppercase;
   }
-  p {
-    font-size: 14px;
-    color: white;
-    font-weight: normal;
-    line-height: 20px;
-    padding-top: 15px;
+
+  h4.sm-txt {
+    color: @main-color;
+    font-size: 24px;
   }
-  .icon {
-    font-size: 85px;
-    margin-top: 55px;
-    color: rgb(255, 255, 255);
+
+  p.det-p {
+    padding: 40px 0;
   }
-}
-
-h3.det-txt {
-  font-size: 40px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-h4.sm-txt {
-  color: @main-color;
-  font-size: 24px;
-}
-
-p.det-p {
-  padding: 40px 0;
-}
-
-#pricing {
-  background: rgb(247, 247, 247);
-}
-
-/***********************************
-Cta
-************************************/
-#cta-2 {
-  padding: 140px 0;
-}
-
-.cta-2-txt {
-  font-size: 24px;
-  padding-bottom: 15px;
-  text-align: center;
-  margin: 0 auto;
-  line-height: 34px !important;
-}
-
-.cta-2-form input[type="email"] {
-  padding: 13px 40px;
-  font-size: 18px;
-  color: #2b5d83;
-  font-weight: 100;
-  min-width: 280px;
-  margin-left: -4px;
-  margin-bottom: 2px;
-  border: 1px solid @main-color;
-  background-color: rgb(247, 247, 247);
-  border-radius: 30px 0 0 30px;
-}
-
-.cta-2-form-submit-btn {
-  font-size: 18px;
-  text-transform: capitalize;
-  color: #fff;
-  background-color: @main-color;
-  padding: 14px 30px;
-  margin-left: -4px;
-  transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  -webkit-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  border-width: 1px 1px 1px 0;
-  border-radius: 0 30px 30px 0;
 }
 
 /***********************************
 Work Shop
 ************************************/
 #work-shop {
-  background-color: white
-          //rgb(247, 247, 247);
-}
+  .service-box {
+    background: #fff;
+    padding: 60px 30px 80px;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+  }
 
-.service-box {
-  background: #fff;
-  padding: 60px 30px 80px;
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
-}
+  .icon-box i {
+    color: @main-color;
+    font-size: 65px;
+  }
 
-.icon-box i {
-  color: @main-color;
-  font-size: 65px;
-}
+  .ser-text {
+    font-size: 24px;
+  }
 
-.ser-text {
-  font-size: 24px;
-}
-
-.icon-box, .icon-text {
-  padding: 20px 0 0;
+  .icon-box, .icon-text {
+    padding: 20px 0 0;
+  }
 }
 
 /***********************************
 Mentor Team
 ************************************/
 
-#faculity-member{
-  background-color: rgb(247, 247, 247);
-}
-.pm-staff-profile-image {
-  width: 150px;
-  height: 150px;
-  background-color: #C6C6C6;
-  border-radius: 50%;
-  display: inline-block;
-}
+#faculty {
+  .pm-staff-profile-image {
+    width: 150px;
+    height: 150px;
+    background-color: #C6C6C6;
+    border-radius: 50%;
+    display: inline-block;
+  }
 
-.pm-staff-profile-details {
-  padding: 20px 20px;
-}
+  .pm-staff-profile-details {
+    padding: 20px 20px;
+  }
 
-.pm-staff-profile-name {
-  font-size: 24px;
-  text-transform: capitalize;
-  color: #2b5d83;
-}
+  .pm-staff-profile-name {
+    font-size: 24px;
+    text-transform: capitalize;
+    color: #2b5d83;
+  }
 
-.pm-staff-profile-title {
-  text-transform: capitalize;
-  color: #4b4b4b;
-  font-weight: 500;
-  padding: 12px 0;
-}
+  .pm-staff-profile-title {
+    text-transform: capitalize;
+    color: #4b4b4b;
+    font-weight: 500;
+    padding: 12px 0;
+  }
 
-.pm-staff-profile-bio {
-  text-transform: capitalize;
-  color: #4b4b4b;
-  font-weight: 100;
+  .pm-staff-profile-bio {
+    text-transform: capitalize;
+    color: #4b4b4b;
+    font-weight: 100;
+  }
 }
 
 /***********************************
@@ -524,78 +480,79 @@ Testimonial
 ************************************/
 #testimonial {
   background-color: #111;
-}
+  .bg-white {
+    background-color: #fff !important;
+  }
 
-.bg-white {
-  background-color: #fff !important;
-}
+  .text-comment {
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+  }
 
-.text-comment {
-  background-color: rgb(255, 255, 255);
-  padding: 20px;
-}
-
-.text-par {
-  font-size: 20px;
-  padding-bottom: 15px;
+  .text-par {
+    font-size: 20px;
+    padding-bottom: 15px;
+  }
 }
 
 /***********************************
 Course
 ************************************/
 [class*=" imghvr-"] figcaption, [class^="imghvr-"] figcaption {
-  background-color: @main-color;
+  background-color: @main-color !important;
 }
 
 [class*=" imghvr-"], [class^="imghvr-"] {
-  background-color: @main-color;
-  color: #fff;
+  background-color: @main-color !important;
+  color: @hover-color !important;
 }
 
 /***********************************
 Price Table
 ************************************/
-.price-table {
-  box-shadow: 0 0 1px 0 RGBA(0, 0, 0, 0.4);
-  position: relative;
-  .pricing-head {
-    background: #fff;
-    padding: 40px;
-    text-align: center;
-    .amount {
-      font-size: 60px;
-      font-weight: bold;
-    }
-    .curency {
-      display: inline-block;
-      position: relative;
-      top: -30px;
-      font-size: 20px;
-    }
-    h4 {
-      font-size: 22px;
-      color: #232c3b;
-      margin-top: 0;
-      letter-spacing: 1px;
-      border-bottom: 1px solid #232c3b;
-      padding-bottom: 20px;
+#pricing {
+  .price-table {
+    box-shadow: 0 0 1px 0 RGBA(0, 0, 0, 0.4);
+    position: relative;
+    .pricing-head {
+      background: #fff;
+      padding: 40px;
+      text-align: center;
+      .amount {
+        font-size: 60px;
+        font-weight: bold;
+      }
+      .curency {
+        display: inline-block;
+        position: relative;
+        top: -30px;
+        font-size: 20px;
+      }
+      h4 {
+        font-size: 22px;
+        color: #232c3b;
+        margin-top: 0;
+        letter-spacing: 1px;
+        border-bottom: 1px solid #232c3b;
+        padding-bottom: 20px;
+      }
     }
   }
-}
 
-.price-in {
-  background: #fff;
-  text-align: center;
-}
+  .price-in {
+    background: #fff;
+    text-align: center;
+  }
 
-.btn-bg {
-  border: 0;
-  border-radius: 0;
-  color: #fff !important;
-  padding: 20px 0;
-  font-weight: bold !important;
-  font-size: 14px;
-  background-color: @main-color;
+  .btn-bg {
+    border: 0;
+    border-radius: 0;
+    color: #fff !important;
+    padding: 20px 0;
+    font-weight: bold !important;
+    font-size: 14px;
+    background-color: @main-color;
+  }
 }
 
 /***********************************

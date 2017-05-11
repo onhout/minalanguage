@@ -12,6 +12,7 @@ module.exports = {
         vendor:[
             'jquery',
             'jquery-ui-dist/jquery-ui',
+            'jquery-validation',
             'globals/index.less',
             'globals/index.js',
             'bootstrap',

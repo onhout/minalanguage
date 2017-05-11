@@ -3,9 +3,10 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^login$', views.user_login, name='user_login'),
+    url(r'^$', views.user_login, name='user_login'),
     url(r'^logout$', views.user_logout, name='user_logout'),
-    url(r'^$', views.book_meeting, name='book_meeting'),
+    url(r'^send_message/', views.send_message, name='send_message'),
+    url(r'^home/$', views.book_meeting, name='book_meeting'),
     url(r'^file/list/$', views.file_list, name='file_list'),
     url(r'^file/manage/$', views.manage_files, name='manage_files'),
     url(r'^file/manage/(?P<user_id>[\w-]+)$', views.manage_user_files, name='manage_user_files'),

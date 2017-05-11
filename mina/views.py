@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta
+import requests
 
 import os
 import stripe
@@ -20,7 +21,7 @@ from .models import Booking, Files
 
 def user_login(request):
     if request.user.is_authenticated and not request.user.is_anonymous:
-        return redirect('/')
+        return redirect('book_meeting')
     else:
         return render(request, 'index.html', {
         })
@@ -34,6 +35,26 @@ def user_login(request):
 def user_logout(request):
     auth_logout(request)
     return redirect('user_login')
+
+
+def send_message(request):
+    recaptcha = request.POST.get('g-recaptcha-response')
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', {
+        "response": recaptcha,
+        "secret": "6Ld55iAUAAAAALrIF3nwtqeMUruRckJvQ6F3-VeI"
+    })
+    if request.method == "POST" and request.POST.get('email') and r.json()['success'] is True:
+        person = request.POST.get('person')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = "(%s:%s) sent you the following message: \"%s\"" % (person, email, request.POST.get('message'))
+        send_mail(
+            subject,
+            message,
+            'admin@minajeong.com',
+            ['zxoct11@gmail.com'],
+            fail_silently=False, )
+    return redirect('/')
 
 
 @login_required
@@ -250,3 +271,4 @@ def delete_file(request, file_id):
         Files.objects.get(id=file_id).delete()
         data = {'success': True}
         return JsonResponse(data)
+
