@@ -13,7 +13,7 @@
                     <th>First name</th>
                     <th class="hidden-xs">Last name</th>
                     <th class="hidden-xs">Username/Email</th>
-                    <th class="hidden-xs">Date joined</th>
+                    <th class="hidden-xs">Last login</th>
                     <th class="hidden-xs">Total Files</th>
                     <th class="hidden-xs">Total Paid</th>
                     <th>Action</th>
@@ -26,7 +26,7 @@
                             <td>{{ user.first_name }}</td>
                             <td class="hidden-xs">{{ user.last_name }}</td>
                             <td class="hidden-xs">{{ user.username }}</td>
-                            <td class="hidden-xs">{{ user.date_joined }}</td>
+                            <td class="hidden-xs">{{ user.last_login }}</td>
                             <td class="hidden-xs">{{ user.totalFiles }}</td>
                             <td class="hidden-xs">
                                 ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}

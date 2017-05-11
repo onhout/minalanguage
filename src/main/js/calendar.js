@@ -44,9 +44,10 @@ $(function () {
         firstDay: moment().day(),
         unselectAuto: false,
         select: function (start, end, jsEvent, view) {
+            var modal_id = 'confirm-time';
             if (moment(start).subtract(2, 'hour') > moment()) {
                 var eventData;
-                var modal = new MODAL('Confirm', '');
+                var modal = new MODAL('Confirm', '', modal_id);
                 var select = $('<select class="form-control" id="booking_type">' +
                     '<option value="">--Select Meeting Type--</option>' +
                     '<option value="online">Online</option>' +
@@ -74,7 +75,7 @@ $(function () {
                     }
 
                 });
-                $('#modal-confirm-time').on('hide.bs.modal', function () {
+                $('#modal-' + modal_id).on('hide.bs.modal', function () {
                     calendar.fullCalendar('unselect');
                 });
             } else {
@@ -110,6 +111,50 @@ $(function () {
                 })
             }
 
+        },
+        eventClick: function (calEvent, jsEvent, view) {
+            if (calEvent.meeting_id) {
+                var modal_id = 'edit' + calEvent.start;
+                var modal = new MODAL('Edit Meeting', '', modal_id);
+                var edit_location = calEvent.is_admin ? $('<div/>', {
+                    class: 'form-group'
+                }).append($('<label/>', {
+                    "for": 'location',
+                    "text": "Location: "
+                })).append($('<input/>', {
+                    id: "location",
+                    class: 'form-control',
+                    placeholder: 'Location',
+                    value: calEvent.location
+                })) : '';
+                modal.modal_body = $('<div/>').append($('<select class="form-control" id="booking_type">' +
+                    '<option value="">--Select Meeting Type--</option>' +
+                    '<option value="online">Online</option>' +
+                    '<option value="in-person">In Person</option>' +
+                    '</select>')).append(edit_location);
+
+                modal.run_modal(function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/meetings/edit?meeting_id=' + calEvent.meeting_id,
+                        data: {
+                            csrfmiddlewaretoken: csrftoken,
+                            book_type: $('#booking_type').val(),
+                            location: $('#location').val()
+                        }
+                    }).done(function (data) {
+                        if (data.status == 'success') {
+                            $('.errors').append(new ALERT('Event settings changed successfully', 'success'));
+                            calendar.fullCalendar('refetchEvents')
+                        } else {
+                            $('.errors').append(new ALERT('Error occurred', 'warning'));
+                        }
+                    });
+                });
+                $('#modal-' + modal_id).on('hide.bs.modal', function () {
+                    calendar.fullCalendar('unselect');
+                });
+            }
         }
     };
 

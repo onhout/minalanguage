@@ -1,5 +1,6 @@
 class Modal {
-    constructor(title, text) {
+    constructor(title, text, id) {
+        this.id = id;
         this.save_text = 'Yes';
         this.modal_body = $('<p/>', {
             'text': text
@@ -20,7 +21,7 @@ class Modal {
         var self = this;
         self.modal = $('<div/>', {
             'class': 'modal fade in',
-            'id': 'modal-confirm-time'
+            'id': 'modal-' + self.id
         })
             .append($('<div/>', {
                 'class': 'modal-dialog'
@@ -53,8 +54,8 @@ class Modal {
                             'text': self.save_text
                         }).click(callback)))));
         self.modal.appendTo($('body'));
-        $('#modal-confirm-time').modal('show');
-        $('#modal-confirm-time').on('hide.bs.modal', function () {
+        $('#modal-'+self.id).modal('show');
+        $('#modal-'+self.id).on('hide.bs.modal', function () {
             self.modal.remove();
         })
     }

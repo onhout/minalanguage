@@ -1,0 +1,26 @@
+{% extends 'email_templates/head.html' %}
+{% block email_content %}
+    <div style="text-align: center">
+        <h1>Dear {{ name }}, your meeting has changed</h1>
+        {% if meeting_start_orig != start %}
+            <h3>Book time:</h3>
+            <p>
+                From : {{ meeting_start_orig }} to {{ meeting_end_orig }}
+            </p>
+            <p>
+                To: {{ start }} to {{ end }}
+            </p>
+        {% endif %}
+        {% if meeting_booktype_orig != book_type %}
+            <h3>Type:</h3>
+            <p>From : {{ meeting_booktype_orig }} </p>
+            <p>To : {{ book_type }}</p>
+        {% endif %}
+        {% if meeting_location_orig != location %}
+            <h3>Location:</h3>
+            <p>From : {{ meeting_location_orig }}</p>
+            <p>To : {{ location }}</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

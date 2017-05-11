@@ -1,9 +1,11 @@
+import os
+from datetime import datetime
+from uuid import uuid4
+
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_delete, pre_save
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from uuid import uuid4
-import os
 
 
 # Create your models here.
@@ -26,6 +28,10 @@ class Booking(models.Model):
 
     class Meta:
         ordering = ['start']
+
+    @property
+    def is_in_past(self):
+        return datetime.now() > self.end
 
 
 def user_directory_path(instance, filename):

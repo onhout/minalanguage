@@ -1,8 +1,8 @@
 import json
-from datetime import datetime, timedelta
-import requests
-
 import os
+from datetime import datetime, timedelta
+
+import requests
 import stripe
 from decouple import config
 from django.contrib.auth import logout as auth_logout
@@ -12,7 +12,8 @@ from django.core.mail import send_mail
 from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from .forms import BookingForm, FileForm
 from .models import Booking, Files
 
@@ -25,11 +26,6 @@ def user_login(request):
     else:
         return render(request, 'index.html', {
         })
-
-
-# @login_required
-# def user_home(request):
-#     return render(request, 'home.html', {})
 
 
 def user_logout(request):
@@ -80,18 +76,22 @@ def book_meeting(request):
         for booking in json_loads["bookings"]:
             book_form = BookingForm(booking)
             if book_form.is_valid():
-                message = "New person booked you: %s, %s session, from %s to %s, paid: $%s" \
-                          % (request.user.get_full_name(),
-                             booking["book_type"],
-                             booking["start"],
-                             booking["end"],
-                             booking["transaction_amount"])
-                send_mail(
-                    'Someone booked you baby',
-                    message,
-                    'mina@minajeong.com',
-                    ['zxoct11@gmail.com'],
-                    fail_silently=False, )
+                msg_html = render_to_string('email_templates/new_meeting.html', {
+                    "name": request.user.get_full_name(),
+                    "start": datetime.strptime(booking["start"], '%Y-%m-%d %H:%M:%S'),
+                    "end": datetime.strptime(booking["end"], '%Y-%m-%d %H:%M:%S'),
+                    "book_type": booking["book_type"]
+                })
+                message = strip_tags(msg_html)
+                email_list = ['zxoct11@gmail.com', request.user.email]
+                for email in email_list:
+                    send_mail(
+                        'Thank you for booking a meeting',
+                        message,
+                        'noreply@minajeong.com',
+                        [email],
+                        html_message=msg_html,
+                        fail_silently=False, )
                 form = book_form.save(commit=False)
                 form.client_ip = json_loads["stripeToken"]["client_ip"]
                 form.transaction_id = charge["id"]
@@ -153,7 +153,8 @@ def get_all_meetings(request):
                     "title": 'Booked - (%s)' % meeting.book_type,
                     "allDay": False,
                     "startEditable": True,
-                    "meeting_id": meeting.id
+                    "meeting_id": meeting.id,
+                    "is_admin": request.user.is_superuser
                 }
             else:
                 extendability = {
@@ -179,27 +180,41 @@ def get_all_meetings(request):
 def change_meeting(request):
     if request.method == "POST" and request.user.is_authenticated:
         meeting = Booking.objects.get(id=request.GET.get('meeting_id'))
+        meeting_start_orig = meeting.start
+        meeting_end_orig = meeting.end
+        meeting_booktype_orig = meeting.book_type
+        meeting_location_orig = meeting.class_location
         meeting_obj = {
-            "start": request.POST.get('start'),
-            "end": request.POST.get('end'),
-            "book_type": meeting.book_type,
-            "class_location": meeting.class_location,
+            "start": request.POST.get('start') or datetime.strftime(meeting.start, '%Y-%m-%d %H:%M:%S'),
+            "end": request.POST.get('end') or datetime.strftime(meeting.end, '%Y-%m-%d %H:%M:%S'),
+            "book_type": request.POST.get('book_type') or meeting.book_type,
+            "class_location": request.POST.get('location') or meeting.class_location,
             "transaction_amount": meeting.transaction_amount,
             "transaction_id": meeting.transaction_id
         }
         book_form = BookingForm(meeting_obj, instance=meeting)
         if book_form.is_valid():
-            message = "%s changed a meeting, %s session, from %s to %s" \
-                      % (request.user.get_full_name(),
-                         meeting.book_type,
-                         request.POST.get('start'),
-                         request.POST.get('end'))
-            send_mail(
-                'Meeting has changed baby',
-                message,
-                'mina@minajeong.com',
-                ['zxoct11@gmail.com'],
-                fail_silently=False, )
+            msg_html = render_to_string('email_templates/meeting_changed.html', {
+                "name": request.user.get_full_name(),
+                "meeting_start_orig": meeting_start_orig,
+                "meeting_end_orig": meeting_end_orig,
+                "start": datetime.strptime(meeting_obj["start"], '%Y-%m-%d %H:%M:%S'),
+                "end": datetime.strptime(meeting_obj["end"], '%Y-%m-%d %H:%M:%S'),
+                "meeting_booktype_orig": meeting_booktype_orig,
+                "book_type": meeting_obj["book_type"],
+                "meeting_location_orig": meeting_location_orig,
+                "location": meeting_obj["class_location"]
+            })
+            message = strip_tags(msg_html)
+            email_list = ['zxoct11@gmail.com', meeting.user.email]
+            for email in email_list:
+                send_mail(
+                    'Your meeting with Mina Jeong has changed',
+                    message,
+                    'noreply@minajeong.com',
+                    [email],
+                    html_message=msg_html,
+                    fail_silently=False, )
             book_form.save()
             data = {'status': "success"}
         else:
@@ -271,4 +286,3 @@ def delete_file(request, file_id):
         Files.objects.get(id=file_id).delete()
         data = {'success': True}
         return JsonResponse(data)
-
