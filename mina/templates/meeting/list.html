@@ -28,7 +28,7 @@
                         <td>{{ meeting.book_type }}</td>
                         {% if user.is_superuser %}
                             <td>{{ meeting.user.get_full_name }}</td>
-                            <td>Upcoming</td>
+                            <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
                         {% endif %}
                     </tr>
                 {% endif %}

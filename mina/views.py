@@ -1,7 +1,7 @@
 import json
-import os
 from datetime import datetime, timedelta
 
+import os
 import requests
 import stripe
 from decouple import config
@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+
 from .forms import BookingForm, FileForm
 from .models import Booking, Files
 
@@ -143,8 +144,19 @@ def get_all_meetings(request):
                                           end__lte=request.GET.get('to_date'))
         dataobj = []
         for meeting in meetings:
-            if (meeting.user == request.user and (meeting.start + timedelta(hours=2)) > datetime.now()) or (
-                    request.user.is_superuser):
+            if request.user.is_superuser:
+                extendability = {
+                    "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
+                    "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
+                    "type": meeting.book_type,
+                    "location": meeting.class_location,
+                    "title": 'Booked - (%s)' % meeting.book_type,
+                    "allDay": False,
+                    "editable": True,
+                    "meeting_id": meeting.id,
+                    "is_admin": request.user.is_superuser
+                }
+            elif meeting.user == request.user and (meeting.start + timedelta(hours=2)) > datetime.now():
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
@@ -153,8 +165,7 @@ def get_all_meetings(request):
                     "title": 'Booked - (%s)' % meeting.book_type,
                     "allDay": False,
                     "startEditable": True,
-                    "meeting_id": meeting.id,
-                    "is_admin": request.user.is_superuser
+                    "meeting_id": meeting.id
                 }
             else:
                 extendability = {
@@ -195,7 +206,7 @@ def change_meeting(request):
         book_form = BookingForm(meeting_obj, instance=meeting)
         if book_form.is_valid():
             msg_html = render_to_string('email_templates/meeting_changed.html', {
-                "name": request.user.get_full_name(),
+                "name": meeting.user.get_full_name(),
                 "meeting_start_orig": meeting_start_orig,
                 "meeting_end_orig": meeting_end_orig,
                 "start": datetime.strptime(meeting_obj["start"], '%Y-%m-%d %H:%M:%S'),
@@ -207,6 +218,7 @@ def change_meeting(request):
             })
             message = strip_tags(msg_html)
             email_list = ['zxoct11@gmail.com', meeting.user.email]
+
             for email in email_list:
                 send_mail(
                     'Your meeting with Mina Jeong has changed',

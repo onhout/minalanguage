@@ -45,7 +45,7 @@ $(function () {
         unselectAuto: false,
         select: function (start, end, jsEvent, view) {
             var modal_id = 'confirm-time';
-            if (moment(start).subtract(2, 'hour') > moment()) {
+            if (moment(start).subtract(12, 'hour') > moment()) {
                 var eventData;
                 var modal = new MODAL('Confirm', '', modal_id);
                 var select = $('<select class="form-control" id="booking_type">' +
@@ -79,7 +79,7 @@ $(function () {
                     calendar.fullCalendar('unselect');
                 });
             } else {
-                $('.errors').append(new ALERT('Cannot book previous dates or two hour before start time, sorry.', 'danger'));
+                $('.errors').append(new ALERT('Cannot book previous dates or at least twelve hours before start time, sorry.', 'danger'));
                 calendar.fullCalendar('unselect');
             }
         },
@@ -87,8 +87,34 @@ $(function () {
         startParam: 'from_date',
         endParam: 'to_date',
         eventDrop: function (event, delta, revertFunc) {
-            if (moment(event.start).subtract(2, 'hour') < moment()) {
-                $('.errors').append(new ALERT('Cannot move to previous dates or two hour before start time, sorry.', 'danger'));
+            if (moment(event.start).subtract(12, 'hour') < moment()) {
+                $('.errors').append(new ALERT('Cannot move to previous dates or at least twelve hours before start time, sorry.', 'danger'));
+                revertFunc()
+            } else if (checkOverlap(event)) {
+                $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after another event', 'danger'));
+                revertFunc()
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/meetings/edit?meeting_id=' + event.meeting_id,
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        start: moment(event.start).format('YYYY-MM-DD HH:mm:ss'),
+                        end: moment(event.end).format('YYYY-MM-DD HH:mm:ss')
+                    }
+                }).done(function (data) {
+                    if (data.status == 'success') {
+                        $('.errors').append(new ALERT('Time changed successfully', 'success'));
+                    } else {
+                        $('.errors').append(new ALERT('Error occurred', 'warning'));
+                    }
+                })
+            }
+
+        },
+        eventResize: function (event, delta, revertFunc) {
+            if (moment(event.start).subtract(12, 'hour') < moment()) {
+                $('.errors').append(new ALERT('Cannot move to previous dates or at least twelve hours before start time, sorry.', 'danger'));
                 revertFunc()
             } else if (checkOverlap(event)) {
                 $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after another event', 'danger'));
