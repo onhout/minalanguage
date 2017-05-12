@@ -1,7 +1,7 @@
 import json
+import os
 from datetime import datetime, timedelta
 
-import os
 import requests
 import stripe
 from decouple import config
@@ -218,7 +218,6 @@ def change_meeting(request):
             })
             message = strip_tags(msg_html)
             email_list = ['zxoct11@gmail.com', meeting.user.email]
-
             for email in email_list:
                 send_mail(
                     'Your meeting with Mina Jeong has changed',
