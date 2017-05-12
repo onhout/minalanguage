@@ -1,7 +1,7 @@
 class Modal {
     constructor(title, text, id) {
         this.id = id;
-        this.save_text = 'Yes';
+        this.save_text = 'Save';
         this.modal_body = $('<p/>', {
             'text': text
         });

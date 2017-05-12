@@ -116,20 +116,32 @@ $(function () {
             if (calEvent.meeting_id) {
                 var modal_id = 'edit' + calEvent.start;
                 var modal = new MODAL('Edit Meeting', '', modal_id);
-                var edit_location = calEvent.is_admin ? $('<div/>', {
-                    class: 'form-group'
-                }).append($('<label/>', {
-                    "for": 'location',
-                    "text": "Location: "
-                })).append($('<input/>', {
-                    id: "location",
-                    class: 'form-control',
-                    placeholder: 'Location',
-                    value: calEvent.location
-                })) : '';
-                modal.modal_body = $('<div/>').append($('<select class="form-control" id="booking_type">' +
+                var edit_location = '';
+                if (calEvent.is_admin && calEvent.type == 'in-person') {
+                     edit_location = $('<div/>', {
+                        class: 'form-group'
+                    }).append($('<label/>', {
+                        "for": 'location',
+                        "text": "Location: "
+                    })).append($('<input/>', {
+                        id: "location",
+                        class: 'form-control',
+                        placeholder: 'Location',
+                        value: calEvent.location
+                    }))
+                } else if (!calEvent.is_admin && calEvent.type == 'in-person') {
+                    edit_location = $('<h5/>', {
+                        text: "Meeting Location: " + calEvent.location
+                    });
+                } else {
+                    edit_location = '';
+                }
+
+                modal.modal_body = $('<div/>', {
+                    text: "Currently this meeting is an " + calEvent.type + " meeting."
+                }).append($('<select class="form-control" id="booking_type">' +
                     '<option value="">--Select Meeting Type--</option>' +
-                    '<option value="online">Online</option>' +
+                    '<option value="online">Online</option>'+
                     '<option value="in-person">In Person</option>' +
                     '</select>')).append(edit_location);
 
