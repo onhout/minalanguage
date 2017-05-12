@@ -81,6 +81,7 @@ def book_meeting(request):
                     "name": request.user.get_full_name(),
                     "start": datetime.strptime(booking["start"], '%Y-%m-%d %H:%M:%S'),
                     "end": datetime.strptime(booking["end"], '%Y-%m-%d %H:%M:%S'),
+                    "class_type": booking["class_type"],
                     "book_type": booking["book_type"]
                 })
                 message = strip_tags(msg_html)
@@ -149,6 +150,7 @@ def get_all_meetings(request):
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
                     "type": meeting.book_type,
+                    "class_type": meeting.class_type,
                     "location": meeting.class_location,
                     "title": 'Booked - (%s)' % meeting.book_type,
                     "allDay": False,
@@ -161,6 +163,7 @@ def get_all_meetings(request):
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
                     "type": meeting.book_type,
+                    "class_type": meeting.class_type,
                     "location": meeting.class_location,
                     "title": 'Booked - (%s)' % meeting.book_type,
                     "allDay": False,
@@ -171,8 +174,6 @@ def get_all_meetings(request):
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
-                    "type": meeting.book_type,
-                    "location": meeting.class_location,
                     "title": 'Unavailable',
                     "allDay": False,
                     "color": "#555555",
@@ -194,11 +195,13 @@ def change_meeting(request):
         meeting_start_orig = meeting.start
         meeting_end_orig = meeting.end
         meeting_booktype_orig = meeting.book_type
+        meeting_classtype_orig = meeting.class_type
         meeting_location_orig = meeting.class_location
         meeting_obj = {
             "start": request.POST.get('start') or datetime.strftime(meeting.start, '%Y-%m-%d %H:%M:%S'),
             "end": request.POST.get('end') or datetime.strftime(meeting.end, '%Y-%m-%d %H:%M:%S'),
             "book_type": request.POST.get('book_type') or meeting.book_type,
+            "class_type": request.POST.get('class_type') or meeting.class_type,
             "class_location": request.POST.get('location') or meeting.class_location,
             "transaction_amount": meeting.transaction_amount,
             "transaction_id": meeting.transaction_id
@@ -213,6 +216,8 @@ def change_meeting(request):
                 "end": datetime.strptime(meeting_obj["end"], '%Y-%m-%d %H:%M:%S'),
                 "meeting_booktype_orig": meeting_booktype_orig,
                 "book_type": meeting_obj["book_type"],
+                "meeting_classtype_orig": meeting_classtype_orig,
+                "class_type": meeting_obj["class_type"],
                 "meeting_location_orig": meeting_location_orig,
                 "location": meeting_obj["class_location"]
             })

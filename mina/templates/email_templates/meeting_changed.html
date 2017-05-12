@@ -11,6 +11,11 @@
                 To: {{ start }} to {{ end }}
             </p>
         {% endif %}
+        {% if meeting_classtype_orig != class_type %}
+            <h3>Class:</h3>
+            <p>From : {{ meeting_classtype_orig }} </p>
+            <p>To : {{ class_type }}</p>
+        {% endif %}
         {% if meeting_booktype_orig != book_type %}
             <h3>Type:</h3>
             <p>From : {{ meeting_booktype_orig }} </p>

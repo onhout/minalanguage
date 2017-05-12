@@ -15,11 +15,16 @@ class Booking(models.Model):
         ('online', 'Online'),
         ('in-person', 'In Person')
     )
+    CLASS_TYPE = (
+        ('chinese', 'Chinese'),
+        ('korean', 'Korean')
+    )
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booked_user')
     book_type = models.CharField(max_length=10, choices=TYPE, null=True, blank=True)
     start = models.DateTimeField()
     end = models.DateTimeField()
+    class_type = models.CharField(max_length=10, null=True, blank=True, choices=CLASS_TYPE)
     class_location = models.CharField(max_length=255, null=True, blank=True, default="Walnut Creek, CA")
     transaction_id = models.CharField(max_length=50, null=True, blank=True)
     transaction_amount = models.IntegerField(null=True, blank=True)

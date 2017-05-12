@@ -48,19 +48,28 @@ $(function () {
             if (moment(start).subtract(12, 'hour') > moment()) {
                 var eventData;
                 var modal = new MODAL('Confirm', '', modal_id);
-                var select = $('<select class="form-control" id="booking_type">' +
-                    '<option value="">--Select Meeting Type--</option>' +
+                var class_type = $('<div class="form-group">' +
+                    '<small>Choose lecture type: </small>' +
+                    '<select class="form-control" id="class_type">' +
+                    '<option value="korean">Korean</option>' +
+                    '<option value="chinese">Chinese</option>' +
+                    '</select></div>');
+
+                var select = $('<div class="form-group">' +
+                    '<small>Choose booking type: </small>' +
+                    '<select class="form-control" id="booking_type">' +
                     '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
-                    '</select>');
+                    '</select></div>');
                 modal.modal_body = $('<h4>Do you want to book from ' +
                     moment(start).format('MM/DD hh:mm:ss') + ' to ' +
-                    moment(end).format('MM/DD hh:mm:ss') + '?</h4>').append(select);
+                    moment(end).format('MM/DD hh:mm:ss') + '?</h4>').append("<hr>").append(class_type).append(select);
                 modal.run_modal(function () {
                     var differenceInMs = moment(end).diff(moment(start)); // diff yields milliseconds
                     var duration = moment.duration(differenceInMs);
                     eventData = {
                         book_type: $('#booking_type').val() ? $('#booking_type').val() : 'online',
+                        class_type: $('#class_type').val() ? $('#class_type').val() : 'korean',
                         title: 'Booked - (' + ($('#booking_type').val() ? $('#booking_type').val() : 'online') + ')',
                         start: start,
                         end: end,
@@ -163,13 +172,23 @@ $(function () {
                     edit_location = '';
                 }
 
-                modal.modal_body = $('<div/>', {
-                    text: "Currently this meeting is an " + calEvent.type + " meeting."
-                }).append($('<select class="form-control" id="booking_type">' +
-                    '<option value="">--Select Meeting Type--</option>' +
-                    '<option value="online">Online</option>'+
+                var class_type = $('<div class="form-group">' +
+                    '<small>Choose lecture type: </small>' +
+                    '<select class="form-control" id="class_type">' +
+                    '<option value="korean">Korean</option>' +
+                    '<option value="chinese">Chinese</option>' +
+                    '</select></div>');
+
+                var select = $('<div class="form-group">' +
+                    '<small>Choose booking type: </small>' +
+                    '<select class="form-control" id="booking_type">' +
+                    '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
-                    '</select>')).append(edit_location);
+                    '</select></div>');
+
+                modal.modal_body = $('<div/>', {
+                    text: "Currently this lecture is a " + calEvent.class_type + " lecture and its "+calEvent.type+"."
+                }).append('<hr>').append(class_type).append(select).append(edit_location);
 
                 modal.run_modal(function () {
                     $.ajax({
@@ -178,6 +197,7 @@ $(function () {
                         data: {
                             csrfmiddlewaretoken: csrftoken,
                             book_type: $('#booking_type').val(),
+                            class_type: $('#class_type').val(),
                             location: $('#location').val()
                         }
                     }).done(function (data) {
@@ -192,6 +212,9 @@ $(function () {
                 $('#modal-' + modal_id).on('hide.bs.modal', function () {
                     calendar.fullCalendar('unselect');
                 });
+
+                $('select > option[value="'+calEvent.type+'"]').attr('selected', 'selected');
+                $('select > option[value="'+calEvent.class_type+'"]').attr('selected', 'selected')
             }
         }
     };
