@@ -23,7 +23,7 @@ from .models import Booking, Files
 
 def user_login(request):
     if request.user.is_authenticated and not request.user.is_anonymous:
-        return redirect('book_meeting')
+        return redirect('show_calendar')
     else:
         return render(request, 'index.html', {
         })
@@ -60,10 +60,6 @@ def book_meeting(request):
         stripe.api_key = os.environ['STRIPE_SECRET_KEY']
     else:
         stripe.api_key = config('STRIPE_SECRET_KEY')
-    try:
-        next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
-    except:
-        next_meeting = 'none'
     if request.method == "POST" and request.user.is_authenticated:
         json_loads = json.loads(request.POST.get('booking'))
         charge = stripe.Charge.create(
@@ -101,7 +97,15 @@ def book_meeting(request):
                 form.user = request.user
                 form.save()
 
-        return redirect('book_meeting')
+        return redirect('show_calendar')
+
+
+@login_required
+def show_calendar(request):
+    try:
+        next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
+    except:
+        next_meeting = 'none'
     return render(request, 'meeting/book.html', {
         'next_meeting': next_meeting
     })

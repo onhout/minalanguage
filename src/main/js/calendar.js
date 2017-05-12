@@ -296,7 +296,7 @@ $(function () {
         if (eventList.length > 0 && token) {
             $.ajax({
                 type: 'POST',
-                url: '/',
+                url: '/book/',
                 data: {
                     csrfmiddlewaretoken: csrftoken,
                     booking: JSON.stringify({
