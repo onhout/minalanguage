@@ -12,6 +12,7 @@
                 <th>End Time</th>
                 <th>Class Location</th>
                 <th>Meeting Type</th>
+                <th>Class Type</th>
                 {% if user.is_superuser %}
                     <th>Student</th>
                     <th>Action</th>
@@ -26,6 +27,7 @@
                         <td>{{ meeting.end }}</td>
                         <td>{{ meeting.class_location }}</td>
                         <td>{{ meeting.book_type }}</td>
+                        <td>{{ meeting.class_type }}</td>
                         {% if user.is_superuser %}
                             <td>{{ meeting.user.get_full_name }}</td>
                             <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
@@ -43,6 +45,7 @@
                 <th>End Time</th>
                 <th>Class Location</th>
                 <th>Meeting Type</th>
+                <th>Class Type</th>
                 {% if user.is_superuser %}
                     <th>Student</th>
                     <th>Action</th>
@@ -57,6 +60,7 @@
                         <td>{{ meeting.end }}</td>
                         <td>{{ meeting.class_location }}</td>
                         <td>{{ meeting.book_type }}</td>
+                        <td>{{ meeting.class_type }}</td>
                         {% if user.is_superuser %}
                             <td>{{ meeting.user.get_full_name }}</td>
                             <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
