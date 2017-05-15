@@ -7,6 +7,7 @@
         <div class="panel-heading">User List</div>
         <div class="panel-body"></div>
         {% if user_list %}
+            <h1>Students</h1>
             <table class="table">
                 <thead>
                 <tr>
@@ -21,8 +22,40 @@
                 </thead>
                 <tbody>
                 {% for user in user_list %}
-                    {% if not user.is_superuser %}
+                    {% if user.totalPaid.totalPaid %}
                         <tr>
+                            <td>{{ user.first_name }}</td>
+                            <td class="hidden-xs">{{ user.last_name }}</td>
+                            <td class="hidden-xs">{{ user.username }}</td>
+                            <td class="hidden-xs">{{ user.last_login }}</td>
+                            <td class="hidden-xs">{{ user.totalFiles }}</td>
+                            <td class="hidden-xs">
+                                ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}
+                            </td>
+                            <td><a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <h1>Whatever people</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>First name</th>
+                    <th class="hidden-xs">Last name</th>
+                    <th class="hidden-xs">Username/Email</th>
+                    <th class="hidden-xs">Last login</th>
+                    <th class="hidden-xs">Total Files</th>
+                    <th class="hidden-xs">Total Paid</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in user_list %}
+                    {% if not user.is_superuser and not user.totalPaid.totalPaid %}
+                        <tr class="text-muted" style="font-style: italic">
                             <td>{{ user.first_name }}</td>
                             <td class="hidden-xs">{{ user.last_name }}</td>
                             <td class="hidden-xs">{{ user.username }}</td>

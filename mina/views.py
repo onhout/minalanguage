@@ -69,7 +69,17 @@ def book_meeting(request):
             amount=json_loads["cost"],
             metadata={"order_from": request.user.get_full_name()}
         )
+        obj, customer = Customer.objects.get_or_create(user=request.user)
         if charge["status"] == "succeeded":
+            if obj.customer_id is None:
+                stripe_customer = stripe.Customer.create(
+                    description="minajeong.com student: %s" % request.user.get_full_name(),
+                    email=charge["source"]["name"] or request.user.email or None,
+                    source=json_loads["stripeToken"]["id"]
+                )
+                obj.customer_id = stripe_customer.stripe_id
+                obj.customer_email = charge["source"]["name"]
+                obj.save()
             for booking in json_loads["bookings"]:
                 book_form = BookingForm(booking)
                 if book_form.is_valid():
@@ -116,6 +126,7 @@ def subscribe(request):
                 source=json_loads["stripeToken"]["id"]
             )
             obj.customer_id = stripe_customer.stripe_id
+            obj.save()
         else:
             stripe_customer = stripe.Customer.retrieve(obj.customer_id)
 
@@ -124,7 +135,6 @@ def subscribe(request):
             plan="month_plan"
         )
         if sub.status == "active":
-            obj.save()
             for booking in json_loads["bookings"]:
                 msg_html = render_to_string('email_templates/new_sub.html', {
                     "name": request.user.get_full_name(),

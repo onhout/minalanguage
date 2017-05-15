@@ -305,6 +305,7 @@ $(function () {
         eventList = [];
         $('#duration').text('0');
         $('#pay_btn').attr('disabled', true);
+        $('#subscribe_btn').attr('disabled', true);
         $('.initial_dollar').text('0');
     });
 
