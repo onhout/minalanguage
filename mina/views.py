@@ -1,7 +1,7 @@
 import json
+import os
 from datetime import datetime, timedelta
 
-import os
 import requests
 import stripe
 from decouple import config
@@ -170,6 +170,34 @@ def subscribe(request):
 
 
 @login_required
+def unsubscribe(request, trans_id):
+    if 'STRIPE_SECRET_KEY' in os.environ:
+        stripe.api_key = os.environ['STRIPE_SECRET_KEY']
+    else:
+        stripe.api_key = config('STRIPE_SECRET_KEY')
+    sub = Booking.objects.filter(transaction_id=trans_id)[0]
+    if sub.user == request.user or request.user.is_superuser:
+        stripe_sub = stripe.Subscription.retrieve(trans_id)
+        Booking.objects.filter(transaction_id=trans_id).delete()
+        stripe_sub.delete()
+        msg_html = render_to_string('email_templates/lost_sub.html', {
+            "name": request.user.get_full_name()
+        })
+        message = strip_tags(msg_html)
+        email_list = ['zxoct11@gmail.com', request.user.email]
+        for email in email_list:
+            send_mail(
+                'Sorry to see you go.',
+                message,
+                'noreply@minajeong.com',
+                [email],
+                html_message=msg_html,
+                fail_silently=False, )
+        return redirect('list_meetings')
+    return redirect('/')
+
+
+@login_required
 def show_calendar(request):
     try:
         next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
@@ -204,13 +232,25 @@ def super_book_meeting(request):
 def list_meetings(request):
     before = datetime.now() - timedelta(days=30)
     after = datetime.now() + timedelta(days=30)
+    sub_list = []
+    subscription_list = Booking.objects.values_list('transaction_id').order_by('-repeat').distinct()
     if request.user.is_superuser:
         meeting_list = Booking.objects.filter(start__gte=before, end__lte=after)
+        for sub in subscription_list:
+            try:
+                sub_list.append(Booking.objects.filter(transaction_id=sub[0], repeat=True)[0])
+            except:
+                pass
     else:
-
         meeting_list = Booking.objects.filter(user=request.user, start__gte=before, end__lte=after)
+        for sub in subscription_list:
+            try:
+                sub_list.append(Booking.objects.filter(transaction_id=sub[0], repeat=True, user=request.user)[0])
+            except:
+                pass
     return render(request, 'meeting/list.html', {
-        'meetings': meeting_list
+        'meetings': meeting_list,
+        "subscription_list": sub_list
     })
 
 
@@ -234,7 +274,8 @@ def get_all_meetings(request):
                     "meeting_id": meeting.id,
                     "is_admin": request.user.is_superuser
                 }
-            elif meeting.user == request.user and (meeting.start + timedelta(hours=2)) > datetime.now() and meeting.repeat is False:
+            elif meeting.user == request.user and (
+                        meeting.start + timedelta(hours=2)) > datetime.now() and meeting.repeat is False:
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),

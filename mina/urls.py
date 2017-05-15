@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^home/$', views.show_calendar, name='show_calendar'),
     url(r'^book/$', views.book_meeting, name='book_meeting'),
     url(r'^subscribe/$', views.subscribe, name='subscribe'),
+    url(r'^subs/unsub/(?P<trans_id>[\w-]+)$', views.unsubscribe, name='unsubscribe'),
     url(r'^file/list/$', views.file_list, name='file_list'),
     url(r'^file/manage/$', views.manage_files, name='manage_files'),
     url(r'^file/manage/(?P<user_id>[\w-]+)$', views.manage_user_files, name='manage_user_files'),
