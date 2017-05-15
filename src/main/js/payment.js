@@ -8,19 +8,16 @@ class Payment {
 
     create() {
         var self = this;
-        var pay_configure = StripeCheckout.configure({
+        this.pay_configure = StripeCheckout.configure({
             key: 'pk_live_FIfPHyXp3JfYXIqWm688dCGB',
             image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
             locale: 'auto',
             token: self.token_function
         });
-        $('#pay_btn').click(function (e) {
-            pay_configure.open(self.pay_obj);
-            e.preventDefault();
-        });
+        self.pay_configure.open(self.pay_obj);
 
         window.addEventListener('popstate', function () {
-            pay_configure.close();
+            self.pay_configure.close();
         });
     }
 }

@@ -24,6 +24,7 @@ class Booking(models.Model):
     book_type = models.CharField(max_length=10, choices=TYPE, null=True, blank=True)
     start = models.DateTimeField()
     end = models.DateTimeField()
+    repeat = models.BooleanField(default=False)
     class_type = models.CharField(max_length=10, null=True, blank=True, choices=CLASS_TYPE)
     class_location = models.CharField(max_length=255, null=True, blank=True, default="Walnut Creek, CA")
     transaction_id = models.CharField(max_length=50, null=True, blank=True)
@@ -57,3 +58,10 @@ class Files(models.Model):
 def file_delete(sender, instance, **kwargs):
     if instance.file:
         instance.file.delete(False)
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer")
+    customer_id = models.CharField(max_length=50, blank=True, null=True)
+    customer_email = models.CharField(max_length=50, blank=True, null=True)
+    total_paid = models.IntegerField(null=True, blank=True)

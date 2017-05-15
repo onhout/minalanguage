@@ -1,7 +1,6 @@
 require('./calendar.js');
 
-(function ($) {
 
-    // Navigation scrolls
+$(function () {
 
-})(jQuery);
+});
