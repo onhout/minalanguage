@@ -1,6 +1,3 @@
-require('./calendar.js');
-
-
 $(function () {
 
 });
