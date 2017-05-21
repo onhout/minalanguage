@@ -1,0 +1,27 @@
+{% extends 'email_templates/head.html' %}
+{% block email_content %}
+    <div style="text-align: center">
+        <h1>Thank you for subscribing, {{ name }}!</h1>
+        <h3>Book time:</h3>
+        <p>
+            From : {{ start }}
+        </p>
+        <p>
+            To: {{ end }}
+        </p>
+        <p><b>SAME TIME EVERY WEEK</b></p>
+        <h3>Type:</h3>
+        <p>{{ book_type }} </p>
+        {% if book_type == "in-person" %}
+            <h3>Location:</h3>
+            <p>
+                Usually your location will be in a Starbucks nearby Walnut Creek Bart Station
+                <br>The default Starbucks for meetings will be:
+                <br>1663 N California Blvd, Walnut Creek, CA 94596.
+                <br>You will receive a separate notification if the location is changed.
+            </p>
+        {% endif %}
+        <p>Thank you very much for subscribing! We will see you very soon!</p>
+    </div>
+
+{% endblock %}

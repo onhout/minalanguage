@@ -4,35 +4,54 @@
 {% block content %}
     {% load humanize %}
     <script src="https://checkout.stripe.com/checkout.js"></script>
-    <h1 class="text-center">Book / edit a meeting</h1>
+    <h1>Mina's calendar</h1>
+    <h3 class="text-warning">Next meeting:
+        {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
+            {{ next_meeting }}{% endif %}</h3>
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <h3 class="text-warning">Next meeting:
-                {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
-                    {{ next_meeting }}{% endif %}</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1 calendar-container">
+        <div class="col-md-8 calendar-container">
             <div id="calendar"></div>
-            <div class="clearfix">
-                <button id="reset_btn" class="btn btn-danger" style="margin-top: 5px;">Reset Calendar</button>
-
-                <button id="pay_btn" class="btn btn-primary pull-right"
-                        style="margin-top: 5px;" disabled>Pay $<span
-                        class="initial_dollar">0</span> <i class="fa fa-arrow-right"></i></button>
+        </div>
+        <div class="col-md-4">
+            <div>
+                <p>Tips:
+                <p><i class="fa fa-hand-o-right"></i> <strong>$20 discount</strong> when you book over 5 hours!</p>
+                <p><i class="fa fa-hand-o-right"></i> You can select <strong>multiple hours at once</strong>, days and even weeks in advance!</p>
+                <p><i class="fa fa-hand-o-right"></i> You can <strong>edit the meeting</strong> by clicking on it or moving it, after you've booked a meeting</p>
+                <p><i class="fa fa-hand-o-right"></i> The <strong>"Subscribe"</strong> button will be enabled when you have selected 2 hours on the calendar. This will be a
+                    recurring event until you have canceled it in <strong>Meeting List</strong>.</p>
+                <p><i class="fa fa-hand-o-right"></i> When you are booking a new meeting and made a mistake, you can click <strong>"Reset Calendar"</strong> to start
+                    over!</p>
             </div>
-            <h4 class="pull-left">Duration: <span id="duration">0</span> hour(s)</h4>
+            <div class="jumbotron">
+                <p>Duration: <span id="duration">0</span> hour(s)</p>
+                <p>Total: $<span class="initial_dollar">0</span></p>
+            </div>
+            <div class="btn-group btn-group-justified" style="margin-bottom: 5px;">
+                <div class="btn-group">
+                    <button id="pay_btn" class="btn btn-primary" disabled>
+                        Pay via <i class="fa fa-cc-stripe"></i>
+                    </button>
+                </div>
+                <div class="btn-group">
+                    <button id="subscribe_btn" class="btn btn-success" disabled="disabled">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+
+            <button id="reset_btn" class="btn btn-default btn-block">Reset Calendar</button>
+
             {% if user.is_superuser %}
-                <button id="super_btn" class="btn btn-danger pull-right" style="margin-top: 5px;">SUPER BUTTON</button>
+                <button id="super_btn" class="btn btn-danger" style="margin-top: 5px;">SUPER BUTTON</button>
             {% endif %}
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+    <div class="row" style="margin-top: 10px">
+        <div class="col-md-12">
             <div class="errors"></div>
         </div>
     </div>
 
-    {% render_bundle 'main' %}
+    {% render_bundle 'calendar' %}
 {% endblock %}

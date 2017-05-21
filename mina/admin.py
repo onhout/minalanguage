@@ -8,6 +8,7 @@ class BookingAdmin(admin.ModelAdmin):
     list_display = [
         'user',
         'book_type',
+        'class_type',
         'class_location',
         'start',
         'end',
@@ -20,6 +21,7 @@ class FilesAdmin(admin.ModelAdmin):
     model = Files
     list_display = [
         'to_user',
+        'name',
         'file',
         'created_at',
     ]

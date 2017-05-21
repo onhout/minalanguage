@@ -1,7 +1,3 @@
-require('./calendar.js');
+$(function () {
 
-(function ($) {
-
-    // Navigation scrolls
-
-})(jQuery);
+});

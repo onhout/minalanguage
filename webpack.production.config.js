@@ -7,8 +7,9 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        main: ['main/js/main','main/less/main.less'],
+        main: ['main/js/main'],
         files: ['main/js/files','main/less/files.less'],
+        calendar: ['main/js/calendar','main/less/calendar.less'],
         vendor:[
             'jquery',
             'jquery-ui-dist/jquery-ui',

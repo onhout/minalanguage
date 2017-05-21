@@ -1,3 +1,5 @@
+var MODAL = require('./Modal.js').default;
+
 $(function () {
     $('#contactForm').validate();
 
@@ -28,4 +30,13 @@ $(function () {
         }
 
     });
+
+    $('.btn-unsubscribe').click(function(){
+        var self = this;
+        var modal_id = 'ubsub-' + $(this).data('id');
+        var modal = new MODAL('Unsubscribe', 'Are you sure you want to remove this subscription?', modal_id);
+        modal.run_modal(function(e){
+            window.location.href = $(self).data('href')
+        })
+    })
 });

@@ -16,14 +16,14 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from .forms import BookingForm, FileForm, OutlineForm
-from .models import Booking, Files, Outline
+from .models import Booking, Files, Customer, Outline
 
 
 # Create your views here.
 
 def user_login(request):
     if request.user.is_authenticated and not request.user.is_anonymous:
-        return redirect('book_meeting')
+        return redirect('show_calendar')
     else:
         return render(request, 'index.html', {
         })
@@ -60,10 +60,6 @@ def book_meeting(request):
         stripe.api_key = os.environ['STRIPE_SECRET_KEY']
     else:
         stripe.api_key = config('STRIPE_SECRET_KEY')
-    try:
-        next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
-    except:
-        next_meeting = 'none'
     if request.method == "POST" and request.user.is_authenticated:
         json_loads = json.loads(request.POST.get('booking'))
         charge = stripe.Charge.create(
@@ -73,34 +69,140 @@ def book_meeting(request):
             amount=json_loads["cost"],
             metadata={"order_from": request.user.get_full_name()}
         )
+        obj, customer = Customer.objects.get_or_create(user=request.user)
+        if charge["status"] == "succeeded":
+            if obj.customer_id is None:
+                stripe_customer = stripe.Customer.create(
+                    description="minajeong.com student: %s" % request.user.get_full_name(),
+                    email=charge["source"]["name"] or request.user.email or None,
+                    source=json_loads["stripeToken"]["id"]
+                )
+                obj.customer_id = stripe_customer.stripe_id
+                obj.customer_email = charge["source"]["name"]
+                obj.save()
+            for booking in json_loads["bookings"]:
+                book_form = BookingForm(booking)
+                if book_form.is_valid():
+                    msg_html = render_to_string('email_templates/new_meeting.html', {
+                        "name": request.user.get_full_name(),
+                        "start": datetime.strptime(booking["start"], '%Y-%m-%d %H:%M:%S'),
+                        "end": datetime.strptime(booking["end"], '%Y-%m-%d %H:%M:%S'),
+                        "class_type": booking["class_type"],
+                        "book_type": booking["book_type"]
+                    })
+                    message = strip_tags(msg_html)
+                    email_list = ['zxoct11@gmail.com', request.user.email]
+                    for email in email_list:
+                        send_mail(
+                            'Thank you for booking a meeting',
+                            message,
+                            'noreply@minajeong.com',
+                            [email],
+                            html_message=msg_html,
+                            fail_silently=False, )
+                    form = book_form.save(commit=False)
+                    form.client_ip = json_loads["stripeToken"]["client_ip"]
+                    form.transaction_id = charge["id"]
+                    form.transaction_amount = booking["transaction_amount"]
+                    form.user = request.user
+                    form.save()
 
-        for booking in json_loads["bookings"]:
-            book_form = BookingForm(booking)
-            if book_form.is_valid():
-                msg_html = render_to_string('email_templates/new_meeting.html', {
+        return redirect('show_calendar')
+
+
+@login_required
+def subscribe(request):
+    if 'STRIPE_SECRET_KEY' in os.environ:
+        stripe.api_key = os.environ['STRIPE_SECRET_KEY']
+    else:
+        stripe.api_key = config('STRIPE_SECRET_KEY')
+    if request.method == "POST" and request.user.is_authenticated:
+        json_loads = json.loads(request.POST.get('booking'))
+        obj, customer = Customer.objects.get_or_create(user=request.user)
+        if obj.customer_id is None:
+            stripe_customer = stripe.Customer.create(
+                description="minajeong.com student: %s" % request.user.get_full_name(),
+                email=request.user.email or None,
+                source=json_loads["stripeToken"]["id"]
+            )
+            obj.customer_id = stripe_customer.stripe_id
+            obj.save()
+        else:
+            stripe_customer = stripe.Customer.retrieve(obj.customer_id)
+
+        sub = stripe.Subscription.create(
+            customer=stripe_customer.id,
+            plan="month_plan"
+        )
+        if sub.status == "active":
+            for booking in json_loads["bookings"]:
+                msg_html = render_to_string('email_templates/new_sub.html', {
                     "name": request.user.get_full_name(),
                     "start": datetime.strptime(booking["start"], '%Y-%m-%d %H:%M:%S'),
                     "end": datetime.strptime(booking["end"], '%Y-%m-%d %H:%M:%S'),
+                    "class_type": booking["class_type"],
                     "book_type": booking["book_type"]
                 })
                 message = strip_tags(msg_html)
                 email_list = ['zxoct11@gmail.com', request.user.email]
                 for email in email_list:
                     send_mail(
-                        'Thank you for booking a meeting',
+                        'Thank you for subscribing!',
                         message,
                         'noreply@minajeong.com',
                         [email],
                         html_message=msg_html,
                         fail_silently=False, )
-                form = book_form.save(commit=False)
-                form.client_ip = json_loads["stripeToken"]["client_ip"]
-                form.transaction_id = charge["id"]
-                form.transaction_amount = booking["transaction_amount"]
-                form.user = request.user
-                form.save()
+                for i in range(52):
+                    start_time = datetime.strptime(booking["start"], '%Y-%m-%d %H:%M:%S') + timedelta(days=(i * 7))
+                    end_time = datetime.strptime(booking["end"], '%Y-%m-%d %H:%M:%S') + timedelta(days=(i * 7))
+                    book_form = BookingForm(booking)
+                    if book_form.is_valid():
+                        form = book_form.save(commit=False)
+                        form.start = start_time
+                        form.end = end_time
+                        form.repeat = True
+                        form.transaction_id = sub["id"]
+                        form.transaction_amount = sub["plan"]["amount"]
+                        form.user = request.user
+                        form.save()
+        return redirect('show_calendar')
 
-        return redirect('book_meeting')
+
+@login_required
+def unsubscribe(request, trans_id):
+    if 'STRIPE_SECRET_KEY' in os.environ:
+        stripe.api_key = os.environ['STRIPE_SECRET_KEY']
+    else:
+        stripe.api_key = config('STRIPE_SECRET_KEY')
+    sub = Booking.objects.filter(transaction_id=trans_id)[0]
+    if sub.user == request.user or request.user.is_superuser:
+        stripe_sub = stripe.Subscription.retrieve(trans_id)
+        Booking.objects.filter(transaction_id=trans_id).delete()
+        stripe_sub.delete()
+        msg_html = render_to_string('email_templates/lost_sub.html', {
+            "name": request.user.get_full_name()
+        })
+        message = strip_tags(msg_html)
+        email_list = ['zxoct11@gmail.com', request.user.email]
+        for email in email_list:
+            send_mail(
+                'Sorry to see you go.',
+                message,
+                'noreply@minajeong.com',
+                [email],
+                html_message=msg_html,
+                fail_silently=False, )
+        return redirect('list_meetings')
+    return redirect('/')
+
+
+@login_required
+def show_calendar(request):
+    try:
+        next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
+    except:
+        next_meeting = 'none'
     return render(request, 'meeting/book.html', {
         'next_meeting': next_meeting
     })
@@ -128,12 +230,27 @@ def super_book_meeting(request):
 
 @login_required
 def list_meetings(request):
+    before = datetime.now() - timedelta(days=30)
+    after = datetime.now() + timedelta(days=30)
+    sub_list = []
+    subscription_list = Booking.objects.values_list('transaction_id').order_by('-repeat').distinct()
     if request.user.is_superuser:
-        meeting_list = Booking.objects.all()
+        meeting_list = Booking.objects.filter(start__gte=before, end__lte=after)
+        for sub in subscription_list:
+            try:
+                sub_list.append(Booking.objects.filter(transaction_id=sub[0], repeat=True)[0])
+            except:
+                pass
     else:
-        meeting_list = Booking.objects.filter(user=request.user)
+        meeting_list = Booking.objects.filter(user=request.user, start__gte=before, end__lte=after)
+        for sub in subscription_list:
+            try:
+                sub_list.append(Booking.objects.filter(transaction_id=sub[0], repeat=True, user=request.user)[0])
+            except:
+                pass
     return render(request, 'meeting/list.html', {
-        'meetings': meeting_list
+        'meetings': meeting_list,
+        "subscription_list": sub_list
     })
 
 
@@ -149,6 +266,7 @@ def get_all_meetings(request):
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
                     "type": meeting.book_type,
+                    "class_type": meeting.class_type,
                     "location": meeting.class_location,
                     "title": 'Booked - (%s)' % meeting.book_type,
                     "allDay": False,
@@ -156,23 +274,35 @@ def get_all_meetings(request):
                     "meeting_id": meeting.id,
                     "is_admin": request.user.is_superuser
                 }
-            elif meeting.user == request.user and (meeting.start + timedelta(hours=2)) > datetime.now():
+            elif meeting.user == request.user and (
+                        meeting.start + timedelta(hours=2)) > datetime.now() and meeting.repeat is False:
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
                     "type": meeting.book_type,
+                    "class_type": meeting.class_type,
                     "location": meeting.class_location,
                     "title": 'Booked - (%s)' % meeting.book_type,
                     "allDay": False,
                     "startEditable": True,
                     "meeting_id": meeting.id
                 }
-            else:
+            elif meeting.user == request.user and meeting.repeat is True:
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
                     "type": meeting.book_type,
+                    "class_type": meeting.class_type,
                     "location": meeting.class_location,
+                    "title": 'Booked - (%s)' % meeting.book_type,
+                    "allDay": False,
+                    "meeting_id": meeting.id,
+                    "subscription": True
+                }
+            else:
+                extendability = {
+                    "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
+                    "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
                     "title": 'Unavailable',
                     "allDay": False,
                     "color": "#555555",
@@ -194,14 +324,17 @@ def change_meeting(request):
         meeting_start_orig = meeting.start
         meeting_end_orig = meeting.end
         meeting_booktype_orig = meeting.book_type
+        meeting_classtype_orig = meeting.class_type
         meeting_location_orig = meeting.class_location
         meeting_obj = {
             "start": request.POST.get('start') or datetime.strftime(meeting.start, '%Y-%m-%d %H:%M:%S'),
             "end": request.POST.get('end') or datetime.strftime(meeting.end, '%Y-%m-%d %H:%M:%S'),
             "book_type": request.POST.get('book_type') or meeting.book_type,
+            "class_type": request.POST.get('class_type') or meeting.class_type,
             "class_location": request.POST.get('location') or meeting.class_location,
             "transaction_amount": meeting.transaction_amount,
-            "transaction_id": meeting.transaction_id
+            "transaction_id": meeting.transaction_id,
+            "repeat": meeting.repeat
         }
         book_form = BookingForm(meeting_obj, instance=meeting)
         if book_form.is_valid():
@@ -213,6 +346,8 @@ def change_meeting(request):
                 "end": datetime.strptime(meeting_obj["end"], '%Y-%m-%d %H:%M:%S'),
                 "meeting_booktype_orig": meeting_booktype_orig,
                 "book_type": meeting_obj["book_type"],
+                "meeting_classtype_orig": meeting_classtype_orig,
+                "class_type": meeting_obj["class_type"],
                 "meeting_location_orig": meeting_location_orig,
                 "location": meeting_obj["class_location"]
             })

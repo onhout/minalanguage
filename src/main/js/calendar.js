@@ -8,6 +8,7 @@ $(function () {
     var totalHours = 0;
     var payment = new PAYMENT;
     var csrftoken = CSRF_TOKEN.getCookie('csrftoken');
+    var payment_obj = {};
     var eventList = [];
     var calendar = $('#calendar');
     var calendarOptions = {
@@ -48,19 +49,28 @@ $(function () {
             if (moment(start).subtract(12, 'hour') > moment()) {
                 var eventData;
                 var modal = new MODAL('Confirm', '', modal_id);
-                var select = $('<select class="form-control" id="booking_type">' +
-                    '<option value="">--Select Meeting Type--</option>' +
+                var class_type = $('<div class="form-group">' +
+                    '<small>Choose lecture type: </small>' +
+                    '<select class="form-control" id="class_type">' +
+                    '<option value="korean">Korean</option>' +
+                    '<option value="chinese">Chinese</option>' +
+                    '</select></div>');
+
+                var select = $('<div class="form-group">' +
+                    '<small>Choose booking type: </small>' +
+                    '<select class="form-control" id="booking_type">' +
                     '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
-                    '</select>');
+                    '</select></div>');
                 modal.modal_body = $('<h4>Do you want to book from ' +
                     moment(start).format('MM/DD hh:mm:ss') + ' to ' +
-                    moment(end).format('MM/DD hh:mm:ss') + '?</h4>').append(select);
+                    moment(end).format('MM/DD hh:mm:ss') + '?</h4>').append("<hr>").append(class_type).append(select);
                 modal.run_modal(function () {
                     var differenceInMs = moment(end).diff(moment(start)); // diff yields milliseconds
                     var duration = moment.duration(differenceInMs);
                     eventData = {
                         book_type: $('#booking_type').val() ? $('#booking_type').val() : 'online',
+                        class_type: $('#class_type').val() ? $('#class_type').val() : 'korean',
                         title: 'Booked - (' + ($('#booking_type').val() ? $('#booking_type').val() : 'online') + ')',
                         start: start,
                         end: end,
@@ -143,8 +153,9 @@ $(function () {
                 var modal_id = 'edit' + calEvent.start;
                 var modal = new MODAL('Edit Meeting', '', modal_id);
                 var edit_location = '';
+                var class_type = '';
                 if (calEvent.is_admin && calEvent.type == 'in-person') {
-                     edit_location = $('<div/>', {
+                    edit_location = $('<div/>', {
                         class: 'form-group'
                     }).append($('<label/>', {
                         "for": 'location',
@@ -163,13 +174,31 @@ $(function () {
                     edit_location = '';
                 }
 
-                modal.modal_body = $('<div/>', {
-                    text: "Currently this meeting is an " + calEvent.type + " meeting."
-                }).append($('<select class="form-control" id="booking_type">' +
-                    '<option value="">--Select Meeting Type--</option>' +
-                    '<option value="online">Online</option>'+
+                if (calEvent.subscription) {
+                    class_type = $('<div/>', {
+                        class: 'text-warning',
+                        text: 'Sorry, currently subscription events cannot switch between Chinese or Korean'
+                    })
+                } else {
+                    class_type = $('<div class="form-group">' +
+                        '<small>Choose lecture type: </small>' +
+                        '<select class="form-control" id="class_type">' +
+                        '<option value="korean">Korean</option>' +
+                        '<option value="chinese">Chinese</option>' +
+                        '</select></div>');
+                }
+
+
+                var select = $('<div class="form-group">' +
+                    '<small>Choose booking type: </small>' +
+                    '<select class="form-control" id="booking_type">' +
+                    '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
-                    '</select>')).append(edit_location);
+                    '</select></div>');
+
+                modal.modal_body = $('<div/>', {
+                    text: "Currently this lecture is a " + calEvent.class_type + " lecture and its " + calEvent.type + "."
+                }).append('<hr>').append(class_type).append(select).append(edit_location);
 
                 modal.run_modal(function () {
                     $.ajax({
@@ -178,6 +207,7 @@ $(function () {
                         data: {
                             csrfmiddlewaretoken: csrftoken,
                             book_type: $('#booking_type').val(),
+                            class_type: $('#class_type').val() || '',
                             location: $('#location').val()
                         }
                     }).done(function (data) {
@@ -192,6 +222,9 @@ $(function () {
                 $('#modal-' + modal_id).on('hide.bs.modal', function () {
                     calendar.fullCalendar('unselect');
                 });
+
+                $('select > option[value="' + calEvent.type + '"]').attr('selected', 'selected');
+                $('select > option[value="' + calEvent.class_type + '"]').attr('selected', 'selected')
             }
         }
     };
@@ -209,13 +242,21 @@ $(function () {
             event.start = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
             event.end = moment(event.end).format('YYYY-MM-DD HH:mm:ss');
         });
-        $('#duration').text(totalDurationHours);
-        $('#pay_btn').attr('disabled', false);
-        $('.initial_dollar').text(totalDurationMinutes);
+
+        if (totalDurationHours >= 5) {
+            totalDurationMinutes -= 20;
+            totalMinutes -= 20;
+        }
         totalMinutes = totalDurationMinutes;
         totalHours = totalDurationHours;
 
-        payment.pay_obj = {
+        $('#duration').text(totalDurationHours);
+        $('#pay_btn').attr('disabled', false);
+        totalDurationHours == 2 ? $('#subscribe_btn').attr('disabled', false) :
+            $('#subscribe_btn').attr('disabled', true);
+        $('.initial_dollar').text(totalDurationMinutes);
+
+        payment_obj = {
             name: "Mina's Language Class",
             description: totalDurationHours + ' hours booking',
             amount: totalDurationMinutes * 100
@@ -264,31 +305,64 @@ $(function () {
         eventList = [];
         $('#duration').text('0');
         $('#pay_btn').attr('disabled', true);
+        $('#subscribe_btn').attr('disabled', true);
         $('.initial_dollar').text('0');
     });
 
     calendar.fullCalendar(calendarOptions);
 
-    payment.token_function = function (token) {
-        if (eventList.length > 0 && token) {
-            $.ajax({
-                type: 'POST',
-                url: '/',
-                data: {
-                    csrfmiddlewaretoken: csrftoken,
-                    booking: JSON.stringify({
-                        stripeToken: token,
-                        bookings: eventList,
-                        cost: totalMinutes * 100
-                    })
-                }
-            }).done(function () {
-                window.location.reload()
-            });
-        }
-    };
+    $('#pay_btn').click(function (e) {
+        payment.pay_obj = payment_obj;
+        payment.token_function = function (token) {
+            if (eventList.length > 0 && token) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/book/',
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        booking: JSON.stringify({
+                            stripeToken: token,
+                            bookings: eventList,
+                            cost: totalMinutes * 100
+                        })
+                    }
+                }).done(function () {
+                    window.location.reload()
+                });
+            }
+        };
+        e.preventDefault();
+        payment.create()
+    });
 
-    payment.create();
+    $('#subscribe_btn').click(function (e) {
+        payment.pay_obj = {
+            name: "Mina's Language Class",
+            description: 'Monthly Subscription - 8 sessions per month',
+            amount: 40000
+        };
+        payment.token_function = function (token) {
+            if (eventList.length > 0 && token) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/subscribe/',
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        booking: JSON.stringify({
+                            stripeToken: token,
+                            bookings: eventList,
+                            cost: 40000
+                        })
+                    }
+                }).done(function () {
+                    window.location.reload()
+                });
+            }
+        };
+        e.preventDefault();
+        payment.create();
+    });
+
 
 });
 

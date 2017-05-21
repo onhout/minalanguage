@@ -12,6 +12,7 @@
                 <th>End Time</th>
                 <th>Class Location</th>
                 <th>Meeting Type</th>
+                <th>Class Type</th>
                 {% if user.is_superuser %}
                     <th>Student</th>
                     <th>Action</th>
@@ -26,6 +27,7 @@
                         <td>{{ meeting.end }}</td>
                         <td>{{ meeting.class_location }}</td>
                         <td>{{ meeting.book_type }}</td>
+                        <td>{{ meeting.class_type }}</td>
                         {% if user.is_superuser %}
                             <td>{{ meeting.user.get_full_name }}</td>
                             <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
@@ -43,6 +45,7 @@
                 <th>End Time</th>
                 <th>Class Location</th>
                 <th>Meeting Type</th>
+                <th>Class Type</th>
                 {% if user.is_superuser %}
                     <th>Student</th>
                     <th>Action</th>
@@ -57,6 +60,7 @@
                         <td>{{ meeting.end }}</td>
                         <td>{{ meeting.class_location }}</td>
                         <td>{{ meeting.book_type }}</td>
+                        <td>{{ meeting.class_type }}</td>
                         {% if user.is_superuser %}
                             <td>{{ meeting.user.get_full_name }}</td>
                             <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
@@ -66,8 +70,51 @@
             {% endfor %}
             </tbody>
         </table>
+        <h2>Subscriptions</h2>
+        {% if subscription_list %}
+            <table class="table table-hover table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Begin Time</th>
+                <th>End Time</th>
+                <th>Date Created</th>
+                <th>Meeting Type</th>
+                <th>Class Type</th>
+                <th>Unsubscribe</th>
+                {% if user.is_superuser %}
+                    <th>Student</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for meeting in subscription_list %}
+                <tr class="text-success">
+                    <td>{{ meeting.start|date:"P" }}</td>
+                    <td>{{ meeting.end|date:"P" }}</td>
+                    <td>{{ meeting.created_at }}</td>
+                    <td>{{ meeting.book_type }}</td>
+                    <td>{{ meeting.class_type }}</td>
+                    <td>
+                        <button data-href="{% url 'unsubscribe' meeting.transaction_id %}"
+                                data-id="{{ meeting.transaction_id }}"
+                                class="btn btn-default btn-unsubscribe">Unsubscribe
+                        </button>
+                    </td>
+                    {% if user.is_superuser %}
+                        <td>{{ meeting.user.get_full_name }}</td>
+
+                    {% endif %}
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        {% else %}
+            <tr>Nothing yet</tr>
+        {% endif %}
+    </table>
     {% else %}
-        <h1>Nothing yet! Book some meetings!</h1>
+        <h1 class="text-center">Nothing yet! Book some meetings!</h1>
     {% endif %}
 
 
