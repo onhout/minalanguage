@@ -23,6 +23,7 @@
     "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",
     "jquery-validation": "^1.16.0",
+    "jquery.fancytree": "^2.22.5",
     "moment": "^2.18.1",
     "webpack": "^1.14.0",
     "webpack-bundle-tracker": "^0.2.0",

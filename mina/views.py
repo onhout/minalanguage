@@ -15,8 +15,8 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-from .forms import BookingForm, FileForm
-from .models import Booking, Files
+from .forms import BookingForm, FileForm, OutlineForm
+from .models import Booking, Files, Outline
 
 
 # Create your views here.
@@ -297,3 +297,35 @@ def delete_file(request, file_id):
         Files.objects.get(id=file_id).delete()
         data = {'success': True}
         return JsonResponse(data)
+
+
+@login_required
+def show_outline(request):
+    outline = Outline.objects.all()
+    return render(request, 'outline/outline.html', {
+        'outline': outline,
+        'outline_form': OutlineForm()
+    })
+
+
+@login_required
+def edit_outline_title(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        try:
+            outline = Outline.objects.get(id=request.POST['outline_id'])
+        except:
+            outline = ''
+        if outline:
+            outline_form = OutlineForm(request.POST, instance=outline)
+        else:
+            outline_form = OutlineForm(request.POST)
+        if outline_form.is_valid():
+            print(outline_form)
+            # outline_form.save()
+            return JsonResponse({
+                # "nodeID": outline_form,
+                "success": True
+            })
+        return JsonResponse({
+            "success": False
+        })

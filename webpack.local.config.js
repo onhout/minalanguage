@@ -9,6 +9,7 @@ module.exports = {
     entry: {
         main: ['main/js/main','main/less/main.less'],
         files: ['main/js/files','main/less/files.less'],
+        outlinetree: ['main/js/outline-tree'],
         vendor:[
             'jquery',
             'jquery-ui-dist/jquery-ui',
@@ -19,7 +20,8 @@ module.exports = {
             'blueimp-file-upload',
             'lodash',
             'moment',
-            'fullcalendar'
+            'fullcalendar',
+            'jquery.fancytree/dist/jquery.fancytree-all.js'
         ]
     }, // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 
@@ -36,7 +38,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',             // bootstrap 3.x requires
             jQuery: 'jquery',        // bootstrap 3.x requires
-            moment: 'moment'
+            moment: 'moment',
         }),
         new ExtractTextPlugin('[name]-[hash].css'),
         new webpack.optimize.DedupePlugin(),

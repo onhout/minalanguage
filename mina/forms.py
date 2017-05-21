@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from .models import Booking, Files
+from .models import Booking, Files, Outline
 
 
 class BookingForm(ModelForm):
@@ -14,3 +14,9 @@ class FileForm(ModelForm):
         model = Files
         fields = ['file']
         exclude = ['to_user']
+
+
+class OutlineForm(ModelForm):
+    class Meta:
+        model = Outline
+        exclude = []

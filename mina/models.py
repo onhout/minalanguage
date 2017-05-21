@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 # Create your models here.
@@ -25,6 +26,11 @@ class Booking(models.Model):
     transaction_amount = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s - %s to %s" % (self.user.get_full_name(),
+                                 datetime.strftime(self.start, '%m/%d/%y %H:%M'),
+                                 datetime.strftime(self.end, '%m/%d/%y %H:%M'))
 
     class Meta:
         ordering = ['start']
@@ -47,8 +53,25 @@ class Files(models.Model):
     file = models.FileField(upload_to=user_directory_path)
     name = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return "%s - %s" % (self.to_user.get_full_name(), self.name)
+
 
 @receiver(post_delete, sender=Files)
 def file_delete(sender, instance, **kwargs):
     if instance.file:
         instance.file.delete(False)
+
+
+class Outline(MPTTModel):
+    name = models.CharField(max_length=50)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    booking = models.ForeignKey(Booking, null=True, blank=True, related_name='outline_booking')
+    file = models.ForeignKey(Files, null=True, blank=True, related_name='outline_file')
+    passed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s" % self.name
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
