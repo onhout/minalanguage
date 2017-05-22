@@ -9,7 +9,7 @@ class Payment {
     create() {
         var self = this;
         this.pay_configure = StripeCheckout.configure({
-            key: 'pk_live_FIfPHyXp3JfYXIqWm688dCGB',
+            key: 'pk_test_pWX6UmqrRBJr80k790ebWI1f',
             image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
             locale: 'auto',
             token: self.token_function

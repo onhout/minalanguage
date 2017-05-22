@@ -82,9 +82,11 @@ class Outline(MPTTModel):
     booking = models.ForeignKey(Booking, null=True, blank=True, related_name='outline_booking')
     file = models.ForeignKey(Files, null=True, blank=True, related_name='outline_file')
     passed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "%s" % self.name
 
     class MPTTMeta:
-        order_insertion_by = ['name']
+        order_insertion_by = ['updated_at']

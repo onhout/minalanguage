@@ -12,12 +12,14 @@ cryptography==1.8.1
 defusedxml==0.5.0
 Django==1.11
 django-gulp==2.5.1
+django-mptt==0.8.7
 django-ses==0.8.2
 django-social-auth==0.7.28
 django-storages==1.5.2
 django-webpack-loader==0.4.1
 docutils==0.13.1
 env-tools==2.0.0
+futures==3.0.5
 httplib2==0.10.3
 idna==2.5
 jmespath==0.9.2

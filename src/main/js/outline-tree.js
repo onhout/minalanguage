@@ -57,14 +57,16 @@ $(function () {
                 }
             },
             save: function (event, data) {
-                console.log(data);
+                console.log(data.node.title);
                 var postData = {
                     csrfmiddlewaretoken: csrftoken,
-                    name: data.node.title,
-                    outline_id: data.node.data.nodeid
+                    name: data.input.val(),
+                    outline_id: data.node.data.nodeid || '',
+                    parent: data.node.parent.data.nodeid || ''
 
                 };
-                $.post('/outline/edit/', postData, function(data){
+                console.log(postData);
+                $.post('/outline/edit/', postData, function (data) {
                     console.log(data);
                 });
 
@@ -95,10 +97,12 @@ $(function () {
     $('#btnAddChild').click(function () {
         var node = tree.fancytree("getActiveNode");
         if (!node) {
-            alert("Please select a title.");
-            return;
+            var root = tree.fancytree('getRootNode');
+            root.editCreateNode("child", "")
+        } else {
+            node.editCreateNode("child", "");
         }
-        node.editCreateNode("child", "");
+
     });
     $('#btnRemoveNode').click(function () {
         var node = tree.fancytree("getActiveNode");

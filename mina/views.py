@@ -445,6 +445,7 @@ def show_outline(request):
 
 @login_required
 def edit_outline_title(request):
+    print(request.POST)
     if request.method == "POST" and request.user.is_authenticated:
         try:
             outline = Outline.objects.get(id=request.POST['outline_id'])
@@ -455,8 +456,10 @@ def edit_outline_title(request):
         else:
             outline_form = OutlineForm(request.POST)
         if outline_form.is_valid():
-            print(outline_form)
-            # outline_form.save()
+            form = outline_form.save(commit=False)
+            # print(outline_form)
+
+            outline_form.save()
             return JsonResponse({
                 # "nodeID": outline_form,
                 "success": True

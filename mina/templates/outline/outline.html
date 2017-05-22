@@ -13,7 +13,7 @@
                     {% recursetree outline %}
                         <li class="expanded" data-nodeid="{{ node.id }}"
                             data-inlineEdit="{% if node.booking or node.file %}false{% else %}true{% endif %}">
-                        {{ node.name }}.
+                        {{ node.name }}
                         {% if node.booking %}
                             <a href="{% url 'book_meeting' %}">Booking: {{ node.booking }}</a>
                         {% endif %}
