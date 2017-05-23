@@ -26,7 +26,6 @@ $(function () {
     var tree = $('#tree');
 
     tree.fancytree({
-        checkbox: true,
         selectMode: 3,
         extensions: ["glyph", "edit", "dnd"],
         glyph: glyph_opts,
@@ -68,6 +67,7 @@ $(function () {
                 };
                 $.post('/outline/edit/', postData, function (rtdata) {
                     if (rtdata.success) {
+                        data.node.data.program = rtdata.program;
                         data.node.data.nodeid = rtdata.nodeID
                     }
                 });
@@ -188,7 +188,7 @@ $(function () {
         var node = tree.fancytree("getActiveNode");
         if (!node) {
             var root = tree.fancytree('getRootNode');
-            root.editCreateNode("child", "")
+            root.getFirstChild().editCreateNode("child", "");
         } else {
             node.editCreateNode("child", "");
         }
@@ -196,8 +196,12 @@ $(function () {
     });
     $('#btnRemoveTitle').click(function () {
         var node = tree.fancytree("getActiveNode");
+        var rootnode = tree.fancytree('getRootNode').getFirstChild();
+
         if (!node) {
             alert("Choose a title you want to be removed");
+        } else if (node.key == rootnode.key) {
+            alert("Can't remove root node");
         } else {
             var postData = {
                 csrfmiddlewaretoken: csrftoken,

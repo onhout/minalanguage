@@ -10,6 +10,7 @@ module.exports = {
         main: ['main/js/main'],
         files: ['main/js/files','main/less/files.less'],
         calendar: ['main/js/calendar','main/less/calendar.less'],
+        outlinetree: ['main/js/outline-tree', 'main/less/outline-tree.less'],
         vendor:[
             'jquery',
             'jquery-ui-dist/jquery-ui',
@@ -20,7 +21,8 @@ module.exports = {
             'blueimp-file-upload',
             'lodash',
             'moment',
-            'fullcalendar'
+            'fullcalendar',
+            'jquery.fancytree/dist/jquery.fancytree-all.js'
         ]
     }, // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 

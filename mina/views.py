@@ -468,7 +468,7 @@ def add_root_outline(request):
 
 @login_required
 def edit_outline(request):
-    if request.method == "POST" and request.user.is_authenticated and request.user.is_superuser:
+    if request.method == "POST" and request.user.is_superuser:
         try:
             outline = Outline.objects.get(id=request.POST['outline_id'])
             outline_form = OutlineForm(request.POST, instance=outline)
@@ -481,6 +481,7 @@ def edit_outline(request):
             form.teacher = request.user
             form.save()
             return JsonResponse({
+                "program": form.program,
                 "nodeID": form.id,
                 "success": True
             })
@@ -491,7 +492,7 @@ def edit_outline(request):
 
 @login_required
 def remove_outline(request):
-    if request.method == "POST" and request.user.is_authenticated:
+    if request.method == "POST" and request.user.is_superuser:
         Outline.objects.get(id=request.POST['outline_id']).delete()
         return JsonResponse({
             "success": True

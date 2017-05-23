@@ -35,6 +35,7 @@
                 {% if user.is_superuser %}
                     <ul class="nav navbar-nav">
                         <li><a href="{% url 'manage_files' %}">User List</a></li>
+                        <li><a href="{% url 'outline_overview' %}">Outline Overview</a></li>
                     </ul>
                 {% else %}
                     <ul class="nav navbar-nav">

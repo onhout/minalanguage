@@ -10,7 +10,7 @@ module.exports = {
         main: ['main/js/main'],
         files: ['main/js/files','main/less/files.less'],
         calendar: ['main/js/calendar','main/less/calendar.less'],
-        outlinetree: ['main/js/outline-tree'],
+        outlinetree: ['main/js/outline-tree', 'main/less/outline-tree.less'],
         vendor:[
             'jquery',
             'jquery-ui-dist/jquery-ui',
