@@ -19,4 +19,10 @@ class FileForm(ModelForm):
 class OutlineForm(ModelForm):
     class Meta:
         model = Outline
-        exclude = []
+        exclude = ['teacher']
+
+    def __init__(self, *args, **kwargs):
+        super(OutlineForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['placeholder'] = 'Outline name'
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'

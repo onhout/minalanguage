@@ -435,35 +435,69 @@ def delete_file(request, file_id):
 
 
 @login_required
-def show_outline(request):
-    outline = Outline.objects.all()
-    return render(request, 'outline/outline.html', {
-        'outline': outline,
-        'outline_form': OutlineForm()
-    })
+def outline_overview(request):
+    if request.user.is_superuser:
+        outline = Outline.objects.filter(teacher=request.user, parent__isnull=True)
+        return render(request, 'outline/outline_overview.html', {
+            'outline': outline,
+            'outline_form': OutlineForm()
+        })
 
 
 @login_required
-def edit_outline_title(request):
-    print(request.POST)
-    if request.method == "POST" and request.user.is_authenticated:
-        try:
-            outline = Outline.objects.get(id=request.POST['outline_id'])
-        except:
-            outline = ''
-        if outline:
-            outline_form = OutlineForm(request.POST, instance=outline)
-        else:
-            outline_form = OutlineForm(request.POST)
+def show_outline(request, program_type):
+    if request.user.is_superuser:
+        outline = Outline.objects.filter(teacher=request.user, program=program_type)
+        return render(request, 'outline/outline.html', {
+            'outline': outline,
+            'outline_form': OutlineForm()
+        })
+
+
+@login_required
+def add_root_outline(request):
+    if request.method == "POST" and request.user.is_superuser:
+        outline_form = OutlineForm(request.POST)
         if outline_form.is_valid():
             form = outline_form.save(commit=False)
-            # print(outline_form)
+            form.teacher = request.user
+            form.program = form.name.lower()
+            form.save()
+        return redirect('outline_overview')
 
-            outline_form.save()
+
+@login_required
+def edit_outline(request):
+    if request.method == "POST" and request.user.is_authenticated and request.user.is_superuser:
+        try:
+            outline = Outline.objects.get(id=request.POST['outline_id'])
+            outline_form = OutlineForm(request.POST, instance=outline)
+        except:
+            outline = ''
+            outline_form = OutlineForm(request.POST)
+
+        if outline_form.is_valid():
+            form = outline_form.save(commit=False)
+            form.teacher = request.user
+            form.save()
             return JsonResponse({
-                # "nodeID": outline_form,
+                "nodeID": form.id,
                 "success": True
             })
         return JsonResponse({
             "success": False
         })
+
+
+@login_required
+def remove_outline(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        Outline.objects.get(id=request.POST['outline_id']).delete()
+        return JsonResponse({
+            "success": True
+        })
+
+
+@login_required
+def show_progress(request):
+    outline = Outline.objects.all()

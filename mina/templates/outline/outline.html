@@ -12,19 +12,20 @@
                 <ul id="treeData">
                     {% recursetree outline %}
                         <li class="expanded" data-nodeid="{{ node.id }}"
+                            data-program="{{ node.program }}"
                             data-inlineEdit="{% if node.booking or node.file %}false{% else %}true{% endif %}">
-                        {{ node.name }}
-                        {% if node.booking %}
-                            <a href="{% url 'book_meeting' %}">Booking: {{ node.booking }}</a>
-                        {% endif %}
-                        {% if node.file %}
-                            <a href="{% url 'file_list' %}">File : {{ node.file }}</a>
-                        {% endif %}
-                        {% if not node.is_leaf_node %}
-                            <ul class="children">
-                                {{ children }}
-                            </ul>
-                        {% endif %}
+                            {{ node.name }}
+                            {% if node.booking %}
+                                <a href="{% url 'book_meeting' %}">Booking: {{ node.booking }}</a>
+                            {% endif %}
+                            {% if node.file %}
+                                <a href="{% url 'file_list' %}">File : {{ node.file }}</a>
+                            {% endif %}
+                            {% if not node.is_leaf_node %}
+                                <ul class="children">
+                                    {{ children }}
+                                </ul>
+                            {% endif %}
                         </li>
                     {% endrecursetree %}
                 </ul>
@@ -32,14 +33,8 @@
         </div>
         <div class="panel-footer">
             <button id="btnAddChild" class="btn btn-xs btn-primary">Add child</button>
-            <button id="btnRemoveNode" class="btn btn-xs btn-primary">Remove node</button>
+            <button id="btnRemoveTitle" class="btn btn-xs btn-danger">Remove title</button>
         </div>
     </div>
-
-    <form action="{% url 'edit_outline_title' %}" method="post">
-        {% csrf_token %}
-        {{ outline_form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
     {% render_bundle 'outlinetree' %}
 {% endblock %}

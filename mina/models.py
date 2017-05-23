@@ -35,8 +35,8 @@ class Booking(models.Model):
 
     def __str__(self):
         return "%s - %s to %s" % (self.user.get_full_name(),
-                                 datetime.strftime(self.start, '%m/%d/%y %H:%M'),
-                                 datetime.strftime(self.end, '%m/%d/%y %H:%M'))
+                                  datetime.strftime(self.start, '%m/%d/%y %H:%M'),
+                                  datetime.strftime(self.end, '%m/%d/%y %H:%M'))
 
     class Meta:
         ordering = ['start']
@@ -77,16 +77,23 @@ class Customer(models.Model):
 
 
 class Outline(MPTTModel):
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+    program = models.CharField(max_length=50, null=True, blank=True)
     name = models.CharField(max_length=50)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    booking = models.ForeignKey(Booking, null=True, blank=True, related_name='outline_booking')
-    file = models.ForeignKey(Files, null=True, blank=True, related_name='outline_file')
-    passed = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True,
+                            on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s" % self.name
 
     class MPTTMeta:
-        order_insertion_by = ['updated_at']
+        order_insertion_by = ['name']
+
+
+class Progress(models.Model):
+    outline = models.ForeignKey(Outline, on_delete=models.CASCADE)
+    booking = models.ForeignKey(Booking, null=True, blank=True, related_name='outline_booking')
+    file = models.ForeignKey(Files, null=True, blank=True, related_name='outline_file')
+    passed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

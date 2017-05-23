@@ -25,14 +25,15 @@ $(function () {
     };
     var tree = $('#tree');
 
-
     tree.fancytree({
         checkbox: true,
         selectMode: 3,
-        extensions: ["glyph", "edit"],
+        extensions: ["glyph", "edit", "dnd"],
         glyph: glyph_opts,
         edit: {
-            triggerStart: ["mac+enter"],
+            adjustWidthOfs: 4,
+            triggerStart: ["f2", "mac+enter", "shift+click"],
+            inputCss: {minWidth: "5em"},
             beforeEdit: function (event, data) {
                 // Return false to prevent edit mode
                 if (data.node.data.inlineedit == false) {
@@ -57,17 +58,18 @@ $(function () {
                 }
             },
             save: function (event, data) {
-                console.log(data.node.title);
                 var postData = {
                     csrfmiddlewaretoken: csrftoken,
                     name: data.input.val(),
+                    program: data.node.parent.data.program,
                     outline_id: data.node.data.nodeid || '',
                     parent: data.node.parent.data.nodeid || ''
 
                 };
-                console.log(postData);
-                $.post('/outline/edit/', postData, function (data) {
-                    console.log(data);
+                $.post('/outline/edit/', postData, function (rtdata) {
+                    if (rtdata.success) {
+                        data.node.data.nodeid = rtdata.nodeID
+                    }
                 });
 
 
@@ -91,7 +93,95 @@ $(function () {
                 //     $(data.node.span).addClass("pending");
                 // }
             }
-        }
+        },
+
+        dnd: {
+            autoExpandMS: 400,
+            draggable: { // modify default jQuery draggable options
+                zIndex: 1000,
+                scroll: false,
+                containment: "parent",
+                revert: "invalid"
+            },
+            preventRecursiveMoves: true, // Prevent dropping nodes on own descendants
+            preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
+
+            dragStart: function (node, data) {
+                // This function MUST be defined to enable dragging for the tree.
+                // Return false to cancel dragging of node.
+//    if( data.originalEvent.shiftKey ) ...
+//    if( node.isFolder() ) { return false; }
+                return true;
+            },
+            dragEnter: function (node, data) {
+                /* data.otherNode may be null for non-fancytree droppables.
+                 * Return false to disallow dropping on node. In this case
+                 * dragOver and dragLeave are not called.
+                 * Return 'over', 'before, or 'after' to force a hitMode.
+                 * Return ['before', 'after'] to restrict available hitModes.
+                 * Any other return value will calc the hitMode from the cursor position.
+                 */
+                // Prevent dropping a parent below another parent (only sort
+                // nodes under the same parent):
+//    if(node.parent !== data.otherNode.parent){
+//      return false;
+//    }
+                // Don't allow dropping *over* a node (would create a child). Just
+                // allow changing the order:
+                return ["over"];
+                // Accept everything:
+                // return true;
+            },
+            dragExpand: function (node, data) {
+                // return false to prevent auto-expanding data.node on hover
+            },
+            dragOver: function (node, data) {
+            },
+            dragLeave: function (node, data) {
+            },
+            dragStop: function (node, data) {
+            },
+            dragDrop: function (node, data) {
+                // This function MUST be defined to enable dropping of items on the tree.
+                // data.hitMode is 'before', 'after', or 'over'.
+                // We could for example move the source to the new target:
+                var postData = {};
+
+                if (data.hitMode == "over") {
+                    postData = {
+                        csrfmiddlewaretoken: csrftoken,
+                        name: data.otherNode.title,
+                        program: data.otherNode.data.program,
+                        outline_id: data.otherNode.data.nodeid,
+                        parent: node.data.nodeid
+                    };
+                }
+
+                $.post('/outline/edit/', postData, function (rtdata) {
+                    if (rtdata.success) {
+                        data.otherNode.moveTo(node, data.hitMode);
+                    }
+                });
+
+            }
+        },
+        // select: function (event, data) {
+        //     var postData = {
+        //         csrfmiddlewaretoken: csrftoken,
+        //         name: data.node.title,
+        //         program: data.node.parent.data.program,
+        //         outline_id: data.node.data.nodeid,
+        //         parent: data.node.parent.data.nodeid
+        //     };
+        //     postData.passed = data.node.selected;
+        //
+        //
+        //     $.post('/outline/edit/', postData, function (rtdata) {
+        //         if (rtdata.success) {
+        //
+        //         }
+        //     });
+        // }
     });
 
     $('#btnAddChild').click(function () {
@@ -104,12 +194,21 @@ $(function () {
         }
 
     });
-    $('#btnRemoveNode').click(function () {
+    $('#btnRemoveTitle').click(function () {
         var node = tree.fancytree("getActiveNode");
         if (!node) {
             alert("Choose a title you want to be removed");
-            return;
+        } else {
+            var postData = {
+                csrfmiddlewaretoken: csrftoken,
+                outline_id: node.data.nodeid
+            };
+            $.post('/outline/remove/', postData, function (rtdata) {
+                if (rtdata.success) {
+                    node.remove();
+                }
+            });
         }
-        node.remove();
     })
-});
+})
+;
