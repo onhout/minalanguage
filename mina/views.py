@@ -14,7 +14,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+from django.utils.text import slugify
 from .forms import BookingForm, FileForm, OutlineForm
 from .models import Booking, Files, Customer, Outline, Progress, RelatedFiles
 
@@ -486,7 +486,7 @@ def add_root_outline(request):
         if outline_form.is_valid():
             form = outline_form.save(commit=False)
             form.teacher = request.user
-            form.program = form.name.lower()
+            form.program = slugify(form.name, allow_unicode=True)
             form.save()
         return redirect('outline_overview')
 

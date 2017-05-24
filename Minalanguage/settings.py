@@ -34,9 +34,11 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django_gulp',
+    'django.contrib.contenttypes',
+    'grappelli.dashboard',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -169,7 +171,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")
 
-
 if DEBUG == True:
     STATIC_URL = '/static/'
 else:
@@ -229,3 +230,4 @@ else:
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 SESSION_COOKIE_AGE = 36000
+GRAPPELLI_INDEX_DASHBOARD = 'Minalanguage.dashboard.CustomIndexDashboard'
