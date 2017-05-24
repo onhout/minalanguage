@@ -9,6 +9,9 @@ class CustomIndexDashboard(Dashboard):
 
     def init_with_context(self, context):
         self.available_children.append(modules.LinkList)
+        self.available_children.append(modules.AppList)
+        self.available_children.append(modules.ModelList)
+        self.available_children.append(modules.RecentActions)
         self.available_children.append(google_analytics.GoogleAnalyticsVisitorsTotals)
         self.available_children.append(google_analytics.GoogleAnalyticsVisitorsChart)
         self.available_children.append(google_analytics.GoogleAnalyticsPeriodVisitors)
