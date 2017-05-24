@@ -1,0 +1,83 @@
+{% extends 'Global.html' %}
+{% load render_bundle from webpack_loader %}
+{% load mptt_tags %}
+{% block content %}
+
+    <div class="col-md-10 col-md-offset-1">
+        <h2 class="text-center">My outlines</h2>
+        <ul class="media-list">
+            {% recursetree outline %}
+                <li class="media">
+                    <div class="media-left">
+                        <h3 class="media-heading {% if node.passed %}text-success{% endif %}">
+                            {% if node.passed %}
+                                <i class="fa fa-check-square-o"></i>
+                            {% else %}
+                                <i class="fa fa-square-o"></i>
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="media-heading {% if node.passed %}text-success{% endif %}">{{ node.name }}</h3>
+                    </div>
+                    <ul class="children">
+                        {% if node.related %}
+                            {% for relatedNode in node.related %}
+                                {% if relatedNode.booking %}
+                                    <li class="media">
+                                        <div class="media-left">
+                                            <h3 class="media-heading {% if node.passed %}text-success{% endif %}">
+                                                {% if node.passed %}
+                                                    <i class="fa fa-check-square-o"></i>
+                                                {% else %}
+                                                    <i class="fa fa-square-o"></i>
+                                                {% endif %}
+                                            </h3>
+                                        </div>
+                                        <div class="media-body">
+                                            <h3 class="media-heading">
+
+                                                <span class="{% if node.passed %}text-success{% endif %}">
+                                                <i class="fa fa-book"></i>
+                                                {{ relatedNode.booking.start }} to {{ relatedNode.booking.end }}
+                                                </span>
+                                            </h3>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                {% if relatedNode.file %}
+                                    <li class="media">
+                                        <div class="media-left">
+                                            <h3 class="media-heading {% if node.passed %}text-success{% endif %}">
+                                                {% if node.passed %}
+                                                    <i class="fa fa-check-square-o"></i>
+                                                {% else %}
+                                                    <i class="fa fa-square-o"></i>
+                                                {% endif %}
+                                            </h3>
+                                        </div>
+                                        <div class="media-body">
+                                            <h3 class="media-heading">
+                                                <a href="http://minalanguage.s3.amazonaws.com/{{ relatedNode.file.file }}">
+
+                                                    <span class="{% if node.passed %}text-success{% endif %}">
+                                                    <i class="fa fa-download"></i>
+                                                        {{ relatedNode.file.name }}
+                                                    </span>
+                                                </a>
+                                                <small> - Uploaded: {{ relatedNode.file.updated_at }}</small>
+                                            </h3>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if not node.is_leaf_node %}
+                            {{ children }}
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endrecursetree %}
+        </ul>
+    </div>
+{% endblock %}

@@ -32,7 +32,24 @@
                             <td class="hidden-xs">
                                 ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}
                             </td>
-                            <td><a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
+                            <td>
+                                <a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        Classes <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% for program in program_list %}
+                                            <li>
+                                                <a href="{% url 'show_outline' program.program %}?student_id={{ user.id }}">
+                                                    {{ program.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     {% endif %}

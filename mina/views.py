@@ -1,7 +1,7 @@
 import json
-import os
 from datetime import datetime, timedelta
 
+import os
 import requests
 import stripe
 from decouple import config
@@ -163,7 +163,7 @@ def subscribe(request):
                         form.end = end_time
                         form.repeat = True
                         form.transaction_id = sub["id"]
-                        form.transaction_amount = sub["plan"]["amount"]
+                        form.transaction_amount = 100
                         form.user = request.user
                         form.save()
         return redirect('show_calendar')
@@ -457,14 +457,31 @@ def show_outline(request, program_type):
         for out in outline:
             try:
                 out.passed = Progress.objects.get(outline=out, student=student).passed
-                out.related = RelatedFiles.objects.filter(outline=out)
             except:
                 out.passed = False
+            try:
+                out.related = RelatedFiles.objects.filter(outline=out, student=student)
+            except:
                 out.related = None
+
         return render(request, 'outline/outline.html', {
             'student': student,
             'outline': outline,
             'outline_form': OutlineForm()
+        })
+    else:
+        outline = Outline.objects.filter(program=program_type)
+        for out in outline:
+            try:
+                out.passed = Progress.objects.get(outline=out, student=request.user).passed
+            except:
+                out.passed = False
+            try:
+                out.related = RelatedFiles.objects.filter(outline=out, student=request.user)
+            except:
+                out.related = None
+        return render(request, 'outline/user_outline.html', {
+            'outline': outline,
         })
 
 
@@ -527,7 +544,16 @@ def get_related_items(request):
 @login_required
 def add_related_item(request):
     if request.method == "POST" and request.user.is_superuser:
-        obj, related_item = RelatedFiles.objects.get_or_create(outline_id=request.POST.get('outline_id'))
+        obj = RelatedFiles.objects.create(outline_id=request.POST.get('outline_id'),
+                                          student=User.objects.get(id=request.POST.get('student_id')))
+        if request.POST.get('file_id'):
+            obj.file = Files.objects.get(id=request.POST.get('file_id'))
+        if request.POST.get('booking_id'):
+            obj.booking = Booking.objects.get(id=request.POST.get('booking_id'))
+        obj.save()
+        return JsonResponse({
+            "success": True
+        })
 
 
 @login_required
@@ -548,5 +574,5 @@ def edit_progress(request):
         obj.save()
         return JsonResponse({
             "progress_id": obj.id,
-            "status": "success"
+            "success": True
         })

@@ -100,5 +100,6 @@ class Progress(models.Model):
 
 class RelatedFiles(models.Model):
     outline = models.ForeignKey(Outline, on_delete=models.CASCADE, related_name='related_files')
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_to')
     booking = models.ForeignKey(Booking, null=True, blank=True, related_name='outline_booking')
     file = models.ForeignKey(Files, null=True, blank=True, related_name='outline_file')

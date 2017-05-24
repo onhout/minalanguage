@@ -20,9 +20,9 @@
                             data-selected="{{ node.passed|lower }}"
                             data-folder="true">
                             {{ node.name }}
-                            {% if node.related %}
 
-                                <ul class="children">
+                            <ul class="children">
+                                {% if node.related %}
                                     {% for relatedNode in node.related %}
                                         {% if relatedNode.booking %}
                                             <li data-unselectable="true"
@@ -43,13 +43,11 @@
                                             </li>
                                         {% endif %}
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                            {% if not node.is_leaf_node %}
-                                <ul class="children">
+                                {% endif %}
+                                {% if not node.is_leaf_node %}
                                     {{ children }}
-                                </ul>
-                            {% endif %}
+                                {% endif %}
+                            </ul>
                         </li>
                     {% endrecursetree %}
                 </ul>

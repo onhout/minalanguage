@@ -128,7 +128,11 @@ $(function () {
 //    }
                 // Don't allow dropping *over* a node (would create a child). Just
                 // allow changing the order:
-                return ["over"];
+                if (node.data.inlineedit != false) {
+                    return ["over"];
+                } else {
+                    return false
+                }
                 // Accept everything:
                 // return true;
             },
@@ -145,23 +149,25 @@ $(function () {
                 // This function MUST be defined to enable dropping of items on the tree.
                 // data.hitMode is 'before', 'after', or 'over'.
                 // We could for example move the source to the new target:
-                var postData = {};
+                if (data.otherNode.data.inlineedit != false) {
+                    var postData = {};
 
-                if (data.hitMode == "over") {
-                    postData = {
-                        csrfmiddlewaretoken: csrftoken,
-                        name: data.otherNode.title,
-                        program: data.otherNode.data.program,
-                        outline_id: data.otherNode.data.nodeid,
-                        parent: node.data.nodeid
-                    };
-                }
-
-                $.post('/outline/edit/', postData, function (rtdata) {
-                    if (rtdata.success) {
-                        data.otherNode.moveTo(node, data.hitMode);
+                    if (data.hitMode == "over") {
+                        postData = {
+                            csrfmiddlewaretoken: csrftoken,
+                            name: data.otherNode.title,
+                            program: data.otherNode.data.program,
+                            outline_id: data.otherNode.data.nodeid,
+                            parent: node.data.nodeid
+                        };
                     }
-                });
+
+                    $.post('/outline/edit/', postData, function (rtdata) {
+                        if (rtdata.success) {
+                            data.otherNode.moveTo(node, data.hitMode);
+                        }
+                    });
+                }
 
             }
         },
@@ -174,7 +180,7 @@ $(function () {
                     passed: node.selected
                 };
                 $.post('/progress/edit/', postData, function (data) {
-                    console.log(data);
+
                 });
             }
 
@@ -191,46 +197,86 @@ $(function () {
     $.contextMenu({
         selector: "#tree span.fancytree-title",
         items: {
-            "relate_file_meeting": {
-                name: "Relate Files / Meetings", icon: "fa-clone",
+            "relate_file": {
+                name: "Relate Files", icon: "fa-clone",
                 callback: function (key, opt) {
                     var node = $.ui.fancytree.getNode(opt.$trigger);
                     var rootnode = tree.fancytree('getRootNode').getFirstChild();
                     if (node.key == rootnode.key) {
                         alert("Can't add item into root node");
-                    } else if ($('#treeData').data('student_id') > 0) {
+                    } else if ($('#treeData').data('student_id') > 0 && node.data.inlineedit != false) {
                         var modal_id = 'relate-items';
                         var modal = new MODAL('Confirm', '', modal_id);
                         $.get('/outline/get_related_items?student_id=' + $('#treeData').data('student_id'), function (data) {
                             var related_files = $('<select class="form-control" id="related_files">' +
                                 '</select>');
-                            var related_booking = $('<select class="form-control" id="related_booking">' +
-                                '</select>');
                             var parsedFiles = JSON.parse(data.related_files);
-                            var parsedBooking = JSON.parse(data.related_booking);
                             related_files.append(new Option('---Choose Files---', ''));
-                            related_booking.append(new Option('---Choose Meetings---', ''));
                             $.each(parsedFiles, function (key, val) {
                                 related_files.append(new Option(val.name, val.id))
                             });
+                            modal.modal_body = $('<h4>Choose a file to relate this to</h4>')
+                                .append("<hr>")
+                                .append('<p>Relate Files:</p>')
+                                .append(related_files);
+                            modal.run_modal(function () {
+                                $.post('/outline/add_related/', {
+                                    csrfmiddlewaretoken: csrftoken,
+                                    student_id: $('#treeData').data('student_id'),
+                                    outline_id: node.data.nodeid,
+                                    file_id: $('#related_files').val()
+                                }, function (rtdata) {
+                                    if (rtdata.success) {
+                                        window.location.reload()
+                                    }
+                                });
+                            });
+
+                        })
+                    } else {
+                        alert('Cannot associate the current node to a file')
+                    }
+                }
+            },
+            "relate_booking": {
+                name: "Relate Booking", icon: "fa-clone",
+                callback: function (key, opt) {
+                    var node = $.ui.fancytree.getNode(opt.$trigger);
+                    var rootnode = tree.fancytree('getRootNode').getFirstChild();
+                    if (node.key == rootnode.key) {
+                        alert("Can't add item into root node");
+                    } else if ($('#treeData').data('student_id') > 0 && node.data.inlineedit != false) {
+                        var modal_id = 'relate-items';
+                        var modal = new MODAL('Confirm', '', modal_id);
+                        $.get('/outline/get_related_items?student_id=' + $('#treeData').data('student_id'), function (data) {
+                            var related_booking = $('<select class="form-control" id="related_booking">' +
+                                '</select>');
+                            var parsedBooking = JSON.parse(data.related_booking);
+                            related_booking.append(new Option('---Choose Meetings---', ''));
                             $.each(parsedBooking, function (key, val) {
                                 related_booking.append(new Option(val.start + ' to ' + val.end, val.id))
                             });
                             modal.modal_body = $('<h4>Choose a file or a meeting to relate this to</h4>')
                                 .append("<hr>")
-                                .append('<p>Relate Files:</p>')
-                                .append(related_files)
                                 .append('<p>Relate Meetings:</p>')
                                 .append(related_booking);
                             modal.run_modal(function () {
-                                console.log('post data')
+                                $.post('/outline/add_related/', {
+                                    csrfmiddlewaretoken: csrftoken,
+                                    student_id: $('#treeData').data('student_id'),
+                                    outline_id: node.data.nodeid,
+                                    booking_id: $('#related_booking').val()
+                                }, function (rtdata) {
+                                    if (rtdata.success) {
+                                        window.location.reload()
+                                    }
+                                });
                             });
 
                         })
+                    } else {
+                        alert('Cannot associate the current node to a meeting')
                     }
-                    console.log(key);
-                    console.log(opt);
-                    console.log(node)
                 }
             },
             "sep1": "----",
