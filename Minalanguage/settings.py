@@ -34,10 +34,10 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django_gulp',
-    'django.contrib.contenttypes',
-    'grappelli.dashboard',
-    'grappelli',
+    'jet.dashboard',
+    'jet',
     'django.contrib.admin',
+    'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -230,4 +230,6 @@ else:
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 SESSION_COOKIE_AGE = 36000
-GRAPPELLI_INDEX_DASHBOARD = 'Minalanguage.dashboard.CustomIndexDashboard'
+JET_CHANGE_FORM_SIBLING_LINKS = True
+JET_INDEX_DASHBOARD = 'Minalanguage.dashboard.CustomIndexDashboard'
+JET_MODULE_GOOGLE_ANALYTICS_CLIENT_SECRETS_FILE = os.path.join(PROJECT_ROOT, 'client_secret.json')
