@@ -22,7 +22,8 @@ module.exports = {
             'lodash',
             'moment',
             'fullcalendar',
-            'jquery.fancytree/dist/jquery.fancytree-all.js'
+            'jquery.fancytree/dist/jquery.fancytree-all.js',
+            'jquery-contextmenu'
         ]
     }, // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 

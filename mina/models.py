@@ -91,9 +91,14 @@ class Outline(MPTTModel):
 
 
 class Progress(models.Model):
-    outline = models.ForeignKey(Outline, on_delete=models.CASCADE)
-    booking = models.ForeignKey(Booking, null=True, blank=True, related_name='outline_booking')
-    file = models.ForeignKey(Files, null=True, blank=True, related_name='outline_file')
+    outline = models.ForeignKey(Outline, on_delete=models.CASCADE, related_name='outline_progress')
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_progress')
     passed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class RelatedFiles(models.Model):
+    outline = models.ForeignKey(Outline, on_delete=models.CASCADE, related_name='related_files')
+    booking = models.ForeignKey(Booking, null=True, blank=True, related_name='outline_booking')
+    file = models.ForeignKey(Files, null=True, blank=True, related_name='outline_file')

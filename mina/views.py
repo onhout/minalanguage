@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from .forms import BookingForm, FileForm, OutlineForm
-from .models import Booking, Files, Customer, Outline
+from .models import Booking, Files, Customer, Outline, Progress, RelatedFiles
 
 
 # Create your views here.
@@ -380,11 +380,13 @@ def file_list(request):
 def manage_files(request):
     if request.user.is_superuser:
         users = User.objects.exclude(id=request.user.id).order_by('first_name')
+        programs = Outline.objects.filter(parent__isnull=True)
         for user in users:
             user.totalFiles = Files.objects.filter(to_user=user).count()
             user.totalPaid = Booking.objects.filter(user=user).aggregate(totalPaid=Sum('transaction_amount'))
         return render(request, 'files/manage_files.html', {
-            'user_list': users
+            'user_list': users,
+            'program_list': programs
         })
     else:
         return redirect('/')
@@ -447,8 +449,20 @@ def outline_overview(request):
 @login_required
 def show_outline(request, program_type):
     if request.user.is_superuser:
+        try:
+            student = User.objects.get(id=request.GET.get('student_id'))
+        except:
+            student = None
         outline = Outline.objects.filter(teacher=request.user, program=program_type)
+        for out in outline:
+            try:
+                out.passed = Progress.objects.get(outline=out, student=student).passed
+                out.related = RelatedFiles.objects.filter(outline=out)
+            except:
+                out.passed = False
+                out.related = None
         return render(request, 'outline/outline.html', {
+            'student': student,
             'outline': outline,
             'outline_form': OutlineForm()
         })
@@ -500,5 +514,39 @@ def remove_outline(request):
 
 
 @login_required
-def show_progress(request):
-    outline = Outline.objects.all()
+def get_related_items(request):
+    if request.user.is_superuser:
+        related_files = Files.objects.filter(to_user_id=request.GET.get('student_id')).values('id', 'name', 'file')
+        related_booking = Booking.objects.filter(user_id=request.GET.get('student_id')).values('id', 'start', 'end')
+        return JsonResponse({
+            "related_files": json.dumps(list(related_files)),
+            "related_booking": json.dumps(list(related_booking), default=str)
+        })
+
+
+@login_required
+def add_related_item(request):
+    if request.method == "POST" and request.user.is_superuser:
+        obj, related_item = RelatedFiles.objects.get_or_create(outline_id=request.POST.get('outline_id'))
+
+
+@login_required
+def remove_related_item(request):
+    if request.method == "POST" and request.user.is_superuser:
+        RelatedFiles.objects.get(id=request.POST['related_id']).delete()
+        return JsonResponse({
+            "success": True
+        })
+
+
+@login_required
+def edit_progress(request):
+    if request.user.is_superuser:
+        obj, progress = Progress.objects.get_or_create(outline_id=request.POST.get('outline_id'),
+                                                       student=User.objects.get(id=request.POST.get('student_id')))
+        obj.passed = not obj.passed
+        obj.save()
+        return JsonResponse({
+            "progress_id": obj.id,
+            "status": "success"
+        })

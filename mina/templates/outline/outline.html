@@ -5,21 +5,45 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3>Outline</h3>
+            {% if student %}
+                <h2>Progress for {{ student.get_full_name }}</h2>
+            {% else %}
+                <h2>Core Outline</h2>
+            {% endif %}
         </div>
         <div class="panel-body">
             <div id="tree">
-                <ul id="treeData">
+                <ul id="treeData" data-student_id="{{ student.id }}">
                     {% recursetree outline %}
                         <li class="expanded" data-nodeid="{{ node.id }}"
                             data-program="{{ node.program }}"
-                            data-inlineEdit="{% if node.booking or node.file %}false{% else %}true{% endif %}">
+                            data-selected="{{ node.passed|lower }}"
+                            data-folder="true">
                             {{ node.name }}
-                            {% if node.booking %}
-                                <a href="{% url 'book_meeting' %}">Booking: {{ node.booking }}</a>
-                            {% endif %}
-                            {% if node.file %}
-                                <a href="{% url 'file_list' %}">File : {{ node.file }}</a>
+                            {% if node.related %}
+
+                                <ul class="children">
+                                    {% for relatedNode in node.related %}
+                                        {% if relatedNode.booking %}
+                                            <li data-unselectable="true"
+                                                data-inlineEdit="false"
+                                                data-nodeid="{{ relatedNode.id }}"
+                                                data-selected="{{ node.passed|lower }}"
+                                            >
+                                                Booking: {{ relatedNode.booking }}
+                                            </li>
+                                        {% endif %}
+                                        {% if relatedNode.file %}
+                                            <li data-unselectable="true"
+                                                data-inlineEdit="false"
+                                                data-nodeid="{{ relatedNode.id }}"
+                                                data-selected="{{ node.passed|lower }}"
+                                            >
+                                                File : {{ relatedNode.file }}
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
                             {% endif %}
                             {% if not node.is_leaf_node %}
                                 <ul class="children">
@@ -33,7 +57,6 @@
         </div>
         <div class="panel-footer">
             <button id="btnAddChild" class="btn btn-xs btn-primary">Add child</button>
-            <button id="btnRemoveTitle" class="btn btn-xs btn-danger">Remove title</button>
         </div>
     </div>
     {% render_bundle 'outlinetree' %}

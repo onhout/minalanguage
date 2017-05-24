@@ -26,6 +26,7 @@ $(function () {
     var tree = $('#tree');
 
     tree.fancytree({
+        checkbox: $('#treeData').data('student_id') > 0,
         selectMode: 3,
         extensions: ["glyph", "edit", "dnd"],
         glyph: glyph_opts,
@@ -42,7 +43,6 @@ $(function () {
                 }
             },
             edit: function (event, data) {
-                // Editor was opened (available as data.input)
             },
             beforeClose: function (event, data) {
                 // Return false to prevent cancel/save (data.input is available)
@@ -165,23 +165,113 @@ $(function () {
 
             }
         },
-        // select: function (event, data) {
-        //     var postData = {
-        //         csrfmiddlewaretoken: csrftoken,
-        //         name: data.node.title,
-        //         program: data.node.parent.data.program,
-        //         outline_id: data.node.data.nodeid,
-        //         parent: data.node.parent.data.nodeid
-        //     };
-        //     postData.passed = data.node.selected;
-        //
-        //
-        //     $.post('/outline/edit/', postData, function (rtdata) {
-        //         if (rtdata.success) {
-        //
-        //         }
-        //     });
-        // }
+        select: function (event, data) {
+            function postData(node) {
+                var postData = {
+                    csrfmiddlewaretoken: csrftoken,
+                    student_id: $('#treeData').data('student_id'),
+                    outline_id: node.data.nodeid,
+                    passed: node.selected
+                };
+                $.post('/progress/edit/', postData, function (data) {
+                    console.log(data);
+                });
+            }
+
+            postData(data.node);
+
+            data.node.visit(function (node) {
+                if (node.data.inlineedit != false) {
+                    postData(node)
+                }
+            });
+        }
+    });
+
+    $.contextMenu({
+        selector: "#tree span.fancytree-title",
+        items: {
+            "relate_file_meeting": {
+                name: "Relate Files / Meetings", icon: "fa-clone",
+                callback: function (key, opt) {
+                    var node = $.ui.fancytree.getNode(opt.$trigger);
+                    var rootnode = tree.fancytree('getRootNode').getFirstChild();
+                    if (node.key == rootnode.key) {
+                        alert("Can't add item into root node");
+                    } else if ($('#treeData').data('student_id') > 0) {
+                        var modal_id = 'relate-items';
+                        var modal = new MODAL('Confirm', '', modal_id);
+                        $.get('/outline/get_related_items?student_id=' + $('#treeData').data('student_id'), function (data) {
+                            var related_files = $('<select class="form-control" id="related_files">' +
+                                '</select>');
+                            var related_booking = $('<select class="form-control" id="related_booking">' +
+                                '</select>');
+                            var parsedFiles = JSON.parse(data.related_files);
+                            var parsedBooking = JSON.parse(data.related_booking);
+                            related_files.append(new Option('---Choose Files---', ''));
+                            related_booking.append(new Option('---Choose Meetings---', ''));
+                            $.each(parsedFiles, function (key, val) {
+                                related_files.append(new Option(val.name, val.id))
+                            });
+                            $.each(parsedBooking, function (key, val) {
+                                related_booking.append(new Option(val.start + ' to ' + val.end, val.id))
+                            });
+                            modal.modal_body = $('<h4>Choose a file or a meeting to relate this to</h4>')
+                                .append("<hr>")
+                                .append('<p>Relate Files:</p>')
+                                .append(related_files)
+                                .append('<p>Relate Meetings:</p>')
+                                .append(related_booking);
+                            modal.run_modal(function () {
+                                console.log('post data')
+                            });
+
+                        })
+                    }
+                    console.log(key);
+                    console.log(opt);
+                    console.log(node)
+                }
+            },
+            "sep1": "----",
+            "edit": {
+                name: "Edit", icon: "edit",
+                callback: function (key, opt) {
+                    var node = $.ui.fancytree.getNode(opt.$trigger);
+                    node.editStart();
+                }
+            },
+            "delete": {
+                name: "Delete", icon: "delete",
+                callback: function (key, opt) {
+                    var node = $.ui.fancytree.getNode(opt.$trigger);
+                    var rootnode = tree.fancytree('getRootNode').getFirstChild();
+
+                    if (node.key == rootnode.key) {
+                        alert("Can't remove root node");
+                    } else if (node.data.inlineedit != false) {
+                        $.post('/outline/remove/', {
+                            csrfmiddlewaretoken: csrftoken,
+                            outline_id: node.data.nodeid
+                        }, function (rtdata) {
+                            if (rtdata.success) {
+                                node.remove();
+                            }
+                        });
+                    } else if (node.data.inlineedit == false) {
+                        var postData = {
+                            csrfmiddlewaretoken: csrftoken,
+                            related_id: node.data.nodeid
+                        };
+                        $.post('/outline/remove_related/', postData, function (rtdata) {
+                            if (rtdata.success) {
+                                node.remove();
+                            }
+                        });
+                    }
+                }
+            },
+        }
     });
 
     $('#btnAddChild').click(function () {
@@ -194,25 +284,5 @@ $(function () {
         }
 
     });
-    $('#btnRemoveTitle').click(function () {
-        var node = tree.fancytree("getActiveNode");
-        var rootnode = tree.fancytree('getRootNode').getFirstChild();
-
-        if (!node) {
-            alert("Choose a title you want to be removed");
-        } else if (node.key == rootnode.key) {
-            alert("Can't remove root node");
-        } else {
-            var postData = {
-                csrfmiddlewaretoken: csrftoken,
-                outline_id: node.data.nodeid
-            };
-            $.post('/outline/remove/', postData, function (rtdata) {
-                if (rtdata.success) {
-                    node.remove();
-                }
-            });
-        }
-    })
 })
 ;
