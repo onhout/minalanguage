@@ -72,12 +72,6 @@ def book_meeting(request):
         obj, customer = Customer.objects.get_or_create(user=request.user)
         if charge["status"] == "succeeded":
             if obj.customer_id is None:
-                stripe_customer = stripe.Customer.create(
-                    description="minajeong.com student: %s" % request.user.get_full_name(),
-                    email=charge["source"]["name"] or request.user.email or None,
-                    source=json_loads["stripeToken"]["id"]
-                )
-                obj.customer_id = stripe_customer.stripe_id
                 obj.customer_email = charge["source"]["name"]
                 obj.save()
             for booking in json_loads["bookings"]:
