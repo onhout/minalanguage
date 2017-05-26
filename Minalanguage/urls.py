@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from jet.dashboard.dashboard_modules import google_analytics_views
 
 urlpatterns = [
+    url(r'^jet/', include('jet.urls', 'jet')),
+    url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('mina.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),

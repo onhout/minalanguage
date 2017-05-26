@@ -1,6 +1,7 @@
 {% extends 'Global.html' %}
 {% load render_bundle from webpack_loader %}
 {% load mptt_tags %}
+{% block title %}Outline Overview{% endblock %}
 {% block content %}
     <div class="jumbotron">
         <div class="panel panel-default">
@@ -11,7 +12,7 @@
                 {% for outline in outline %}
                     <div class="col-md-6">
                         <a href="{% url 'show_outline' outline.program %}"
-                           class="btn btn-primary btn-block btn-lg">{{ outline.program|upper }}</a>
+                           class="btn btn-primary btn-block btn-lg">{{ outline.name|upper }}</a>
                     </div>
                 {% endfor %}
             </div>
