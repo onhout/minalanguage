@@ -15,7 +15,7 @@
             <div id="tree">
                 <ul id="treeData" data-student_id="{{ student.id }}">
                     {% recursetree outline %}
-                        <li class="expanded" data-nodeid="{{ node.id }}"
+                        <li data-nodeid="{{ node.id }}"
                             data-program="{{ node.program }}"
                             data-selected="{{ node.passed|lower }}"
                             data-folder="true">
@@ -28,8 +28,7 @@
                                             <li data-unselectable="true"
                                                 data-inlineEdit="false"
                                                 data-nodeid="{{ relatedNode.id }}"
-                                                data-selected="{{ node.passed|lower }}"
-                                            >
+                                                data-selected="{{ node.passed|lower }}">
                                                 Booking: {{ relatedNode.booking }}
                                             </li>
                                         {% endif %}
@@ -37,8 +36,7 @@
                                             <li data-unselectable="true"
                                                 data-inlineEdit="false"
                                                 data-nodeid="{{ relatedNode.id }}"
-                                                data-selected="{{ node.passed|lower }}"
-                                            >
+                                                data-selected="{{ node.passed|lower }}">
                                                 File : {{ relatedNode.file }}
                                             </li>
                                         {% endif %}
@@ -53,9 +51,11 @@
                 </ul>
             </div>
         </div>
-        <div class="panel-footer">
-            <button id="btnAddChild" class="btn btn-xs btn-primary">Add child</button>
-        </div>
-    </div>
+        {% if not student %}
+            <div class="panel-footer">
+                <button id="btnAddChild" class="btn btn-xs btn-primary">Add child</button>
+            </div>
+            </div>
+        {% endif %}
     {% render_bundle 'outlinetree' %}
 {% endblock %}

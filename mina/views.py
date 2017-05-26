@@ -476,6 +476,7 @@ def show_outline(request, program_type):
                 out.related = None
         return render(request, 'outline/user_outline.html', {
             'outline': outline,
+            'class_name': Outline.objects.get(program=program_type, parent__isnull=True).name
         })
 
 
