@@ -8,10 +8,10 @@ module.exports = {
 
     entry: {
         main: ['main/js/main'],
-        files: ['main/js/files','main/less/files.less'],
-        calendar: ['main/js/calendar','main/less/calendar.less'],
+        files: ['main/js/files', 'main/less/files.less'],
+        calendar: ['main/js/calendar', 'main/less/calendar.less'],
         outlinetree: ['main/js/outline-tree', 'main/less/outline-tree.less'],
-        vendor:[
+        vendor: [
             'jquery',
             'jquery-ui-dist/jquery-ui',
             'jquery-validation',
@@ -48,7 +48,17 @@ module.exports = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
-        new webpack.optimize.UglifyJsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            beautify: false,
+            mangle: {
+                screw_ie8: true,
+                keep_fnames: true
+            },
+            compress: {
+                screw_ie8: true
+            },
+            comments: false
+        }),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-[hash].js', Infinity),
     ],
