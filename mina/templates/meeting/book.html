@@ -3,7 +3,17 @@
 {% block title %}Book a meeting{% endblock %}
 {% block content %}
     {% load humanize %}
+
     <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script type="text/javascript" src="https://tracking.propelmedia.com/?id=1G8FEFG8CCAGFB0E2FFE&fetch=0&value=0">
+    </script>
+    <noscript>
+        <div style="display: inline;">
+            <img height="1" width="1" style="border-style: none;" alt=""
+                 src="https://tracking.propelmedia.com/?id=1G8FEFG8CCAGFB0E2FFE&fetch=1&value=0"/>
+        </div>
+    </noscript>
+
     <h1>Mina's calendar</h1>
     <h3 class="text-warning">Next meeting:
         {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
@@ -16,11 +26,15 @@
             <div>
                 <p>Tips:
                 <p><i class="fa fa-hand-o-right"></i> <strong>$20 discount</strong> when you book over 5 hours!</p>
-                <p><i class="fa fa-hand-o-right"></i> You can select <strong>multiple hours at once</strong>, days and even weeks in advance!</p>
-                <p><i class="fa fa-hand-o-right"></i> You can <strong>edit the meeting</strong> by clicking on it or moving it, after you've booked a meeting</p>
-                <p><i class="fa fa-hand-o-right"></i> The <strong>"Subscribe"</strong> button will be enabled when you have selected 2 hours on the calendar. This will be a
+                <p><i class="fa fa-hand-o-right"></i> You can select <strong>multiple hours at once</strong>, days and
+                    even weeks in advance!</p>
+                <p><i class="fa fa-hand-o-right"></i> You can <strong>edit the meeting</strong> by clicking on it or
+                    moving it, after you've booked a meeting</p>
+                <p><i class="fa fa-hand-o-right"></i> The <strong>"Subscribe"</strong> button will be enabled when you
+                    have selected 2 hours on the calendar. This will be a
                     recurring event until you have canceled it in <strong>Meeting List</strong>.</p>
-                <p><i class="fa fa-hand-o-right"></i> When you are booking a new meeting and made a mistake, you can click <strong>"Reset Calendar"</strong> to start
+                <p><i class="fa fa-hand-o-right"></i> When you are booking a new meeting and made a mistake, you can
+                    click <strong>"Reset Calendar"</strong> to start
                     over!</p>
             </div>
             <div class="jumbotron">
