@@ -56,7 +56,7 @@
 
             <button id="reset_btn" class="btn btn-default btn-block">Reset Calendar</button>
 
-            {% if user.is_superuser %}
+            {% if user.is_staff %}
                 <button id="super_btn" class="btn btn-danger" style="margin-top: 5px;">SUPER BUTTON</button>
             {% endif %}
         </div>

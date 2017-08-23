@@ -13,7 +13,7 @@
                 <th>Class Location</th>
                 <th>Meeting Type</th>
                 <th>Class Type</th>
-                {% if user.is_superuser %}
+                {% if user.is_staff %}
                     <th>Student</th>
                     <th>Action</th>
                 {% endif %}
@@ -28,7 +28,7 @@
                         <td>{{ meeting.class_location }}</td>
                         <td>{{ meeting.book_type }}</td>
                         <td>{{ meeting.class_type }}</td>
-                        {% if user.is_superuser %}
+                        {% if user.is_staff %}
                             <td>{{ meeting.user.get_full_name }}</td>
                             <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
                         {% endif %}
@@ -46,7 +46,7 @@
                 <th>Class Location</th>
                 <th>Meeting Type</th>
                 <th>Class Type</th>
-                {% if user.is_superuser %}
+                {% if user.is_staff %}
                     <th>Student</th>
                     <th>Action</th>
                 {% endif %}
@@ -61,7 +61,7 @@
                         <td>{{ meeting.class_location }}</td>
                         <td>{{ meeting.book_type }}</td>
                         <td>{{ meeting.class_type }}</td>
-                        {% if user.is_superuser %}
+                        {% if user.is_staff %}
                             <td>{{ meeting.user.get_full_name }}</td>
                             <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
                         {% endif %}
@@ -81,7 +81,7 @@
                 <th>Meeting Type</th>
                 <th>Class Type</th>
                 <th>Unsubscribe</th>
-                {% if user.is_superuser %}
+                {% if user.is_staff %}
                     <th>Student</th>
                 {% endif %}
             </tr>
@@ -101,7 +101,7 @@
                                 class="btn btn-default btn-unsubscribe">Unsubscribe
                         </button>
                     </td>
-                    {% if user.is_superuser %}
+                    {% if user.is_staff %}
                         <td>{{ meeting.user.get_full_name }}</td>
 
                     {% endif %}

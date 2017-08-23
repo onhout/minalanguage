@@ -25,7 +25,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = '=%$oh_4*5$-6h%s(_%&7k&*$9mauf2lh2g=l$+yjrxa-l&^vr('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False # SET IT TO FALSE FOR PROD MODE
+DEBUG = True # SET IT TO FALSE FOR PROD MODE
 USE_TZ = False
 
 ALLOWED_HOSTS = ['*']
@@ -137,8 +137,6 @@ TIME_ZONE = "America/Los_Angeles"
 
 USE_L10N = True
 
-USE_TZ = False
-
 EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_SES_REGION_NAME = 'us-west-2'
 AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
@@ -230,6 +228,3 @@ else:
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 SESSION_COOKIE_AGE = 36000
-JET_CHANGE_FORM_SIBLING_LINKS = True
-JET_INDEX_DASHBOARD = 'Minalanguage.dashboard.CustomIndexDashboard'
-JET_MODULE_GOOGLE_ANALYTICS_CLIENT_SECRETS_FILE = os.path.join(PROJECT_ROOT, 'client_secret.json')

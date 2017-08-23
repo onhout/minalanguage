@@ -1,7 +1,7 @@
 import json
+import os
 from datetime import datetime, timedelta
 
-import os
 import requests
 import stripe
 from decouple import config
@@ -15,6 +15,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.text import slugify
+
 from .forms import BookingForm, FileForm, OutlineForm
 from .models import Booking, Files, Customer, Outline, Progress, RelatedFiles
 
@@ -170,7 +171,7 @@ def unsubscribe(request, trans_id):
     else:
         stripe.api_key = config('STRIPE_SECRET_KEY')
     sub = Booking.objects.filter(transaction_id=trans_id)[0]
-    if sub.user == request.user or request.user.is_superuser:
+    if sub.user == request.user or request.user.is_staff:
         stripe_sub = stripe.Subscription.retrieve(trans_id)
         Booking.objects.filter(transaction_id=trans_id).delete()
         stripe_sub.delete()
@@ -204,7 +205,7 @@ def show_calendar(request):
 
 @login_required
 def remove_meeting(request, booking_id):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         Booking.objects.get(id=booking_id).delete()
         return redirect('list_meetings')
     return redirect('/')
@@ -212,7 +213,7 @@ def remove_meeting(request, booking_id):
 
 @login_required
 def super_book_meeting(request):
-    if request.method == 'POST' and request.user.is_superuser:
+    if request.method == 'POST' and request.user.is_staff:
         book_form = BookingForm(request.POST)
         if book_form.is_valid():
             form = book_form.save(commit=False)
@@ -228,7 +229,7 @@ def list_meetings(request):
     after = datetime.now() + timedelta(days=30)
     sub_list = []
     subscription_list = Booking.objects.values_list('transaction_id').order_by('-repeat').distinct()
-    if request.user.is_superuser:
+    if request.user.is_staff:
         meeting_list = Booking.objects.filter(start__gte=before, end__lte=after)
         for sub in subscription_list:
             try:
@@ -255,7 +256,7 @@ def get_all_meetings(request):
                                           end__lte=request.GET.get('to_date'))
         dataobj = []
         for meeting in meetings:
-            if request.user.is_superuser:
+            if request.user.is_staff:
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),
@@ -266,7 +267,7 @@ def get_all_meetings(request):
                     "allDay": False,
                     "editable": True,
                     "meeting_id": meeting.id,
-                    "is_admin": request.user.is_superuser
+                    "is_admin": request.user.is_staff
                 }
             elif meeting.user == request.user and (
                         meeting.start + timedelta(hours=2)) > datetime.now() and meeting.repeat is False:
@@ -301,9 +302,9 @@ def get_all_meetings(request):
                     "allDay": False,
                     "color": "#555555",
                 }
-            if request.user.is_superuser:
+            if request.user.is_staff:
                 extendability['title'] = "Booked %s - %s" % (meeting.book_type, meeting.user.get_full_name())
-            if request.user.is_superuser and meeting.user == request.user:
+            if request.user.is_staff and meeting.user == request.user:
                 extendability['color'] = '#654321'
             dataobj.append(extendability)
     else:
@@ -372,9 +373,12 @@ def file_list(request):
 
 @login_required
 def manage_files(request):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         users = User.objects.exclude(id=request.user.id).order_by('first_name')
-        programs = Outline.objects.filter(parent__isnull=True)
+        if request.user.is_superuser:
+            programs = Outline.objects.filter(parent__isnull=True)
+        else:
+            programs = Outline.objects.filter(teacher=request.user, parent__isnull=True)
         for user in users:
             user.totalFiles = Files.objects.filter(to_user=user).count()
             user.totalPaid = Booking.objects.filter(user=user).aggregate(totalPaid=Sum('transaction_amount'))
@@ -388,7 +392,7 @@ def manage_files(request):
 
 @login_required
 def manage_user_files(request, user_id):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         user = User.objects.get(id=user_id)
         files = Files.objects.filter(to_user=user).order_by('-created_at')
         return render(request, 'files/manage_user_files.html', {
@@ -402,7 +406,7 @@ def manage_user_files(request, user_id):
 @login_required
 def upload_files(request, user_id):
     user = User.objects.get(id=user_id)
-    if request.method == "POST" and request.user.is_superuser:
+    if request.method == "POST" and request.user.is_staff:
         file_form = FileForm(request.POST, request.FILES)
         if file_form.is_valid():
             form = file_form.save(commit=False)
@@ -424,7 +428,7 @@ def upload_files(request, user_id):
 
 @login_required
 def delete_file(request, file_id):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         Files.objects.get(id=file_id).delete()
         data = {'success': True}
         return JsonResponse(data)
@@ -432,8 +436,11 @@ def delete_file(request, file_id):
 
 @login_required
 def outline_overview(request):
-    if request.user.is_superuser:
-        outline = Outline.objects.filter(teacher=request.user, parent__isnull=True)
+    if request.user.is_staff:
+        if request.user.is_superuser:
+            outline = Outline.objects.filter(parent__isnull=True)
+        else:
+            outline = Outline.objects.filter(teacher=request.user, parent__isnull=True)
         return render(request, 'outline/outline_overview.html', {
             'outline': outline,
             'outline_form': OutlineForm()
@@ -442,12 +449,15 @@ def outline_overview(request):
 
 @login_required
 def show_outline(request, program_type):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         try:
             student = User.objects.get(id=request.GET.get('student_id'))
         except:
             student = None
-        outline = Outline.objects.filter(teacher=request.user, program=program_type)
+        if request.user.is_superuser:
+            outline = Outline.objects.all()
+        else:
+            outline = Outline.objects.filter(teacher=request.user, program=program_type)
         for out in outline:
             try:
                 out.passed = Progress.objects.get(outline=out, student=student).passed
@@ -482,7 +492,7 @@ def show_outline(request, program_type):
 
 @login_required
 def add_root_outline(request):
-    if request.method == "POST" and request.user.is_superuser:
+    if request.method == "POST" and request.user.is_staff:
         outline_form = OutlineForm(request.POST)
         if outline_form.is_valid():
             form = outline_form.save(commit=False)
@@ -494,7 +504,7 @@ def add_root_outline(request):
 
 @login_required
 def edit_outline(request):
-    if request.method == "POST" and request.user.is_superuser:
+    if request.method == "POST" and request.user.is_staff:
         try:
             outline = Outline.objects.get(id=request.POST['outline_id'])
             outline_form = OutlineForm(request.POST, instance=outline)
@@ -518,7 +528,7 @@ def edit_outline(request):
 
 @login_required
 def remove_outline(request):
-    if request.method == "POST" and request.user.is_superuser:
+    if request.method == "POST" and request.user.is_staff:
         Outline.objects.get(id=request.POST['outline_id']).delete()
         return JsonResponse({
             "success": True
@@ -527,7 +537,7 @@ def remove_outline(request):
 
 @login_required
 def get_related_items(request):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         related_files = Files.objects.filter(to_user_id=request.GET.get('student_id')).values('id', 'name', 'file')
         related_booking = Booking.objects.filter(user_id=request.GET.get('student_id')).values('id', 'start', 'end')
         return JsonResponse({
@@ -538,7 +548,7 @@ def get_related_items(request):
 
 @login_required
 def add_related_item(request):
-    if request.method == "POST" and request.user.is_superuser:
+    if request.method == "POST" and request.user.is_staff:
         obj = RelatedFiles.objects.create(outline_id=request.POST.get('outline_id'),
                                           student=User.objects.get(id=request.POST.get('student_id')))
         if request.POST.get('file_id'):
@@ -553,7 +563,7 @@ def add_related_item(request):
 
 @login_required
 def remove_related_item(request):
-    if request.method == "POST" and request.user.is_superuser:
+    if request.method == "POST" and request.user.is_staff:
         RelatedFiles.objects.get(id=request.POST['related_id']).delete()
         return JsonResponse({
             "success": True
@@ -562,7 +572,7 @@ def remove_related_item(request):
 
 @login_required
 def edit_progress(request):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         obj, progress = Progress.objects.get_or_create(outline_id=request.POST.get('outline_id'),
                                                        student=User.objects.get(id=request.POST.get('student_id')))
         obj.passed = not obj.passed
