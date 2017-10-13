@@ -1,13 +1,15 @@
 <section id="contact" class="section-padding">
     <div class="container">
-        <div class="row">
-            <div class="header-section text-center">
-                <h2>Any Questions?</h2>
-                <p>Don't hesitate to ask! I am available to answer any questions 24/7!</p>
-                <hr class="bottom-line">
-            </div>
-            <form action="{% url 'send_message' %}" method="post" role="form" id="contactForm">
-                {% csrf_token %}
+        <div class="header-section mx-auto text-center">
+            <h2>Any Questions?</h2>
+            <p>Don't hesitate to ask! I am available to answer any questions 24/7!</p>
+            <hr class="bottom-line">
+        </div>
+
+        <form action="{% url 'send_message' %}" method="post" role="form" id="contactForm">
+            {% csrf_token %}
+
+            <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="row">
                         <div class="col-md-6">
@@ -25,21 +27,20 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required/>
+                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
+                               required/>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" name="message" rows="5" placeholder="Message"required></textarea>
+                        <textarea class="form-control" name="message" rows="5" placeholder="Message"
+                                  required></textarea>
                     </div>
-                </div>
-                <div class="col-md-6 col-xs-12">
                     <div class="g-recaptcha" data-sitekey="6Ld55iAUAAAAAJeYVgRyWnHvUB6C93JkaY09Izqz"></div>
-                    <!-- Button -->
                     <button type="submit" id="submit" name="submit"
                             class="form contact-form-button light-form-button oswald light">SEND EMAIL
                     </button>
                 </div>
-            </form>
 
-        </div>
+            </div>
+        </form>
     </div>
 </section>

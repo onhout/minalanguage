@@ -1,1 +1,106 @@
-{"status":"done","publicPath":"/static/dist/","chunks":{"calendar":[{"name":"calendar-0ad79ef8792013c40a15.js","publicPath":"/static/dist/calendar-0ad79ef8792013c40a15.js","path":"/home/onhout/Documents/Minalanguage/static/dist/calendar-0ad79ef8792013c40a15.js"},{"name":"calendar-0ad79ef8792013c40a15.css","publicPath":"/static/dist/calendar-0ad79ef8792013c40a15.css","path":"/home/onhout/Documents/Minalanguage/static/dist/calendar-0ad79ef8792013c40a15.css"},{"name":"calendar-0ad79ef8792013c40a15.js.map","publicPath":"/static/dist/calendar-0ad79ef8792013c40a15.js.map","path":"/home/onhout/Documents/Minalanguage/static/dist/calendar-0ad79ef8792013c40a15.js.map"},{"name":"calendar-0ad79ef8792013c40a15.css.map","publicPath":"/static/dist/calendar-0ad79ef8792013c40a15.css.map","path":"/home/onhout/Documents/Minalanguage/static/dist/calendar-0ad79ef8792013c40a15.css.map"}],"files":[{"name":"files-0ad79ef8792013c40a15.js","publicPath":"/static/dist/files-0ad79ef8792013c40a15.js","path":"/home/onhout/Documents/Minalanguage/static/dist/files-0ad79ef8792013c40a15.js"},{"name":"files-0ad79ef8792013c40a15.css","publicPath":"/static/dist/files-0ad79ef8792013c40a15.css","path":"/home/onhout/Documents/Minalanguage/static/dist/files-0ad79ef8792013c40a15.css"},{"name":"files-0ad79ef8792013c40a15.js.map","publicPath":"/static/dist/files-0ad79ef8792013c40a15.js.map","path":"/home/onhout/Documents/Minalanguage/static/dist/files-0ad79ef8792013c40a15.js.map"},{"name":"files-0ad79ef8792013c40a15.css.map","publicPath":"/static/dist/files-0ad79ef8792013c40a15.css.map","path":"/home/onhout/Documents/Minalanguage/static/dist/files-0ad79ef8792013c40a15.css.map"}],"main":[{"name":"main-0ad79ef8792013c40a15.js","publicPath":"/static/dist/main-0ad79ef8792013c40a15.js","path":"/home/onhout/Documents/Minalanguage/static/dist/main-0ad79ef8792013c40a15.js"},{"name":"main-0ad79ef8792013c40a15.js.map","publicPath":"/static/dist/main-0ad79ef8792013c40a15.js.map","path":"/home/onhout/Documents/Minalanguage/static/dist/main-0ad79ef8792013c40a15.js.map"}],"outlinetree":[{"name":"outlinetree-0ad79ef8792013c40a15.js","publicPath":"/static/dist/outlinetree-0ad79ef8792013c40a15.js","path":"/home/onhout/Documents/Minalanguage/static/dist/outlinetree-0ad79ef8792013c40a15.js"},{"name":"outlinetree-0ad79ef8792013c40a15.css","publicPath":"/static/dist/outlinetree-0ad79ef8792013c40a15.css","path":"/home/onhout/Documents/Minalanguage/static/dist/outlinetree-0ad79ef8792013c40a15.css"},{"name":"outlinetree-0ad79ef8792013c40a15.js.map","publicPath":"/static/dist/outlinetree-0ad79ef8792013c40a15.js.map","path":"/home/onhout/Documents/Minalanguage/static/dist/outlinetree-0ad79ef8792013c40a15.js.map"},{"name":"outlinetree-0ad79ef8792013c40a15.css.map","publicPath":"/static/dist/outlinetree-0ad79ef8792013c40a15.css.map","path":"/home/onhout/Documents/Minalanguage/static/dist/outlinetree-0ad79ef8792013c40a15.css.map"}],"vendor":[{"name":"vendor-0ad79ef8792013c40a15.js","publicPath":"/static/dist/vendor-0ad79ef8792013c40a15.js","path":"/home/onhout/Documents/Minalanguage/static/dist/vendor-0ad79ef8792013c40a15.js"},{"name":"vendor-0ad79ef8792013c40a15.css","publicPath":"/static/dist/vendor-0ad79ef8792013c40a15.css","path":"/home/onhout/Documents/Minalanguage/static/dist/vendor-0ad79ef8792013c40a15.css"},{"name":"vendor-0ad79ef8792013c40a15.js.map","publicPath":"/static/dist/vendor-0ad79ef8792013c40a15.js.map","path":"/home/onhout/Documents/Minalanguage/static/dist/vendor-0ad79ef8792013c40a15.js.map"},{"name":"vendor-0ad79ef8792013c40a15.css.map","publicPath":"/static/dist/vendor-0ad79ef8792013c40a15.css.map","path":"/home/onhout/Documents/Minalanguage/static/dist/vendor-0ad79ef8792013c40a15.css.map"}]}}
+{
+  "status": "done",
+  "publicPath": "/static/dist/",
+  "chunks": {
+    "files": [
+      {
+        "name": "files-3b8dd995292cfc2f10f4.js",
+        "publicPath": "/static/dist/files-3b8dd995292cfc2f10f4.js",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/files-3b8dd995292cfc2f10f4.js"
+      },
+      {
+        "name": "files-3b8dd995292cfc2f10f4.css",
+        "publicPath": "/static/dist/files-3b8dd995292cfc2f10f4.css",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/files-3b8dd995292cfc2f10f4.css"
+      },
+      {
+        "name": "files-3b8dd995292cfc2f10f4.js.map",
+        "publicPath": "/static/dist/files-3b8dd995292cfc2f10f4.js.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/files-3b8dd995292cfc2f10f4.js.map"
+      },
+      {
+        "name": "files-3b8dd995292cfc2f10f4.css.map",
+        "publicPath": "/static/dist/files-3b8dd995292cfc2f10f4.css.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/files-3b8dd995292cfc2f10f4.css.map"
+      }
+    ],
+    "calendar": [
+      {
+        "name": "calendar-3b8dd995292cfc2f10f4.js",
+        "publicPath": "/static/dist/calendar-3b8dd995292cfc2f10f4.js",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/calendar-3b8dd995292cfc2f10f4.js"
+      },
+      {
+        "name": "calendar-3b8dd995292cfc2f10f4.css",
+        "publicPath": "/static/dist/calendar-3b8dd995292cfc2f10f4.css",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/calendar-3b8dd995292cfc2f10f4.css"
+      },
+      {
+        "name": "calendar-3b8dd995292cfc2f10f4.js.map",
+        "publicPath": "/static/dist/calendar-3b8dd995292cfc2f10f4.js.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/calendar-3b8dd995292cfc2f10f4.js.map"
+      },
+      {
+        "name": "calendar-3b8dd995292cfc2f10f4.css.map",
+        "publicPath": "/static/dist/calendar-3b8dd995292cfc2f10f4.css.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/calendar-3b8dd995292cfc2f10f4.css.map"
+      }
+    ],
+    "outlinetree": [
+      {
+        "name": "outlinetree-3b8dd995292cfc2f10f4.js",
+        "publicPath": "/static/dist/outlinetree-3b8dd995292cfc2f10f4.js",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/outlinetree-3b8dd995292cfc2f10f4.js"
+      },
+      {
+        "name": "outlinetree-3b8dd995292cfc2f10f4.css",
+        "publicPath": "/static/dist/outlinetree-3b8dd995292cfc2f10f4.css",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/outlinetree-3b8dd995292cfc2f10f4.css"
+      },
+      {
+        "name": "outlinetree-3b8dd995292cfc2f10f4.js.map",
+        "publicPath": "/static/dist/outlinetree-3b8dd995292cfc2f10f4.js.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/outlinetree-3b8dd995292cfc2f10f4.js.map"
+      },
+      {
+        "name": "outlinetree-3b8dd995292cfc2f10f4.css.map",
+        "publicPath": "/static/dist/outlinetree-3b8dd995292cfc2f10f4.css.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/outlinetree-3b8dd995292cfc2f10f4.css.map"
+      }
+    ],
+    "main": [
+      {
+        "name": "main-3b8dd995292cfc2f10f4.js",
+        "publicPath": "/static/dist/main-3b8dd995292cfc2f10f4.js",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/main-3b8dd995292cfc2f10f4.js"
+      },
+      {
+        "name": "main-3b8dd995292cfc2f10f4.js.map",
+        "publicPath": "/static/dist/main-3b8dd995292cfc2f10f4.js.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/main-3b8dd995292cfc2f10f4.js.map"
+      }
+    ],
+    "vendor": [
+      {
+        "name": "vendor-3b8dd995292cfc2f10f4.js",
+        "publicPath": "/static/dist/vendor-3b8dd995292cfc2f10f4.js",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/vendor-3b8dd995292cfc2f10f4.js"
+      },
+      {
+        "name": "vendor-3b8dd995292cfc2f10f4.css",
+        "publicPath": "/static/dist/vendor-3b8dd995292cfc2f10f4.css",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/vendor-3b8dd995292cfc2f10f4.css"
+      },
+      {
+        "name": "vendor-3b8dd995292cfc2f10f4.js.map",
+        "publicPath": "/static/dist/vendor-3b8dd995292cfc2f10f4.js.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/vendor-3b8dd995292cfc2f10f4.js.map"
+      },
+      {
+        "name": "vendor-3b8dd995292cfc2f10f4.css.map",
+        "publicPath": "/static/dist/vendor-3b8dd995292cfc2f10f4.css.map",
+        "path": "/Users/pl/Documents/pythonstuff/minalanguage/static/dist/vendor-3b8dd995292cfc2f10f4.css.map"
+      }
+    ]
+  }
+}

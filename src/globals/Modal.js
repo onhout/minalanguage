@@ -32,14 +32,14 @@ class Modal {
                     .append($('<div/>', {
                         'class': 'modal-header'
                     })
+                        .append(self.modal_title)
                         .append($('<button/>', {
                             'type': 'button',
                             'class': 'close',
                             'data-dismiss': 'modal',
                             'aria-hidden': 'true',
                             'text': 'x'
-                        }))
-                        .append(self.modal_title))
+                        })))
                     .append($('<div/>', {
                         'class': 'modal-body'
                     })

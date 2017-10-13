@@ -1,6 +1,5 @@
-@import '~bootstrap/less/bootstrap';
-@import "~bootstrap-social/bootstrap-social";
-@import '~font-awesome/less/font-awesome';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~font-awesome/less/font-awesome.less';
 @import '~fullcalendar/dist/fullcalendar.css';
 @import "~jquery-ui/themes/base/all.css";
 @import "~jquery-contextmenu/dist/jquery.contextMenu.css";
@@ -22,6 +21,21 @@ body {
   font-size: 15px;
   color: @text-color;
   font-weight: 400;
+}
+
+.btn-group-justified {
+  display: flex;
+  width: 100%;
+  .btn,
+  .btn-group {
+    flex: 1;
+    .btn {
+      width: 100%;
+    }
+    .dropdown-menu {
+      left: auto;
+    }
+  }
 }
 
 //.navbar-brand {
@@ -64,14 +78,16 @@ a {
     color: @main-color;
   }
 }
-.bottom-logo{
+
+.bottom-logo {
   max-height: 200px;
 }
 
-.alternate-odd{
+.alternate-odd {
   background-color: @alternate-odd;
 }
-.alternate-even{
+
+.alternate-even {
   background-color: @alternate-even;
 }
 
@@ -375,7 +391,7 @@ h2 {
     background-color: @main-color;
     width: 109px;
     height: auto;
-    padding: 10px 10px 25px 10px;
+    padding: 30px 10px 25px 10px;
     text-align: center;
     border-radius: 0 80px 99px 99px;
     -moz-border-radius: 0 80px 99px 99px;

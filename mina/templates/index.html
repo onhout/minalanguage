@@ -11,19 +11,19 @@
             <!-- Modal content no 1-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title text-center form-title">Login</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body padtrbl">
 
                     <div class="login-box-body">
                         <p class="login-box-msg">Sign in to start your session</p>
                         <a href="{% url 'social:begin' 'facebook' %}"
-                           class="btn btn-social btn-lg btn-facebook btn-block"><i
-                                class="fa fa-facebook"></i>Sign in<span class="hidden-xs"> with Facebook</span></a>
+                           class="btn btn-social btn-primary btn-facebook btn-block" role="button"><i
+                                class="fa fa-facebook"></i><span class="hidden-xs"> Sign in with Facebook</span></a>
                         <a href="{% url 'social:begin' 'google-oauth2' %}"
-                           class="btn btn-social btn-lg btn-google btn-block"><i
-                                class="fa fa-google"></i>Sign in<span class="hidden-xs"> with Google</span></a>
+                           class="btn btn-social btn-danger btn-google btn-block" role="button"><i
+                                class="fa fa-google"></i><span class="hidden-xs"> Sign in with Google</span></a>
                     </div>
                 </div>
             </div>
@@ -69,9 +69,9 @@
     {#    </section>#}
     <!--/ Cta-->
     <!--work-shop-->
-{#    <div class="alternate-odd">#}
-{#        {% include 'main_parts/4.html' %}#}
-{#    </div>#}
+    {#    <div class="alternate-odd">#}
+    {#        {% include 'main_parts/4.html' %}#}
+    {#    </div>#}
     <!--/ work-shop-->
     <!--Faculity member-->
     <div class="alternate-odd">
