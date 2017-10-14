@@ -6,7 +6,7 @@ class Modal {
             'text': text
         });
         this.modal_title = $('<h4/>', {
-            'class': 'modal-title',
+            'class': 'title title-up',
             'text': title
         });
 
@@ -30,16 +30,17 @@ class Modal {
                     'class': 'modal-content'
                 })
                     .append($('<div/>', {
-                        'class': 'modal-header'
+                        'class': 'modal-header justify-content-center'
                     })
                         .append(self.modal_title)
                         .append($('<button/>', {
                             'type': 'button',
                             'class': 'close',
                             'data-dismiss': 'modal',
-                            'aria-hidden': 'true',
-                            'text': 'x'
-                        })))
+                            'aria-hidden': 'true'
+                        }).append($('<i>', {
+                            'class': 'now-ui-icons ui-1_simple-remove'
+                        }))))
                     .append($('<div/>', {
                         'class': 'modal-body'
                     })
@@ -54,8 +55,8 @@ class Modal {
                             'text': self.save_text
                         }).click(callback)))));
         self.modal.appendTo($('body'));
-        $('#modal-'+self.id).modal('show');
-        $('#modal-'+self.id).on('hide.bs.modal', function () {
+        $('#modal-' + self.id).modal('show');
+        $('#modal-' + self.id).on('hide.bs.modal', function () {
             self.modal.remove();
         })
     }

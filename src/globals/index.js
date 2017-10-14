@@ -1,4 +1,6 @@
 var MODAL = require('./Modal.js').default;
+const navbar = $('nav.navbar');
+
 
 $(function () {
     $('#contactForm').validate();
@@ -44,3 +46,4 @@ $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
 });
+

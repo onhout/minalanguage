@@ -41,7 +41,6 @@ $(function () {
         },
         eventOverlap: false,
         height: 'auto',
-        timezone: "local",
         firstDay: moment().day(),
         unselectAuto: false,
         select: function (start, end, jsEvent, view) {
@@ -50,21 +49,21 @@ $(function () {
                 var eventData;
                 var modal = new MODAL('Confirm', '', modal_id);
                 var class_type = $('<div class="form-group">' +
-                    '<small>Choose lecture type: </small>' +
+                    '<div class="category">Choose lecture type: </div>' +
                     '<select class="form-control" id="class_type">' +
                     '<option value="korean">Korean</option>' +
                     '<option value="chinese">Chinese</option>' +
                     '</select></div>');
 
                 var select = $('<div class="form-group">' +
-                    '<small>Choose booking type: </small>' +
+                    '<div class="category">Choose booking type: </small>' +
                     '<select class="form-control" id="booking_type">' +
                     '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
                     '</select></div>');
-                modal.modal_body = $('<h4>Do you want to book from ' +
+                modal.modal_body = $('<div><h4>Do you want to book from ' +
                     moment(start).format('MM/DD hh:mm:ss') + ' to ' +
-                    moment(end).format('MM/DD hh:mm:ss') + '?</h4>').append("<hr>").append(class_type).append(select);
+                    moment(end).format('MM/DD hh:mm:ss') + '?</h4></div>').append("<hr>").append(class_type).append(select);
                 modal.run_modal(function () {
                     var differenceInMs = moment(end).diff(moment(start)); // diff yields milliseconds
                     var duration = moment.duration(differenceInMs);

@@ -14,7 +14,7 @@
         </div>
     </noscript>
 
-    <h1>Mina's calendar</h1>
+    <h1 class="h1-seo">Mina's calendar</h1>
     <h3 class="text-warning">Next meeting:
         {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
             {{ next_meeting }}{% endif %}</h3>
@@ -38,8 +38,8 @@
                     over!</p>
             </div>
             <div class="jumbotron">
-                <p>Duration: <span id="duration">0</span> hour(s)</p>
-                <p>Total: $<span class="initial_dollar">0</span></p>
+                <p class="lead">Duration: <span id="duration">0</span> hour(s)</p>
+                <p class="lead">Total: $<span class="initial_dollar">0</span></p>
             </div>
             <div class="btn-group btn-group-justified" style="margin-bottom: 5px;">
                 <div class="btn-group">

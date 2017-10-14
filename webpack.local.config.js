@@ -23,7 +23,8 @@ module.exports = {
             'moment',
             'fullcalendar',
             'jquery.fancytree/dist/jquery.fancytree-all.js',
-            'jquery-contextmenu'
+            'jquery-contextmenu',
+            'globals/now-ui-kit.js'
         ]
     }, // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 
