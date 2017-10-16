@@ -6,8 +6,8 @@ $(function () {
     $('#contactForm').validate();
 
     $('.navbar-nav li a').bind('click', function (event) {
-        $('.navbar-nav li').removeClass('active');
-        $(this).closest('li').addClass('active');
+        // $('.navbar-nav li').removeClass('active');
+        // $(this).closest('li').addClass('active');
         var $anchor = $(this);
         var nav = $($anchor.attr('href') != '#' ? $anchor.attr('href') != '#' : '');
         if (nav.length) {
