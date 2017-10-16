@@ -9,37 +9,34 @@
         <form action="{% url 'send_message' %}" method="post" role="form" id="contactForm">
             {% csrf_token %}
 
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" name="person" class="form-control form" id="person"
-                                       placeholder="Your Name" minlength="2" required/>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="email" class="form-control" name="email" id="email"
-                                       placeholder="Your Email" required/>
-                            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" name="person" class="form-control form" id="person"
+                                   placeholder="Your Name" minlength="2" required/>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
-                               required/>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   placeholder="Your Email" required/>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <textarea class="form-control" name="message" rows="5" placeholder="Message"
-                                  required></textarea>
-                    </div>
-                    <div class="g-recaptcha" data-sitekey="6Ld55iAUAAAAAJeYVgRyWnHvUB6C93JkaY09Izqz"></div>
-                    <button type="submit" id="submit" name="submit"
-                            class="form contact-form-button light-form-button oswald light">SEND EMAIL
-                    </button>
                 </div>
 
+                <div class="form-group">
+                    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
+                           required/>
+                </div>
+                <div class="form-group">
+                        <textarea class="form-control" name="message" rows="5" placeholder="Message"
+                                  required></textarea>
+                </div>
+                <div class="g-recaptcha" data-sitekey="6Ld55iAUAAAAAJeYVgRyWnHvUB6C93JkaY09Izqz"></div>
+                <button type="submit" id="submit" name="submit"
+                        class="form contact-form-button light-form-button oswald light">SEND EMAIL
+                </button>
             </div>
         </form>
     </div>

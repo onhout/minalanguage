@@ -4,75 +4,70 @@
 {% block title %}Your current progress{% endblock %}
 {% block content %}
 
-    <div class="col-md-10 col-md-offset-1 jumbotron">
-        <h4 class="text-center">My {{ class_name }} class progress</h4>
-        <p class="text-muted">Your current progress is shown below. A checked checkbox means it's completed and your instructor
+    <div class="col-md-10 mx-auto jumbotron">
+        <h3 class="text-center">My {{ class_name }} class progress</h3>
+        <p class="text-muted">Your current progress is shown below. A checked checkbox means it's completed and your
+            instructor
             will associate each class with your meeting information. There are also files you are able to download
             under each outline.</p>
-        <ul class="media-list">
+        <div class="media">
             {% recursetree outline %}
-                <li class="media">
-                    <div class="media-left">
-                        <h3 class="media-heading {% if node.passed %}text-success{% endif %}">
-                            {% if node.passed %}
-                                <i class="fa fa-check-square-o"></i>
-                            {% else %}
-                                <i class="fa fa-square-o"></i>
-                            {% endif %}
-                        </h3>
-                    </div>
-                    <div class="media-body">
-                        <h3 class="media-heading {% if node.passed %}text-success{% endif %}">
-                            {{ node.name }}
-                        </h3>
-                    </div>
+                <div class="media-body">
+                    <h6 class="media-heading {% if node.passed %}text-success{% endif %}">
+                        {% if node.passed %}
+                            <i class="fa fa-check-square-o"></i>
+                        {% else %}
+                            <i class="fa fa-square-o"></i>
+                        {% endif %}
+                        {{ node.name }}
+                    </h6>
                     <ul class="children">
                         {% if node.related %}
                             {% for relatedNode in node.related %}
                                 {% if relatedNode.booking %}
                                     <li class="media">
                                         <div class="media-left">
-                                            <h3 class="media-heading {% if node.passed %}text-success{% endif %}">
+                                            <h6 class="media-heading {% if node.passed %}text-success{% endif %}">
                                                 {% if node.passed %}
                                                     <i class="fa fa-check-square-o"></i>
                                                 {% else %}
                                                     <i class="fa fa-square-o"></i>
                                                 {% endif %}
-                                            </h3>
+                                            </h6>
                                         </div>
                                         <div class="media-body">
-                                            <h3 class="media-heading">
+                                            <h6 class="media-heading">
 
                                                 <span class="{% if node.passed %}text-success{% endif %}">
                                                 <i class="fa fa-book"></i>
                                                 {{ relatedNode.booking.start }} to {{ relatedNode.booking.end }}
                                                 </span>
-                                            </h3>
+                                            </h6>
                                         </div>
                                     </li>
                                 {% endif %}
                                 {% if relatedNode.file %}
                                     <li class="media">
                                         <div class="media-left">
-                                            <h3 class="media-heading {% if node.passed %}text-success{% endif %}">
+                                            <h6 class="media-heading {% if node.passed %}text-success{% endif %}">
                                                 {% if node.passed %}
                                                     <i class="fa fa-check-square-o"></i>
                                                 {% else %}
                                                     <i class="fa fa-square-o"></i>
                                                 {% endif %}
-                                            </h3>
+                                            </h6>
                                         </div>
                                         <div class="media-body">
-                                            <h3 class="media-heading">
+                                            <h6 class="media-heading">
                                                 <a href="http://minalanguage.s3.amazonaws.com/{{ relatedNode.file.file }}">
                                                     <span class="{% if node.passed %}text-success{% endif %}">
                                                     <i class="fa fa-download"></i>
                                                         {{ relatedNode.file.name }}
                                                     </span>
                                                 </a>
-                                                <small> - Uploaded: {{ relatedNode.file.updated_at|timesince }} ago
-                                                </small>
-                                            </h3>
+                                                <span> - Uploaded: {{ relatedNode.file.updated_at|timesince }} ago
+                                                </span>
+                                            </h6>
                                         </div>
                                     </li>
                                 {% endif %}
@@ -82,8 +77,8 @@
                             {{ children }}
                         {% endif %}
                     </ul>
-                </li>
+                </div>
             {% endrecursetree %}
-        </ul>
+        </div>
     </div>
 {% endblock %}

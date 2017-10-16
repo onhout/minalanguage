@@ -61,9 +61,9 @@ $(function () {
                     '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
                     '</select></div>');
-                modal.modal_body = $('<div><h4>Do you want to book from ' +
+                modal.modal_body = $('<div>Do you want to book from ' +
                     moment(start).format('MM/DD hh:mm:ss') + ' to ' +
-                    moment(end).format('MM/DD hh:mm:ss') + '?</h4></div>').append("<hr>").append(class_type).append(select);
+                    moment(end).format('MM/DD hh:mm:ss') + '?</div>').append("<hr>").append(class_type).append(select);
                 modal.run_modal(function () {
                     var differenceInMs = moment(end).diff(moment(start)); // diff yields milliseconds
                     var duration = moment.duration(differenceInMs);
@@ -156,8 +156,8 @@ $(function () {
                 if (calEvent.is_admin && calEvent.type == 'in-person') {
                     edit_location = $('<div/>', {
                         class: 'form-group'
-                    }).append($('<label/>', {
-                        "for": 'location',
+                    }).append($('<div/>', {
+                        "class": 'category',
                         "text": "Location: "
                     })).append($('<input/>', {
                         id: "location",
@@ -180,7 +180,7 @@ $(function () {
                     })
                 } else {
                     class_type = $('<div class="form-group">' +
-                        '<small>Choose lecture type: </small>' +
+                        '<div class="category">Choose lecture type: </div>' +
                         '<select class="form-control" id="class_type">' +
                         '<option value="korean">Korean</option>' +
                         '<option value="chinese">Chinese</option>' +
@@ -189,7 +189,7 @@ $(function () {
 
 
                 var select = $('<div class="form-group">' +
-                    '<small>Choose booking type: </small>' +
+                    '<div class="category">Choose booking type: </div>' +
                     '<select class="form-control" id="booking_type">' +
                     '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
@@ -293,7 +293,7 @@ $(function () {
                         class_location: 'None'
                     }
                 })
-            })
+            });
             window.location.reload()
         }
 

@@ -15,16 +15,16 @@ module.exports = {
             'jquery',
             'jquery-ui-dist/jquery-ui',
             'jquery-validation',
-            'globals/index.less',
+            'globals/now-ui-kit.js',
             'globals/index.js',
+            'globals/index.less',
             'bootstrap',
             'blueimp-file-upload',
             'lodash',
             'moment',
             'fullcalendar',
             'jquery.fancytree/dist/jquery.fancytree-all.js',
-            'jquery-contextmenu',
-            'globals/now-ui-kit.js'
+            'jquery-contextmenu'
         ]
     }, // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 

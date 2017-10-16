@@ -61,7 +61,7 @@ $(function () {
                 }
             });
         }
-    }
+    };
     let big_image;
 
 // Javascript just for Demo purpose, remove it from your project
@@ -79,7 +79,7 @@ $(function () {
 
         }, 6)
 
-    }
+    };
 
 // Returns a function, that, as long as it continues to be invoked, will not
 // be triggered. The function will be called after it stops being called for
@@ -98,8 +98,7 @@ $(function () {
             }, wait);
             if (immediate && !timeout) func.apply(context, args);
         };
-    };
-
+    }
     let transparent = true;
 
     let transparentDemo = true;
@@ -322,13 +321,12 @@ $(function () {
         }
     });
 
-
     $(window).on('resize', function () {
         nowuiKit.initNavbarImage();
     });
 
-    $(document).on('click', '.navbar-toggler', function () {
-        $toggle = $(this);
+    $('.navbar-toggler').click(function () {
+        let $toggle = $(this);
 
         if (nowuiKit.misc.navbar_menu_visible == 1) {
             $('html').removeClass('nav-open');
@@ -341,7 +339,7 @@ $(function () {
             setTimeout(function () {
                 $toggle.addClass('toggled');
             }, 580);
-            div = '<div id="bodyClick"></div>';
+            let div = '<div id="bodyClick"></div>';
             $(div).appendTo('body').click(function () {
                 $('html').removeClass('nav-open');
                 nowuiKit.misc.navbar_menu_visible = 0;

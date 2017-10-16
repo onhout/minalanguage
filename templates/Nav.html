@@ -3,7 +3,7 @@
 
         <div class="navbar-translate">
             <a class="navbar-brand" href="/">Mina<span></span></a>
-            <button class="navbar-toggler-right" type="button" data-toggle="collapse" data-target="#minalanguage-nav"
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#minalanguage-nav"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-bar bar1"></span>
                 <span class="navbar-toggler-bar bar2"></span>
@@ -35,19 +35,18 @@
                             Overview</a></li>
 
                     {% else %}
-                        <li class="nav-item">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false"> Classes
                                 <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu">
+                            <div class="dropdown-menu">
                                 {% for class in classes %}
-                                    <li><a class="dropdown-item"
-                                           href="{% url 'list_outline' class.program %}">{{ class.name|title }}</a>
-                                    </li>
+                                    <a class="dropdown-item"
+                                       href="{% url 'list_outline' class.program %}">{{ class.name|title }}</a>
                                 {% endfor %}
-                            </ul>
+                            </div>
                         </li>
                     {% endif %}
                 </ul>

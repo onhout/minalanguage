@@ -10,10 +10,10 @@ class FileUpload {
             dataType: 'json',
             sequentialUploads: true,
             start: function (e) {
-                $('.progress').show();
+                $('.progress-container').show();
             },
             stop: function (e) {
-                $('.progress').hide();
+                $('.progress-container').hide();
             },
             progressall: function (e, data) {  /* UPDATE THE PROGRESS BAR */
                 var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -59,6 +59,7 @@ class FileTableRow {
         this.updated = $('<td>' + data.result.uploaded_at + '</td>');
         this.deleteBtn = $('<a/>',
             {
+                'href': '#',
                 'class': 'btn btn-danger delete_file',
                 'text': 'Delete'
             }).click(FileUpload.deleteFN(data.result.file_id,

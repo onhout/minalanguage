@@ -1,27 +1,46 @@
-<div class="banner">
-    <div class="bg-color">
-        <div class="container">
-            <div class="row">
-                <div class="banner-text mx-auto text-center">
-                    <div class="text-border">
-                        <h4 class="text-dec" style="height: 46px;">Hello.</h4>
-                    </div>
-                    <div class="intro-para text-center quote">
-                        <p class="big-text">Welcome to Mina's Language!</p>
-                        <p class="small-text">Whether you want to learn Korean or Chinese
-                            <br>I will teach you the fastest way to learn the two most popular language in the
-                            world!</p>
-                        {#                            <a href="#" class="btn">GET A QUOTE</a>#}
-                    </div>
-                    <a href="#highlights" class="mouse-hover">
-                        <div class="mouse"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
+<div class="page-header clear-filter" filter-color="purple">
+    <div class="page-header-image" data-parallax="true"
+         style="background-image: url('https://s3-us-west-1.amazonaws.com/minalanguage/media/bg-banner.JPG');">
     </div>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/typed.js/1.1.7/typed.min.js'></script>
+    <div class="container">
+        <div class="content-center brand">
+            <img class="n-logo" src="./assets/img/now-logo.png" alt="">
+            <h4 class="text-dec" style="height: 46px;">Hello.</h4>
+            <p class="big-text">Welcome to Mina's Language!</p>
+            <p class="small-text">Whether you want to learn Korean or Chinese
+                <br>I will teach you the fastest way to learn the two most popular language in the
+                world!</p>
+        </div>
+
+        <a href="#highlights" class="mouse-hover">
+            <div class="mouse"></div>
+        </a>
+    </div>
 </div>
+
+{#<div class="banner">#}
+{#    <div class="bg-color">#}
+{#        <div class="container">#}
+{#            <div class="row">#}
+{#                <div class="banner-text mx-auto text-center">#}
+{#                    <div class="text-border">#}
+{#                        <h4 class="text-dec" style="height: 46px;">Hello.</h4>#}
+{#                    </div>#}
+{#                    <div class="intro-para text-center quote">#}
+{#                        <p class="big-text">Welcome to Mina's Language!</p>#}
+{#                        <p class="small-text">Whether you want to learn Korean or Chinese#}
+{#                            <br>I will teach you the fastest way to learn the two most popular language in the#}
+{#                            world!</p>#}
+{#                            <a href="#" class="btn">GET A QUOTE</a>#}
+{#                    </div>#}
+
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/typed.js/1.1.7/typed.min.js'></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         Typed.new(".text-dec", {
@@ -29,7 +48,7 @@
             typeSpeed: 100,
             backDelay: 1000,
             showCursor: false,
-            loop:true,
+            loop: true,
         });
     });
 </script>
