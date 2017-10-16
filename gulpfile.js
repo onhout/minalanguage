@@ -6,9 +6,6 @@ var gulp = require('gulp'),
     gdel = require('del'),
     gplumber = require('gulp-plumber');
 
-
-
-
 var errorHandler = function(){
     // default appearance
     return gplumber(function(error){

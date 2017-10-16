@@ -67,7 +67,7 @@ module.exports = {
         new OptimizeCssAssetsPlugin({
             cssProcessorOptions: {discardComments: {removeAll: true}},
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-[hash].js', Infinity),
+        new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor-[hash].js', Infinity}),
     ],
 
     module: {
