@@ -1,7 +1,8 @@
-var path = require("path");
-var webpack = require('webpack');
-var BundleTracker = require('webpack-bundle-tracker');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require("path");
+const webpack = require('webpack');
+const BundleTracker = require('webpack-bundle-tracker');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
     context: __dirname,
@@ -13,11 +14,16 @@ module.exports = {
         outlinetree: ['main/js/outline-tree', 'main/less/outline-tree.less'],
         vendor: [
             'jquery',
+            'popper.js',
+            'bootstrap',
+            'bootstrap-switch',
+            'bootstrap-datepicker',
+            'nouislider',
             'jquery-ui-dist/jquery-ui',
             'jquery-validation',
-            'globals/index.less',
+            'globals/now-ui-kit.js',
             'globals/index.js',
-            'bootstrap',
+            'globals/index.less',
             'blueimp-file-upload',
             'lodash',
             'moment',
@@ -39,8 +45,9 @@ module.exports = {
         new BundleTracker({filename: './webpack-stats.json'}),
         new webpack.ProvidePlugin({
             $: 'jquery',             // bootstrap 3.x requires
-            jQuery: 'jquery',        // bootstrap 3.x requires
-            moment: 'moment'
+            jQuery: 'jquery',
+            Popper: ['popper.js', 'default'],      // bootstrap 3.x requires
+            moment: 'moment',
         }),
         new ExtractTextPlugin('[name]-[hash].css'),
         new webpack.DefinePlugin({
@@ -49,32 +56,37 @@ module.exports = {
             }
         }),
         new webpack.optimize.UglifyJsPlugin({
-            beautify: false,
             mangle: {
-                screw_ie8: true,
-                keep_fnames: true
+                toplevel: true
             },
-            compress: {
-                screw_ie8: true
-            },
-            comments: false
+            output: {
+                beautify: false,
+            }
         }),
-        new webpack.optimize.DedupePlugin(),
+
+        new OptimizeCssAssetsPlugin({
+            cssProcessorOptions: {discardComments: {removeAll: true}},
+        }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-[hash].js', Infinity),
     ],
 
     module: {
-        loaders: [
+        rules: [
             {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'}, // to transform JSX into JS
-            {test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")}, //to transform less into CSS
+            {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader!less-loader"})
+            }, //to transform less into CSS
             {test: /\.(jpe|jpg|png|woff|woff2|eot|ttf|gif|svg)(\?.*$|$)/, loader: 'url-loader?limit=100000'},//changed the regex because of an issue of loading less-loader for font-awesome.
-            {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
+            {test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader"})},
         ],
     },
 
     resolve: {
-        modulesDirectories: ['node_modules', 'static/components'],
-        root: path.resolve('./src'),
-        extensions: ['', '.js', '.jsx']
+        modules: [
+            path.resolve('./src'),
+            './node_modules'
+        ],
+        extensions: ['.js', '.jsx']
     },
 };

@@ -131,6 +131,7 @@ $(function () {
         nowuiKit.checkScrollForTransparentNavbar();
         $(window).on('scroll', nowuiKit.checkScrollForTransparentNavbar)
     } else {
+        $('.navbar-logo').show();
         $navbar.removeClass('navbar-transparent');
     }
 

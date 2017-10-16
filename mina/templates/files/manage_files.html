@@ -32,20 +32,19 @@
                         <td>
                             <a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
 
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
+                            <div class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Progress <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     {% for program in program_list %}
-                                        <li>
-                                            <a href="{% url 'show_outline' program.program %}?student_id={{ user.id }}">
-                                                {{ program.name }}
-                                            </a>
-                                        </li>
+                                        <a class="dropdown-item"
+                                           href="{% url 'show_outline' program.program %}?student_id={{ user.id }}">
+                                            {{ program.name }}
+                                        </a>
                                     {% endfor %}
-                                </ul>
+                                </div>
                             </div>
                         </td>
                     </tr>

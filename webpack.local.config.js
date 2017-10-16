@@ -13,12 +13,16 @@ module.exports = {
         outlinetree: ['main/js/outline-tree', 'main/less/outline-tree.less'],
         vendor: [
             'jquery',
+            'popper.js',
+            'bootstrap',
+            'bootstrap-switch',
+            'bootstrap-datepicker',
+            'nouislider',
             'jquery-ui-dist/jquery-ui',
             'jquery-validation',
             'globals/now-ui-kit.js',
             'globals/index.js',
             'globals/index.less',
-            'bootstrap',
             'blueimp-file-upload',
             'lodash',
             'moment',
@@ -58,21 +62,7 @@ module.exports = {
                 loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader!less-loader"})
             }, //to transform less into CSS
             {test: /\.(jpe|jpg|png|woff|woff2|eot|ttf|gif|svg)(\?.*$|$)/, loader: 'url-loader?limit=100000'},//changed the regex because of an issue of loading less-loader for font-awesome.
-            {test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader"})},
-            // {
-            //     test: /\.(scss)$/, use: [
-            //     {loader: 'style-loader',},
-            //     {loader: 'css-loader'},
-            //     {
-            //         loader: 'postcss-loader', options: {
-            //         plugins: function () {
-            //             return [require('precss'), require('autoprefixer')];
-            //         }
-            //     }
-            //     },
-            //     {loader: 'sass-loader'}
-            // ]
-            // },
+            {test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader"}) },
         ],
     },
 
