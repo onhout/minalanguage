@@ -581,3 +581,14 @@ def edit_progress(request):
             "progress_id": obj.id,
             "success": True
         })
+
+
+@login_required
+def user_home(request):
+    try:
+        next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
+    except:
+        next_meeting = 'none'
+    return render(request, 'home.html', {
+        'next_meeting': next_meeting
+    })

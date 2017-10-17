@@ -15,7 +15,8 @@
 <body class="index-page sidebar-collapse">
 {% include 'Nav.html' %}
 {% block main_page %}{% endblock %}
-<div class="container wrapper" style="margin-top: 85px">
+{% url 'user_home' as user_home %}
+<div class="container{% if request.get_full_path == user_home %}-fluid{% endif %} wrapper" style="margin-top: 85px">
     {% block content %}{% endblock %}
 </div>
 {% include 'Footer.html' %}

@@ -2,6 +2,254 @@
 {% load render_bundle from webpack_loader %}
 {% block title %}Main Page{% endblock %}
 {% block content %}
-    <h1 class="text-center">Hello, {{ user.get_full_name }}</h1>
 
+    {% load humanize %}
+    <div class="row">
+        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+            <ul class="nav nav-tabs flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Overview <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Files</a>
+                </li>
+            </ul>
+
+            <ul class="nav nav-tabs flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Nav item</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Nav item again</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">One more nav</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Another nav item</a>
+                </li>
+            </ul>
+
+            <ul class="nav nav-tabs flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Nav item again</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">One more nav</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Another nav item</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main">
+            <h1>Welcome, {{ user.get_full_name }}</h1>
+
+            <section class="row text-center placeholders">
+                <div class="col-6 col-sm-3 placeholder">
+                    <div class="card">
+                        <h5 class="card-header">Upcoming class</h5>
+                        <div class="card-body">
+                            {% if next_meeting != 'none' %}
+                                <h4 class="card-title">
+                                    {% if next_meeting.start %}{{ next_meeting.start }}{% else %}
+                                        {{ next_meeting }}{% endif %}</h4>
+                                <p class="card-text">Your
+                                    next {{ next_meeting.book_type }} {{ next_meeting.class_type|capfirst }} class
+                                    happens
+                                    {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
+                                        {{ next_meeting }}{% endif %}</p>
+                                <a href="#" class="btn btn-primary">View more...</a>
+                            {% else %}
+                                <h4 class="card-title">You have no appointments coming up</h4>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-3 placeholder">
+                    <div class="card">
+                        <h5 class="card-header">Progress</h5>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                {% if next_meeting.start %}{{ next_meeting.start }}{% else %}
+                                    {{ next_meeting }}{% endif %}</h4>
+                            <p class="card-text">Your
+                                next {{ next_meeting.book_type }} {{ next_meeting.class_type|capfirst }} class
+                                happens
+                                {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
+                                    {{ next_meeting }}{% endif %}</p>
+                            <a href="#" class="btn btn-primary">View more...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-3 placeholder">
+                    <div class="card">
+                        <h5 class="card-header">Files</h5>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                {% if next_meeting.start %}{{ next_meeting.start }}{% else %}
+                                    {{ next_meeting }}{% endif %}</h4>
+                            <p class="card-text">Your
+                                next {{ next_meeting.book_type }} {{ next_meeting.class_type|capfirst }} class happens
+                                {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
+                                    {{ next_meeting }}{% endif %}</p>
+                            <a href="#" class="btn btn-primary">View more...</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-3 placeholder">
+                    <div class="card">
+                        <h5 class="card-header">Upcoming class</h5>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                {% if next_meeting.start %}{{ next_meeting.start }}{% else %}
+                                    {{ next_meeting }}{% endif %}</h4>
+                            <p class="card-text">Your
+                                next {{ next_meeting.book_type }} {{ next_meeting.class_type|capfirst }} class happens
+                                {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
+                                    {{ next_meeting }}{% endif %}</p>
+                            <a href="#" class="btn btn-primary">View more...</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <h2>Section title</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Header</th>
+                        <th>Header</th>
+                        <th>Header</th>
+                        <th>Header</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1,001</td>
+                        <td>Lorem</td>
+                        <td>ipsum</td>
+                        <td>dolor</td>
+                        <td>sit</td>
+                    </tr>
+                    <tr>
+                        <td>1,002</td>
+                        <td>amet</td>
+                        <td>consectetur</td>
+                        <td>adipiscing</td>
+                        <td>elit</td>
+                    </tr>
+                    <tr>
+                        <td>1,003</td>
+                        <td>Integer</td>
+                        <td>nec</td>
+                        <td>odio</td>
+                        <td>Praesent</td>
+                    </tr>
+                    <tr>
+                        <td>1,003</td>
+                        <td>libero</td>
+                        <td>Sed</td>
+                        <td>cursus</td>
+                        <td>ante</td>
+                    </tr>
+                    <tr>
+                        <td>1,004</td>
+                        <td>dapibus</td>
+                        <td>diam</td>
+                        <td>Sed</td>
+                        <td>nisi</td>
+                    </tr>
+                    <tr>
+                        <td>1,005</td>
+                        <td>Nulla</td>
+                        <td>quis</td>
+                        <td>sem</td>
+                        <td>at</td>
+                    </tr>
+                    <tr>
+                        <td>1,006</td>
+                        <td>nibh</td>
+                        <td>elementum</td>
+                        <td>imperdiet</td>
+                        <td>Duis</td>
+                    </tr>
+                    <tr>
+                        <td>1,007</td>
+                        <td>sagittis</td>
+                        <td>ipsum</td>
+                        <td>Praesent</td>
+                        <td>mauris</td>
+                    </tr>
+                    <tr>
+                        <td>1,008</td>
+                        <td>Fusce</td>
+                        <td>nec</td>
+                        <td>tellus</td>
+                        <td>sed</td>
+                    </tr>
+                    <tr>
+                        <td>1,009</td>
+                        <td>augue</td>
+                        <td>semper</td>
+                        <td>porta</td>
+                        <td>Mauris</td>
+                    </tr>
+                    <tr>
+                        <td>1,010</td>
+                        <td>massa</td>
+                        <td>Vestibulum</td>
+                        <td>lacinia</td>
+                        <td>arcu</td>
+                    </tr>
+                    <tr>
+                        <td>1,011</td>
+                        <td>eget</td>
+                        <td>nulla</td>
+                        <td>Class</td>
+                        <td>aptent</td>
+                    </tr>
+                    <tr>
+                        <td>1,012</td>
+                        <td>taciti</td>
+                        <td>sociosqu</td>
+                        <td>ad</td>
+                        <td>litora</td>
+                    </tr>
+                    <tr>
+                        <td>1,013</td>
+                        <td>torquent</td>
+                        <td>per</td>
+                        <td>conubia</td>
+                        <td>nostra</td>
+                    </tr>
+                    <tr>
+                        <td>1,014</td>
+                        <td>per</td>
+                        <td>inceptos</td>
+                        <td>himenaeos</td>
+                        <td>Curabitur</td>
+                    </tr>
+                    <tr>
+                        <td>1,015</td>
+                        <td>sodales</td>
+                        <td>ligula</td>
+                        <td>in</td>
+                        <td>libero</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    {% render_bundle 'main' %}
 {% endblock %}
