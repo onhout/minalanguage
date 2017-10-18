@@ -1,5 +1,6 @@
 import json
 import os
+import random
 from datetime import datetime, timedelta
 
 import requests
@@ -18,6 +19,9 @@ from django.utils.text import slugify
 
 from .forms import BookingForm, FileForm, OutlineForm
 from .models import Booking, Files, Customer, Outline, Progress, RelatedFiles
+
+NAVER_CLIENT_ID = config('NAVER_CLIENT_ID')
+NAVER_CLIENT_SECRET = config('NAVER_CLIENT_SECRET')
 
 
 # Create your views here.
@@ -44,13 +48,13 @@ def send_message(request):
     if request.method == "POST" and request.POST.get('email') and r.json()['success'] is True:
         person = request.POST.get('person')
         email = request.POST.get('email')
-        subject = request.POST.get('subject')
-        message = "(%s:%s) sent you the following message: \"%s\"" % (person, email, request.POST.get('message'))
+        subject = "Message received on MinaJeong.com"
+        message = "(%s:%s) sent you the following message: \n Subject: \"%s\" \n Message: \"%s\"" % (person, email, request.POST.get('subject'), request.POST.get('message'))
         send_mail(
             subject,
             message,
             'admin@minajeong.com',
-            ['zxoct11@gmail.com'],
+            ['zxoct11@gmail.com', 'onhout@gmail.com'],
             fail_silently=False, )
     return redirect('/')
 
@@ -589,6 +593,49 @@ def user_home(request):
         next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
     except:
         next_meeting = 'none'
-    return render(request, 'home.html', {
-        'next_meeting': next_meeting
+    try:
+        latest_outline = Outline.objects.get(
+            id=Progress.objects.filter(student=request.user).order_by('-updated_at')[0].outline_id)
+    except:
+        latest_outline = 'none'
+    try:
+        parent_outline = Outline.objects.get(id=latest_outline.parent_id)
+    except:
+        parent_outline = 'none'
+    try:
+        recent_upload = Files.objects.filter(to_user_id=request.user).order_by('-created_at')[:3]
+    except:
+        recent_upload = 'none'
+    text = requests.get(
+        'https://raw.githubusercontent.com/onhout/google-10000-english/master/google-10000-english-usa-no-swears-long.txt')
+    text_array = text.text.split('\n')
+    random.shuffle(text_array)
+    korean = requests.post('https://openapi.naver.com/v1/language/translate',
+                           data={'source': 'en', 'target': 'ko', 'text': text_array[0]},
+                           headers={'X-Naver-Client-Id': NAVER_CLIENT_ID, 'X-Naver-Client-Secret': NAVER_CLIENT_SECRET})
+    translated_korean = korean.json()
+
+    chinese = requests.post('https://openapi.naver.com/v1/language/translate',
+                            data={'source': 'ko', 'target': 'zh-CN',
+                                  'text': translated_korean['message']['result']['translatedText']},
+                            headers={'X-Naver-Client-Id': NAVER_CLIENT_ID,
+                                     'X-Naver-Client-Secret': NAVER_CLIENT_SECRET})
+    translated_chinese = chinese.json()
+    return render(request, 'dashboad/user_dashboard.html', {
+        'next_meeting': next_meeting,
+        'latest_outline': latest_outline,
+        'parent_outline': parent_outline,
+        'recent_upload': recent_upload,
+        'wordofday': {
+            'eng': text_array[0],
+            'kor': translated_korean['message']['result']['translatedText'],
+            'chi': translated_chinese['message']['result']['translatedText'],
+        }
+    })
+
+
+@login_required
+def contact_us(request):
+    return render(request, 'dashboad/contact_us.html', {
+
     })
