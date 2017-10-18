@@ -6062,7 +6062,7 @@ Created using IcoMoon - icomoon.io
         margin-bottom: 15px;
         padding-top: 0;
         height: 150px;
-        overflow-y: scroll;
+        overflow-y: inherit;
     }
     .sidebar-collapse .navbar .dropdown.show .dropdown-menu:before,
     .sidebar-collapse .navbar .dropdown .dropdown-menu:before {

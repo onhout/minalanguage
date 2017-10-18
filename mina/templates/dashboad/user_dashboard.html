@@ -28,6 +28,9 @@
                                 {{ next_meeting }}{% endif %}</h4>
                         <p class="card-text">Your
                             next {{ next_meeting.book_type }} {{ next_meeting.class_type|capfirst }} class
+                            {% if user.is_staff %}
+                                with {{ next_meeting.user.get_full_name }}
+                            {% endif %}
                             happens
                             {% if next_meeting.start %}{{ next_meeting.start | naturaltime }}{% else %}
                                 {{ next_meeting }}{% endif %}</p>
@@ -42,19 +45,22 @@
             <div class="card">
                 <h5 class="card-header">Most Recent Class</h5>
                 <div class="card-body">
-                    {% if latest_outline != 'none' %}
+                    {% if latest_outline.outline != 'none' %}
                         <h4 class="card-title">
-                            {{ latest_outline.name|capfirst }}</h4>
+                            {{ latest_outline.outline.name|capfirst }}</h4>
                         <p class="card-text">Your most recent class
-                            covered {{ latest_outline.name|capfirst }}
+                            covered {{ latest_outline.outline.name|capfirst }}
                             from
                             {% if parent_outline != 'none' %}
                                 {{ parent_outline.name|capfirst }}
                             {% else %}
-                                {{ latest_outline.program|capfirst }}
+                                {{ latest_outline.outline.program|capfirst }}
+                            {% endif %}
+                            {% if user.is_staff %}
+                                with {{ latest_outline.progress.student.get_full_name }}
                             {% endif %}
                         </p>
-                        <a href="{% url 'list_outline' latest_outline.program %}" class="btn btn-primary">See
+                        <a href="{% url 'list_outline' latest_outline.outline.program %}" class="btn btn-primary">See
                             Entire Outline</a>
                     {% else %}
                         <h4 class="card-title">You did not complete a class</h4>

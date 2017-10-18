@@ -79,7 +79,7 @@ $(function () {
                         calculateDuration(eventData);
                         calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
                     } else {
-                        $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after another event', 'danger'));
+                        $('.errors').append(new ALERT('Meeting cannot be booked/edited 30 minutes before or after another event', 'danger'));
                         calendar.fullCalendar('unselect');
                     }
 
@@ -99,8 +99,8 @@ $(function () {
             if (moment(event.start).subtract(12, 'hour') < moment()) {
                 $('.errors').append(new ALERT('Cannot move to previous dates or at least twelve hours before start time, sorry.', 'danger'));
                 revertFunc()
-            } else if (checkOverlap(event)) {
-                $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after another event', 'danger'));
+            } else if (checkOverlap(event) > 1 /*reason being that the node being moved counts as 1*/) {
+                $('.errors').append(new ALERT('Meeting cannot be booked/edited 30 minutes before or after another event', 'danger'));
                 revertFunc()
             } else {
                 $.ajax({
@@ -125,8 +125,8 @@ $(function () {
             if (moment(event.start).subtract(12, 'hour') < moment()) {
                 $('.errors').append(new ALERT('Cannot move to previous dates or at least twelve hours before start time, sorry.', 'danger'));
                 revertFunc()
-            } else if (checkOverlap(event)) {
-                $('.errors').append(new ALERT('Meeting cannot be booked 30 minutes before or after another event', 'danger'));
+            } else if (checkOverlap(event) > 1 /*reason being that the node being moved counts as 1*/) {
+                $('.errors').append(new ALERT('Meeting cannot be booked/edited 30 minutes before or after another event', 'danger'));
                 revertFunc()
             } else {
                 $.ajax({
@@ -176,7 +176,7 @@ $(function () {
                 if (calEvent.subscription) {
                     class_type = $('<div/>', {
                         class: 'text-warning',
-                        text: 'Sorry, currently subscription events cannot switch between Chinese or Korean'
+                        text: 'Sorry, subscription events cannot switch between classes currently, contact Mina Jeong for more info.'
                     })
                 } else {
                     class_type = $('<div class="form-group">' +
@@ -274,7 +274,7 @@ $(function () {
             var estart = new Date(evStart);
             var eend = new Date(evEnd);
 
-            return (Math.round(estart) / 1000 < Math.round(end) / 1000 && Math.round(eend) > Math.round(start));
+            return (((Math.round(estart) / 1000) < (Math.round(end) / 1000)) && (Math.round(eend) > Math.round(start)));
         });
         return overlap.length
     }

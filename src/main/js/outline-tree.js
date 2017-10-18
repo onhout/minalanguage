@@ -1,5 +1,6 @@
 var CSRF_TOKEN = require('../../globals/csrf_token.js').default;
 var MODAL = require('../../globals/Modal.js').default;
+var ALERT = require('../../globals/Alert.js').default;
 
 
 $(function () {
@@ -67,6 +68,7 @@ $(function () {
                 };
                 $.post('/outline/edit/', postData, function (rtdata) {
                     if (rtdata.success) {
+                        $('.errors').append(new ALERT('Node successfully added', 'success'));
                         data.node.data.program = rtdata.program;
                         data.node.data.nodeid = rtdata.nodeID
                     }
@@ -153,20 +155,26 @@ $(function () {
                     var postData = {};
 
                     if (data.hitMode == "over") {
+                        //data.otherNode = node thats being dragged
+                        //node = targeting node
                         postData = {
                             csrfmiddlewaretoken: csrftoken,
                             name: data.otherNode.title,
-                            program: data.otherNode.data.program,
+                            program: node.data.program,
                             outline_id: data.otherNode.data.nodeid,
                             parent: node.data.nodeid
                         };
                     }
-
-                    $.post('/outline/edit/', postData, function (rtdata) {
-                        if (rtdata.success) {
-                            data.otherNode.moveTo(node, data.hitMode);
-                        }
-                    });
+                    if (data.otherNode.parent.parent) {
+                        $.post('/outline/edit/', postData, function (rtdata) {
+                            if (rtdata.success) {
+                                $('.errors').append(new ALERT('Node successfully moved', 'success'));
+                                data.otherNode.moveTo(node, data.hitMode);
+                            }
+                        });
+                    } else {
+                        $('.errors').append(new ALERT('Root node cannot move into another root node', 'danger'));
+                    }
                 }
 
             }
@@ -203,7 +211,7 @@ $(function () {
                     var node = $.ui.fancytree.getNode(opt.$trigger);
                     var rootnode = tree.fancytree('getRootNode').getFirstChild();
                     if (node.key == rootnode.key) {
-                        alert("Can't add item into root node");
+                        $('.errors').append(new ALERT('Can\'t add item into root node', 'danger'));
                     } else if ($('#treeData').data('student_id') > 0 && node.data.inlineedit != false) {
                         var modal_id = 'relate-items';
                         var modal = new MODAL('Confirm', '', modal_id);
@@ -234,7 +242,7 @@ $(function () {
 
                         })
                     } else {
-                        alert('Cannot associate the current node to a file')
+                        $('.errors').append(new ALERT('Cannot associate the current node to a file', 'danger'));
                     }
                 }
             },
@@ -244,7 +252,7 @@ $(function () {
                     var node = $.ui.fancytree.getNode(opt.$trigger);
                     var rootnode = tree.fancytree('getRootNode').getFirstChild();
                     if (node.key == rootnode.key) {
-                        alert("Can't add item into root node");
+                        $('.errors').append(new ALERT('Can\'t add item into root node', 'danger'));
                     } else if ($('#treeData').data('student_id') > 0 && node.data.inlineedit != false) {
                         var modal_id = 'relate-items';
                         var modal = new MODAL('Confirm', '', modal_id);
@@ -275,7 +283,7 @@ $(function () {
 
                         })
                     } else {
-                        alert('Cannot associate the current node to a meeting')
+                        $('.errors').append(new ALERT('Cannot associate the current node to a meeting', 'danger'));
                     }
                 }
             },
@@ -294,13 +302,14 @@ $(function () {
                     var rootnode = tree.fancytree('getRootNode').getFirstChild();
 
                     if (node.key == rootnode.key) {
-                        alert("Can't remove root node");
+                        $('.errors').append(new ALERT('Can\'t remove root node', 'danger'));
                     } else if (node.data.inlineedit != false) {
                         $.post('/outline/remove/', {
                             csrfmiddlewaretoken: csrftoken,
                             outline_id: node.data.nodeid
                         }, function (rtdata) {
                             if (rtdata.success) {
+                                $('.errors').append(new ALERT('Node removed', 'success'));
                                 node.remove();
                             }
                         });
@@ -311,6 +320,7 @@ $(function () {
                         };
                         $.post('/outline/remove_related/', postData, function (rtdata) {
                             if (rtdata.success) {
+                                $('.errors').append(new ALERT('Node removed', 'success'));
                                 node.remove();
                             }
                         });

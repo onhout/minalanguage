@@ -23,6 +23,7 @@ class FileUpload {
             },
             done: function (e, data) {  /* PROCESS THE RESPONSE FROM THE SERVER */
                 if (data.result.status == 'success') {
+                    $('.errors').append(new Alert('File successfully uploaded', 'success'));
                     var fileTableRow = new FileTableRow(data, csrf_token);
                     $('#file_table tbody').prepend(fileTableRow);
                 }
@@ -37,6 +38,7 @@ class FileUpload {
             var href = '/file/delete/' + file_id + '/';
             $.post(href, csrftoken, function (data) {
                 if (data.success) {
+                    $('.errors').append(new Alert('File successfully deleted', 'danger'));
                     $(self).closest('tr').remove();
                     if ($('.js-upload-files').hasClass('disabled')) {
                         $('.js-upload-files').removeClass('disabled')

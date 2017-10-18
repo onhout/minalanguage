@@ -28,8 +28,6 @@
                             <a class="dropdown-item" href="{% url 'show_calendar' %}">Book/edit a meeting</a>
                         </div>
                     </li>
-
-
                     {% if user.is_staff %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'manage_files' %}">User List</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'outline_overview' %}">Outline
@@ -58,7 +56,15 @@
                                aria-haspopup="true"
                                aria-expanded="false">{{ user.get_full_name }}</a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href={% url 'user_home' %}>Home</a>
+                                <a class="dropdown-item" href={% url 'user_home' %}>Overview</a>
+                                <div class="d-block d-sm-none">
+                                    <a class="dropdown-item {% if request.get_full_path == user_meetings %}active{% endif %}"
+                                       href="{% url 'list_meetings' %}">Appointments</a>
+                                    <a class="dropdown-item {% if request.get_full_path == file_url %}active{% endif %}"
+                                       href="{% url 'file_list' %}">Files</a>
+                                    <a class="dropdown-item {% if request.get_full_path == contact_us %}active{% endif %}"
+                                       href="{% url 'contact_us' %}">Contact us</a>
+                                </div>
                                 <a class="dropdown-item" href={% url 'user_logout' %}>Logout</a>
                             </div>
                         </li>

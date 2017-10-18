@@ -28,7 +28,7 @@ NAVER_CLIENT_SECRET = config('NAVER_CLIENT_SECRET')
 
 def user_login(request):
     if request.user.is_authenticated and not request.user.is_anonymous:
-        return redirect('show_calendar')
+        return redirect('user_home')
     else:
         return render(request, 'index.html', {
         })
@@ -49,7 +49,8 @@ def send_message(request):
         person = request.POST.get('person')
         email = request.POST.get('email')
         subject = "Message received on MinaJeong.com"
-        message = "(%s:%s) sent you the following message: \n Subject: \"%s\" \n Message: \"%s\"" % (person, email, request.POST.get('subject'), request.POST.get('message'))
+        message = "(%s:%s) sent you the following message: \n Subject: \"%s\" \n Message: \"%s\"" % (
+            person, email, request.POST.get('subject'), request.POST.get('message'))
         send_mail(
             subject,
             message,
@@ -590,20 +591,30 @@ def edit_progress(request):
 @login_required
 def user_home(request):
     try:
-        next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
+        if request.user.is_staff:
+            next_meeting = Booking.objects.filter(start__gt=datetime.today())[0]
+        else:
+            next_meeting = Booking.objects.filter(user=request.user, start__gt=datetime.today())[0]
     except:
         next_meeting = 'none'
     try:
-        latest_outline = Outline.objects.get(
-            id=Progress.objects.filter(student=request.user).order_by('-updated_at')[0].outline_id)
+        progress = Progress.objects.all().order_by('-updated_at')[0]
+        if request.user.is_staff:
+            latest_outline = Outline.objects.get(id=progress.outline_id)
+        else:
+            latest_outline = Outline.objects.get(id=progress.outline_id)
     except:
+        progress = 'none'
         latest_outline = 'none'
     try:
         parent_outline = Outline.objects.get(id=latest_outline.parent_id)
     except:
         parent_outline = 'none'
     try:
-        recent_upload = Files.objects.filter(to_user_id=request.user).order_by('-created_at')[:3]
+        if request.user.is_staff:
+            recent_upload = Files.objects.all().order_by('-created_at')[:3]
+        else:
+            recent_upload = Files.objects.filter(to_user_id=request.user).order_by('-created_at')[:3]
     except:
         recent_upload = 'none'
     text = requests.get(
@@ -623,7 +634,10 @@ def user_home(request):
     translated_chinese = chinese.json()
     return render(request, 'dashboad/user_dashboard.html', {
         'next_meeting': next_meeting,
-        'latest_outline': latest_outline,
+        'latest_outline': {
+            'outline': latest_outline,
+            'progress': progress
+        },
         'parent_outline': parent_outline,
         'recent_upload': recent_upload,
         'wordofday': {
