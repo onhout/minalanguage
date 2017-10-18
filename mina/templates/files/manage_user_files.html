@@ -24,27 +24,29 @@
                    data-url="{% url 'upload_files' this_user.id %}"
                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
         </div>
-        <table class="table table-bordered table-striped table-hover" id="file_table">
-            <thead>
-            <tr>
-                <th>File</th>
-                <th>Date Uploaded</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for file in file_list %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover" id="file_table">
+                <thead>
                 <tr>
-                    <td><a href="http://minalanguage.s3.amazonaws.com/{{ file.file }}">{{ file.name }}</a></td>
-                    <td>{{ file.created_at }}</td>
-                    <td><a href="{% url 'delete_file' file.id %}"
-                           data-csrftoken='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'
-                           data-file_id="{{ file.id }}"
-                           class="btn btn-danger delete_file">Delete</a></td>
+                    <th>File</th>
+                    <th>Date Uploaded</th>
+                    <th>Action</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for file in file_list %}
+                    <tr>
+                        <td><a href="http://minalanguage.s3.amazonaws.com/{{ file.file }}">{{ file.name }}</a></td>
+                        <td>{{ file.created_at }}</td>
+                        <td><a href="{% url 'delete_file' file.id %}"
+                               data-csrftoken='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'
+                               data-file_id="{{ file.id }}"
+                               class="btn btn-danger delete_file">Delete</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% render_bundle 'files' %}
 {% endblock %}

@@ -5,99 +5,105 @@
     <h1 class="text-center">Manage User Files</h1>
     {% if user_list %}
         <h4>Students</h4>
-        <table class="table table-striped table-bordered table-sm table-responsive">
-            <thead>
-            <tr>
-                <th>First name</th>
-                <th class="hidden-xs">Last name</th>
-                <th class="hidden-xs">Username/Email</th>
-                <th class="hidden-xs">Last login</th>
-                <th class="hidden-xs">Total Files</th>
-                <th class="hidden-xs">Total Paid</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in user_list %}
-                {% if user.totalPaid.totalPaid %}
-                    <tr>
-                        <td>{{ user.first_name }}</td>
-                        <td class="hidden-xs">{{ user.last_name }}</td>
-                        <td class="hidden-xs">{{ user.username }}</td>
-                        <td class="hidden-xs">{{ user.last_login }}</td>
-                        <td class="hidden-xs">{{ user.totalFiles }}</td>
-                        <td class="hidden-xs">
-                            ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
-                            <div class="dropdown" style="display:inline">
-                                <button class="btn btn-info dropdown-toggle" type="button" id="studentDropDownButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Progress
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="studentDropDownButton">
-                                    {% for program in program_list %}
-                                        <a class="dropdown-item"
-                                           href="{% url 'show_outline' program.program %}?student_id={{ user.id }}">
-                                            {{ program.name }}
-                                        </a>
-                                    {% endfor %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th>First name</th>
+                    <th class="hidden-xs">Last name</th>
+                    <th class="hidden-xs">Username/Email</th>
+                    <th class="hidden-xs">Last login</th>
+                    <th class="hidden-xs">Total Files</th>
+                    <th class="hidden-xs">Total Paid</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in user_list %}
+                    {% if user.totalPaid.totalPaid %}
+                        <tr>
+                            <td>{{ user.first_name }}</td>
+                            <td class="hidden-xs">{{ user.last_name }}</td>
+                            <td class="hidden-xs">{{ user.username }}</td>
+                            <td class="hidden-xs">{{ user.last_login }}</td>
+                            <td class="hidden-xs">{{ user.totalFiles }}</td>
+                            <td class="hidden-xs">
+                                ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
+                                <div class="dropdown" style="display:inline">
+                                    <button class="btn btn-info dropdown-toggle" type="button"
+                                            id="studentDropDownButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Progress
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="studentDropDownButton">
+                                        {% for program in program_list %}
+                                            <a class="dropdown-item"
+                                               href="{% url 'show_outline' program.program %}?student_id={{ user.id }}">
+                                                {{ program.name }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
         <h4>Whatever people</h4>
-        <table class="table table-striped table-bordered table-sm table-responsive">
-            <thead>
-            <tr>
-                <th>First name</th>
-                <th class="hidden-xs">Last name</th>
-                <th class="hidden-xs">Username/Email</th>
-                <th class="hidden-xs">Last login</th>
-                <th class="hidden-xs">Total Files</th>
-                <th class="hidden-xs">Total Paid</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in user_list %}
-                {% if not user.is_staff and not user.totalPaid.totalPaid %}
-                    <tr class="text-muted" style="font-style: italic">
-                        <td>{{ user.first_name }}</td>
-                        <td class="hidden-xs">{{ user.last_name }}</td>
-                        <td class="hidden-xs">{{ user.username }}</td>
-                        <td class="hidden-xs">{{ user.last_login }}</td>
-                        <td class="hidden-xs">{{ user.totalFiles }}</td>
-                        <td class="hidden-xs">
-                            ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
-                            <div class="dropdown" style="display:inline">
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false" id="whateverDropDown">
-                                    Classes
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="whateverDropDown">
-                                    {% for program in program_list %}
-                                        <a class="dropdown-item"
-                                           href="{% url 'show_outline' program.program %}?student_id={{ user.id }}">
-                                            {{ program.name }}
-                                        </a>
-                                    {% endfor %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm table-responsive">
+                <thead>
+                <tr>
+                    <th>First name</th>
+                    <th class="hidden-xs">Last name</th>
+                    <th class="hidden-xs">Username/Email</th>
+                    <th class="hidden-xs">Last login</th>
+                    <th class="hidden-xs">Total Files</th>
+                    <th class="hidden-xs">Total Paid</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in user_list %}
+                    {% if not user.is_staff and not user.totalPaid.totalPaid %}
+                        <tr class="text-muted" style="font-style: italic">
+                            <td>{{ user.first_name }}</td>
+                            <td class="hidden-xs">{{ user.last_name }}</td>
+                            <td class="hidden-xs">{{ user.username }}</td>
+                            <td class="hidden-xs">{{ user.last_login }}</td>
+                            <td class="hidden-xs">{{ user.totalFiles }}</td>
+                            <td class="hidden-xs">
+                                ${% if user.totalPaid.totalPaid %}{{ user.totalPaid.totalPaid }}{% else %}0{% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'manage_user_files' user.id %}" class="btn btn-primary">Upload Files</a>
+                                <div class="dropdown" style="display:inline">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" id="whateverDropDown">
+                                        Classes
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="whateverDropDown">
+                                        {% for program in program_list %}
+                                            <a class="dropdown-item"
+                                               href="{% url 'show_outline' program.program %}?student_id={{ user.id }}">
+                                                {{ program.name }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
     {% render_bundle 'files' %}
 {% endblock %}

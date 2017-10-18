@@ -5,73 +5,80 @@
     <h1>Appointment List</h1>
     {% if meetings %}
         <h4>Upcoming</h4>
-        <table class="table table-hover table-striped table-bordered">
-            <thead>
-            <tr>
-                <th>Begin Time</th>
-                <th>End Time</th>
-                <th>Class Location</th>
-                <th>Meeting Type</th>
-                <th>Class Type</th>
-                {% if user.is_staff %}
-                    <th>Student</th>
-                    <th>Action</th>
-                {% endif %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for meeting in meetings %}
-                {% if not meeting.is_in_past %}
-                    <tr>
-                        <td>{{ meeting.start }}</td>
-                        <td>{{ meeting.end }}</td>
-                        <td>{{ meeting.class_location }}</td>
-                        <td>{{ meeting.book_type }}</td>
-                        <td>{{ meeting.class_type }}</td>
-                        {% if user.is_staff %}
-                            <td>{{ meeting.user.get_full_name }}</td>
-                            <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
-                        {% endif %}
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Begin Time</th>
+                    <th>End Time</th>
+                    <th>Class Location</th>
+                    <th>Meeting Type</th>
+                    <th>Class Type</th>
+                    {% if user.is_staff %}
+                        <th>Student</th>
+                        <th>Action</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for meeting in meetings %}
+                    {% if not meeting.is_in_past %}
+                        <tr>
+                            <td>{{ meeting.start|date:"m/d/y, P" }}</td>
+                            <td>{{ meeting.end|date:"m/d/y, P" }}</td>
+                            <td>{{ meeting.class_location }}</td>
+                            <td>{{ meeting.book_type }}</td>
+                            <td>{{ meeting.class_type }}</td>
+                            {% if user.is_staff %}
+                                <td>{{ meeting.user.get_full_name }}</td>
+                                <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <h4>Past</h4>
-        <table class="table table-hover table-striped table-bordered">
-            <thead>
-            <tr>
-                <th>Begin Time</th>
-                <th>End Time</th>
-                <th>Class Location</th>
-                <th>Meeting Type</th>
-                <th>Class Type</th>
-                {% if user.is_staff %}
-                    <th>Student</th>
-                    <th>Action</th>
-                {% endif %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for meeting in meetings %}
-                {% if meeting.is_in_past %}
-                    <tr class="text-danger">
-                        <td>{{ meeting.start }}</td>
-                        <td>{{ meeting.end }}</td>
-                        <td>{{ meeting.class_location }}</td>
-                        <td>{{ meeting.book_type }}</td>
-                        <td>{{ meeting.class_type }}</td>
-                        {% if user.is_staff %}
-                            <td>{{ meeting.user.get_full_name }}</td>
-                            <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a></td>
-                        {% endif %}
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Begin Time</th>
+                    <th>End Time</th>
+                    <th>Class Location</th>
+                    <th>Meeting Type</th>
+                    <th>Class Type</th>
+                    {% if user.is_staff %}
+                        <th>Student</th>
+                        <th>Action</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for meeting in meetings %}
+                    {% if meeting.is_in_past %}
+                        <tr class="text-danger">
+                            <td>{{ meeting.start|date:"m/d/y, P" }}</td>
+                            <td>{{ meeting.end|date:"m/d/y, P" }}</td>
+                            <td>{{ meeting.class_location }}</td>
+                            <td>{{ meeting.book_type }}</td>
+                            <td>{{ meeting.class_type }}</td>
+                            {% if user.is_staff %}
+                                <td>{{ meeting.user.get_full_name }}</td>
+                                <td><a href="{% url 'remove_meeting' meeting.id %}" class="btn btn-danger">Remove</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <h4>Subscriptions</h4>
         {% if subscription_list %}
+            <div class="table-responsive">
             <table class="table table-hover table-striped table-bordered">
             <thead>
             <tr>
@@ -87,7 +94,6 @@
             </tr>
             </thead>
             <tbody>
-
             {% for meeting in subscription_list %}
                 <tr class="text-success">
                     <td>{{ meeting.start|date:"P" }}</td>
@@ -107,12 +113,12 @@
                     {% endif %}
                 </tr>
             {% endfor %}
-
             </tbody>
         {% else %}
             <tr>Nothing yet</tr>
         {% endif %}
     </table>
+    </div>
     {% else %}
         <h1 class="text-center">Nothing yet! Book some meetings!</h1>
     {% endif %}
