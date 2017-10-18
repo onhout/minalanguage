@@ -57,7 +57,7 @@
                                aria-expanded="false">{{ user.get_full_name }}</a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" href={% url 'user_home' %}>Overview</a>
-                                <div class="d-block d-sm-none">
+                                <div class="d-lg-none">
                                     <a class="dropdown-item {% if request.get_full_path == user_meetings %}active{% endif %}"
                                        href="{% url 'list_meetings' %}">Appointments</a>
                                     <a class="dropdown-item {% if request.get_full_path == file_url %}active{% endif %}"

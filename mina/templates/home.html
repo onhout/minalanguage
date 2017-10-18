@@ -9,7 +9,7 @@
 
     {% load humanize %}
     <div class="row">
-        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+        <nav class="col-sm-3 col-md-2 d-none d-lg-block bg-light sidebar">
             <ul class="nav nav-tabs flex-column">
                 <li class="nav-item">
                     <a class="nav-link {% if request.get_full_path == user_home %}active{% endif %}" href="{% url 'user_home' %}">Overview <span class="sr-only">(current)</span></a>
@@ -31,7 +31,7 @@
 {#            </ul>#}
         </nav>
 
-        <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main">
+        <main class="col-12 ml-lg-auto col-lg-10 pt-3" role="main">
             {% block user_home %}{% endblock %}
         </main>
     </div>

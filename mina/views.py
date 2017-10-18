@@ -618,7 +618,7 @@ def user_home(request):
     except:
         recent_upload = 'none'
     text = requests.get(
-        'https://raw.githubusercontent.com/onhout/google-10000-english/master/google-10000-english-usa-no-swears-long.txt')
+        'https://raw.githubusercontent.com/onhout/google-10000-english/master/google-10000-english-usa-no-swears-medium.txt')
     text_array = text.text.split('\n')
     random.shuffle(text_array)
     korean = requests.post('https://openapi.naver.com/v1/language/translate',
