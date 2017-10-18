@@ -8,7 +8,7 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        main: ['main/js/main'],
+        main: ['main/js/main', 'main/less/dashboard.less'],
         files: ['main/js/files', 'main/less/files.less'],
         calendar: ['main/js/calendar', 'main/less/calendar.less'],
         outlinetree: ['main/js/outline-tree', 'main/less/outline-tree.less'],
