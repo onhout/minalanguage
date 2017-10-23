@@ -598,10 +598,11 @@ def user_home(request):
     except:
         next_meeting = 'none'
     try:
-        progress = Progress.objects.all().order_by('-updated_at')[0]
         if request.user.is_staff:
+            progress = Progress.objects.all().order_by('-updated_at')[0]
             latest_outline = Outline.objects.get(id=progress.outline_id)
         else:
+            progress = Progress.objects.filter(student=request.user, passed=1).order_by('-updated_at')[0]
             latest_outline = Outline.objects.get(id=progress.outline_id)
     except:
         progress = 'none'

@@ -16,4 +16,4 @@ class CSRF_TOKEN {
     }
 }
 
-export default CSRF_TOKEN
+export default CSRF_TOKEN 
