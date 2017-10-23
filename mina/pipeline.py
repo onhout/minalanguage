@@ -1,9 +1,3 @@
-from urllib.request import urlopen, HTTPError
-from uuid import uuid4
-
-from django.core.files.base import ContentFile
-from django.template.defaultfilters import slugify
-
 from mina.models import Profile
 
 
@@ -33,24 +27,25 @@ def get_profile_data(backend, details, response, uid, user, *args, **kwargs):
 def get_profile_avatar(backend, details, response,
                        uid, user, *args, **kwargs):
     url = None
-    profile = user.profile
-    profile.profile_photo.delete(False)
-    if backend.__class__.__name__ == 'FacebookOAuth2':
-        url = "http://graph.facebook.com/%s/picture?type=large" % \
-              response.get('id')
-
-    if backend.__class__.__name__ == 'GoogleOAuth2':
-        url = response.get('image').get('url')
-        url = url.replace('sz=50', 'sz=200')
-    if url:
-        try:
-            avatar = urlopen(url)
-            rstring = uuid4().hex
-            profile.profile_photo.save(slugify(rstring + '_p') + '.jpg',
-                                       ContentFile(avatar.read()))
-            profile.save()
-        except HTTPError:
-            pass
+    # CONCURRENT PROBLEM, FIX LATER
+    # profile = user.profile
+    # profile.profile_photo.delete(False)
+    # if backend.__class__.__name__ == 'FacebookOAuth2':
+    #     url = "http://graph.facebook.com/%s/picture?type=large" % \
+    #           response.get('id')
+    #
+    # if backend.__class__.__name__ == 'GoogleOAuth2':
+    #     url = response.get('image').get('url')
+    #     url = url.replace('sz=50', 'sz=200')
+    # if url:
+    #     try:
+    #         avatar = urlopen(url)
+    #         rstring = uuid4().hex
+    #         profile.profile_photo.save(slugify(rstring + '_p') + '.jpg',
+    #                                    ContentFile(avatar.read()))
+    #         profile.save()
+    #     except HTTPError:
+    #         pass
 
 
 def check_if_profile_exist(backend, details, response, uid, user, *args, **kwargs):
