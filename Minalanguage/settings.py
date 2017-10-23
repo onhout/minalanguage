@@ -204,6 +204,9 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
+    'mina.pipeline.check_if_profile_exist',  # custom
+    'mina.pipeline.get_profile_data',  # custom
+    'mina.pipeline.get_profile_avatar',  # custom
 )
 
 SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'

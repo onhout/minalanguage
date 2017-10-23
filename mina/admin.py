@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Booking, Files, Customer, Outline, Progress, RelatedFiles
+from .models import Booking, Files, Customer, Outline, Progress, RelatedFiles, Profile
 
 
 class BookingAdmin(admin.ModelAdmin):
@@ -65,9 +65,19 @@ class RelatedFilesAdmin(admin.ModelAdmin):
     ]
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    model = Profile
+    list_display = [
+        'user',
+        'social_id',
+        'login_type',
+    ]
+
+
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(Files, FilesAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Outline, OutlineAdmin)
 admin.site.register(Progress, ProgressAdmin)
 admin.site.register(RelatedFiles, RelatedFilesAdmin)
+admin.site.register(Profile, ProfileAdmin)
