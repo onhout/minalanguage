@@ -607,16 +607,18 @@ def user_home(request):
     except:
         progress = 'none'
         latest_outline = 'none'
+
     try:
         parent_outline = Outline.objects.get(id=latest_outline.parent_id)
     except:
         parent_outline = 'none'
+
     try:
         if request.user.is_staff:
             recent_upload = Files.objects.all().order_by('-created_at')[:3]
         else:
-            recent_upload = Files.objects.filter(to_user_id=request.user).order_by('-created_at')[:3]
-    except:
+            recent_upload = Files.objects.filter(to_user=request.user).order_by('-created_at')[:3]
+    except Files.DoesNotExist:
         recent_upload = 'none'
     text = requests.get(
         'https://raw.githubusercontent.com/onhout/google-10000-english/master/google-10000-english-usa-no-swears-medium.txt')
@@ -633,7 +635,7 @@ def user_home(request):
                             headers={'X-Naver-Client-Id': NAVER_CLIENT_ID,
                                      'X-Naver-Client-Secret': NAVER_CLIENT_SECRET})
     translated_chinese = chinese.json()
-    return render(request, 'dashboad/user_dashboard.html', {
+    return render(request, 'dashboard/user_dashboard.html', {
         'next_meeting': next_meeting,
         'latest_outline': {
             'outline': latest_outline,
@@ -651,6 +653,10 @@ def user_home(request):
 
 @login_required
 def contact_us(request):
-    return render(request, 'dashboad/contact_us.html', {
+    return render(request, 'dashboard/contact_us.html', {})
 
-    })
+
+@login_required
+def free_consultation(request):
+    if request.user.profile.new_student:
+        return render(request, 'dashboard/free_consultation.html', {})

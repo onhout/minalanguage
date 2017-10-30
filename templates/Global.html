@@ -17,7 +17,7 @@
 {% block main_page %}{% endblock %}
 {% url 'user_home' as user_home %}
 <div class="container{% if request.get_full_path == user_home %}-fluid{% endif %} wrapper"
-     style="margin-top: 85px; min-height: 640px">
+     style="margin-top: 85px;">
     {% block content %}{% endblock %}
 </div>
 <div class="errors"></div>

@@ -2,33 +2,44 @@
 {% load render_bundle from webpack_loader %}
 {% block title %}Main Page{% endblock %}
 {% block content %}
-{% url 'user_home' as user_home %}
-{% url 'list_meetings' as user_meetings %}
-{% url 'file_list' as file_url %}
-{% url 'contact_us' as contact_us %}
+    {% url 'user_home' as user_home %}
+    {% url 'list_meetings' as user_meetings %}
+    {% url 'file_list' as file_url %}
+    {% url 'contact_us' as contact_us %}
+    {% url 'free_consultation' as consultation %}
 
     {% load humanize %}
     <div class="row">
         <nav class="col-sm-3 col-md-2 d-none d-lg-block bg-light sidebar">
             <ul class="nav nav-tabs flex-column">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.get_full_path == user_home %}active{% endif %}" href="{% url 'user_home' %}">Overview <span class="sr-only">(current)</span></a>
+                    <a class="nav-link {% if request.get_full_path == user_home %}active{% endif %}"
+                       href="{% url 'user_home' %}">Overview <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.get_full_path == user_meetings %}active{% endif %}" href="{% url 'list_meetings' %}">Appointments</a>
+                    <a class="nav-link {% if request.get_full_path == user_meetings %}active{% endif %}"
+                       href="{% url 'list_meetings' %}">Appointments</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.get_full_path == file_url %}active{% endif %}" href="{% url 'file_list' %}">Files</a>
+                    <a class="nav-link {% if request.get_full_path == file_url %}active{% endif %}"
+                       href="{% url 'file_list' %}">Files</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.get_full_path == contact_us %}active{% endif %}" href="{% url 'contact_us' %}">Contact us</a>
+                    <a class="nav-link {% if request.get_full_path == contact_us %}active{% endif %}"
+                       href="{% url 'contact_us' %}">Contact us</a>
                 </li>
             </ul>
+            {% if request.user.profile.new_student %}
+                <ul class="nav nav-tabs flex-column">
+                    <li class="nav-item">
+                        <a class="btn btn-danger nav-link {% if request.get_full_path == consultation %}active{% endif %}"
+                           href="{% url 'free_consultation' %}">Free Consultation</a>
+                    </li>
+                </ul>
+            {% endif %}
 
-{#            <ul class="nav nav-tabs flex-column">#}
-{#            </ul>#}
-{#            <ul class="nav nav-tabs flex-column">#}
-{#            </ul>#}
+            {#            <ul class="nav nav-tabs flex-column">#}
+            {#            </ul>#}
         </nav>
 
         <main class="col-12 ml-lg-auto col-lg-10 pt-3" role="main">
