@@ -1,47 +1,39 @@
-var MODAL = require('./Modal.js').default;
+const MODAL = require('./Modal.js').default;
 const navbar = $('nav.navbar');
 
-
-$(function () {
+$(() => {
     $('#contactForm').validate();
-
-    $('.navbar-nav li a').bind('click', function (event) {
-        var $anchor = $(this);
-        var nav = $($anchor.attr('href') != '#' ? $anchor.attr('href') != '#' : '');
+    $('.navbar-nav li a').bind('click', (event) => {
+        let $anchor = $(this);
+        let nav = $($anchor.attr('href') != '#' ? $anchor.attr('href') != '#' : '');
         if (nav.length) {
             $('html, body').stop().animate({
                 scrollTop: $($anchor.attr('href')).offset().top
             }, 1500, 'easeInOutExpo');
-
             event.preventDefault();
         }
     });
-
     // Add smooth scrolling to all links in navbar
-    $(".navbar a, a.mouse-hover, .overlay-detail a").on('click', function (event) {
+    $(".navbar a, a.mouse-hover, .overlay-detail a").on('click', (event) => {
         event.preventDefault();
-        var hash = this.hash;
+        let hash = this.hash;
         if (hash) {
             $('html, body').animate({
                 scrollTop: $(hash).offset().top
-            }, 900, function () {
+            }, 900, () => {
                 window.location.hash = hash;
             });
         }
-
     });
-
-    $('.btn-unsubscribe').click(function () {
-        var self = this;
-        var modal_id = 'unsub-' + $(this).data('id');
-        var modal = new MODAL('Unsubscribe', 'Are you sure you want to remove this subscription?', modal_id);
-        modal.run_modal(function (e) {
+    $('.btn-unsubscribe').click(() => {
+        let self = this;
+        let modal_id = 'unsub-' + $(this).data('id');
+        let modal = new MODAL('Unsubscribe', 'Are you sure you want to remove this subscription?', modal_id);
+        modal.run_modal((e) => {
             window.location.href = $(self).data('href')
         })
     });
-
-    $(function () {
+    $(() => {
         $('[data-toggle="tooltip"]').tooltip()
     })
 });
-

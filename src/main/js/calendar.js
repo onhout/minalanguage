@@ -1,17 +1,16 @@
-var ALERT = require('../../globals/Alert.js').default;
-var CSRF_TOKEN = require('../../globals/csrf_token.js').default;
-var PAYMENT = require('./payment.js').default;
-var MODAL = require('../../globals/Modal.js').default;
-
-$(function () {
-    var totalMinutes = 0;
-    var totalHours = 0;
-    var payment = new PAYMENT;
-    var csrftoken = CSRF_TOKEN.getCookie('csrftoken');
-    var payment_obj = {};
-    var eventList = [];
-    var calendar = $('#calendar');
-    var calendarOptions = {
+const ALERT = require('../../globals/Alert.js').default;
+const CSRF_TOKEN = require('../../globals/csrf_token.js').default;
+const PAYMENT = require('./payment.js').default;
+const MODAL = require('../../globals/Modal.js').default;
+$(() => {
+    let totalMinutes = 0;
+    let totalHours = 0;
+    let payment = new PAYMENT;
+    let csrftoken = CSRF_TOKEN.getCookie('csrftoken');
+    let payment_obj = {};
+    let eventList = [];
+    let calendar = $('#calendar');
+    let calendarOptions = {
         defaultView: 'agendaWeek',
         theme: true,
         header: {
@@ -43,19 +42,18 @@ $(function () {
         height: 'auto',
         firstDay: moment().day(),
         unselectAuto: false,
-        select: function (start, end, jsEvent, view) {
-            var modal_id = 'confirm-time';
+        select: (start, end, jsEvent, view) => {
+            let modal_id = 'confirm-time';
             if (moment(start).subtract(12, 'hour') > moment()) {
-                var eventData;
-                var modal = new MODAL('Confirm', '', modal_id);
-                var class_type = $('<div class="form-group">' +
+                let eventData;
+                let modal = new MODAL('Confirm', '', modal_id);
+                let class_type = $('<div class="form-group">' +
                     '<div class="category">Choose lecture type: </div>' +
                     '<select class="form-control" id="class_type">' +
                     '<option value="korean">Korean</option>' +
                     '<option value="chinese">Chinese</option>' +
                     '</select></div>');
-
-                var select = $('<div class="form-group">' +
+                let select = $('<div class="form-group">' +
                     '<div class="category">Choose booking type: </small>' +
                     '<select class="form-control" id="booking_type">' +
                     '<option value="online">Online</option>' +
@@ -64,9 +62,9 @@ $(function () {
                 modal.modal_body = $('<div>Do you want to book from ' +
                     moment(start).format('MM/DD hh:mm:ss') + ' to ' +
                     moment(end).format('MM/DD hh:mm:ss') + '?</div>').append("<hr>").append(class_type).append(select);
-                modal.run_modal(function () {
-                    var differenceInMs = moment(end).diff(moment(start)); // diff yields milliseconds
-                    var duration = moment.duration(differenceInMs);
+                modal.run_modal(() => {
+                    let differenceInMs = moment(end).diff(moment(start)); // diff yields milliseconds
+                    let duration = moment.duration(differenceInMs);
                     eventData = {
                         book_type: $('#booking_type').val() ? $('#booking_type').val() : 'online',
                         class_type: $('#class_type').val() ? $('#class_type').val() : 'korean',
@@ -82,9 +80,8 @@ $(function () {
                         $('.errors').append(new ALERT('Meeting cannot be booked/edited 30 minutes before or after another event', 'danger'));
                         calendar.fullCalendar('unselect');
                     }
-
                 });
-                $('#modal-' + modal_id).on('hide.bs.modal', function () {
+                $('#modal-' + modal_id).on('hide.bs.modal', () => {
                     calendar.fullCalendar('unselect');
                 });
             } else {
@@ -95,7 +92,7 @@ $(function () {
         events: '/meetings/get_meetings',
         startParam: 'from_date',
         endParam: 'to_date',
-        eventDrop: function (event, delta, revertFunc) {
+        eventDrop: (event, delta, revertFunc) => {
             if (moment(event.start).subtract(12, 'hour') < moment()) {
                 $('.errors').append(new ALERT('Cannot move to previous dates or at least twelve hours before start time, sorry.', 'danger'));
                 revertFunc()
@@ -111,7 +108,7 @@ $(function () {
                         start: moment(event.start).format('YYYY-MM-DD HH:mm:ss'),
                         end: moment(event.end).format('YYYY-MM-DD HH:mm:ss')
                     }
-                }).done(function (data) {
+                }).done((data) => {
                     if (data.status == 'success') {
                         $('.errors').append(new ALERT('Time changed successfully', 'success'));
                     } else {
@@ -119,9 +116,8 @@ $(function () {
                     }
                 })
             }
-
         },
-        eventResize: function (event, delta, revertFunc) {
+        eventResize: (event, delta, revertFunc) => {
             if (moment(event.start).subtract(12, 'hour') < moment()) {
                 $('.errors').append(new ALERT('Cannot move to previous dates or at least twelve hours before start time, sorry.', 'danger'));
                 revertFunc()
@@ -137,7 +133,7 @@ $(function () {
                         start: moment(event.start).format('YYYY-MM-DD HH:mm:ss'),
                         end: moment(event.end).format('YYYY-MM-DD HH:mm:ss')
                     }
-                }).done(function (data) {
+                }).done((data) => {
                     if (data.status == 'success') {
                         $('.errors').append(new ALERT('Time changed successfully', 'success'));
                     } else {
@@ -145,14 +141,13 @@ $(function () {
                     }
                 })
             }
-
         },
-        eventClick: function (calEvent, jsEvent, view) {
+        eventClick: (calEvent, jsEvent, view) => {
             if (calEvent.meeting_id) {
-                var modal_id = 'edit' + calEvent.start;
-                var modal = new MODAL('Edit Meeting', '', modal_id);
-                var edit_location = '';
-                var class_type = '';
+                let modal_id = 'edit' + calEvent.start;
+                let modal = new MODAL('Edit Meeting', '', modal_id);
+                let edit_location = '';
+                let class_type = '';
                 if (calEvent.is_admin && calEvent.type == 'in-person') {
                     edit_location = $('<div/>', {
                         class: 'form-group'
@@ -172,7 +167,6 @@ $(function () {
                 } else {
                     edit_location = '';
                 }
-
                 if (calEvent.subscription) {
                     class_type = $('<div/>', {
                         class: 'text-warning',
@@ -187,19 +181,16 @@ $(function () {
                         '</select></div>');
                 }
 
-
-                var select = $('<div class="form-group">' +
+                let select = $('<div class="form-group">' +
                     '<div class="category">Choose booking type: </div>' +
                     '<select class="form-control" id="booking_type">' +
                     '<option value="online">Online</option>' +
                     '<option value="in-person">In Person</option>' +
                     '</select></div>');
-
                 modal.modal_body = $('<div/>', {
                     text: "Currently this lecture is a " + calEvent.class_type + " lecture and its " + calEvent.type + "."
                 }).append('<hr>').append(class_type).append(select).append(edit_location);
-
-                modal.run_modal(function () {
+                modal.run_modal(() => {
                     $.ajax({
                         type: 'POST',
                         url: '/meetings/edit?meeting_id=' + calEvent.meeting_id,
@@ -209,7 +200,7 @@ $(function () {
                             class_type: $('#class_type').val() || '',
                             location: $('#location').val()
                         }
-                    }).done(function (data) {
+                    }).done((data) => {
                         if (data.status == 'success') {
                             $('.errors').append(new ALERT('Event settings changed successfully', 'success'));
                             calendar.fullCalendar('refetchEvents')
@@ -218,10 +209,9 @@ $(function () {
                         }
                     });
                 });
-                $('#modal-' + modal_id).on('hide.bs.modal', function () {
+                $('#modal-' + modal_id).on('hide.bs.modal', () => {
                     calendar.fullCalendar('unselect');
                 });
-
                 $('select > option[value="' + calEvent.type + '"]').attr('selected', 'selected');
                 $('select > option[value="' + calEvent.class_type + '"]').attr('selected', 'selected')
             }
@@ -231,30 +221,27 @@ $(function () {
     function calculateDuration(eventData) {
         eventData.id = 'temp';
         eventList.push(eventData);
-        var totalDurationHours = 0;
-        var totalDurationMinutes = 0;
-        $.each(eventList, function (i, event) {
-            var differenceInMs = moment(event.end).diff(moment(event.start)); // diff yields milliseconds
-            var duration = moment.duration(differenceInMs);
+        let totalDurationHours = 0;
+        let totalDurationMinutes = 0;
+        $.each(eventList, (i, event) => {
+            let differenceInMs = moment(event.end).diff(moment(event.start)); // diff yields milliseconds
+            let duration = moment.duration(differenceInMs);
             totalDurationHours += duration.asHours();
             totalDurationMinutes += duration.asMinutes();
             event.start = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
             event.end = moment(event.end).format('YYYY-MM-DD HH:mm:ss');
         });
-
         if (totalDurationHours >= 5) {
             totalDurationMinutes -= 20;
             totalMinutes -= 20;
         }
         totalMinutes = totalDurationMinutes;
         totalHours = totalDurationHours;
-
         $('#duration').text(totalDurationHours);
         $('#pay_btn').attr('disabled', false);
         totalDurationHours == 2 ? $('#subscribe_btn').attr('disabled', false) :
             $('#subscribe_btn').attr('disabled', true);
         $('.initial_dollar').text(totalDurationMinutes);
-
         payment_obj = {
             name: "Mina's Language Class",
             description: totalDurationHours + ' hours booking',
@@ -263,25 +250,23 @@ $(function () {
     }
 
     function checkOverlap(event) {
-        var start = new Date(event.start);
-        var end = new Date(event.end);
-
-        var overlap = calendar.fullCalendar('clientEvents', function (ev) {
-            var evEnd = moment(ev.end).add(30, 'minute');
-            var evStart = moment(ev.start).subtract(30, 'minute');
+        let start = new Date(event.start);
+        let end = new Date(event.end);
+        let overlap = calendar.fullCalendar('clientEvents', (ev) => {
+            let evEnd = moment(ev.end).add(30, 'minute');
+            let evStart = moment(ev.start).subtract(30, 'minute');
             if (ev == event)
                 return false;
-            var estart = new Date(evStart);
-            var eend = new Date(evEnd);
-
+            let estart = new Date(evStart);
+            let eend = new Date(evEnd);
             return (((Math.round(estart) / 1000) < (Math.round(end) / 1000)) && (Math.round(eend) > Math.round(start)));
         });
         return overlap.length
     }
 
-    $('#super_btn').click(function () {
+    $('#super_btn').click(() => {
         if (eventList.length > 0) {
-            $.each(eventList, function (i, v) {
+            $.each(eventList, (i, v) => {
                 $.ajax({
                     type: 'POST',
                     url: '/meetings/superbook/',
@@ -296,10 +281,8 @@ $(function () {
             });
             window.location.reload()
         }
-
     });
-
-    $('#reset_btn').click(function () {
+    $('#reset_btn').click(() => {
         calendar.fullCalendar('removeEvents', 'temp');
         eventList = [];
         $('#duration').text('0');
@@ -307,12 +290,10 @@ $(function () {
         $('#subscribe_btn').attr('disabled', true);
         $('.initial_dollar').text('0');
     });
-
     calendar.fullCalendar(calendarOptions);
-
-    $('#pay_btn').click(function (e) {
+    $('#pay_btn').click((e) => {
         payment.pay_obj = payment_obj;
-        payment.token_function = function (token) {
+        payment.token_function = (token) => {
             if (eventList.length > 0 && token) {
                 $.ajax({
                     type: 'POST',
@@ -325,7 +306,7 @@ $(function () {
                             cost: totalMinutes * 100
                         })
                     }
-                }).done(function () {
+                }).done(() => {
                     window.location.reload()
                 });
             }
@@ -333,14 +314,13 @@ $(function () {
         e.preventDefault();
         payment.create()
     });
-
-    $('#subscribe_btn').click(function (e) {
+    $('#subscribe_btn').click((e) => {
         payment.pay_obj = {
             name: "Mina's Language Class",
             description: 'Monthly Subscription - 8 sessions per month',
             amount: 40000
         };
-        payment.token_function = function (token) {
+        payment.token_function = (token) => {
             if (eventList.length > 0 && token) {
                 $.ajax({
                     type: 'POST',
@@ -353,7 +333,7 @@ $(function () {
                             cost: 40000
                         })
                     }
-                }).done(function () {
+                }).done(() => {
                     window.location.reload()
                 });
             }
@@ -362,7 +342,5 @@ $(function () {
         payment.create();
     });
 
-
 });
-
 

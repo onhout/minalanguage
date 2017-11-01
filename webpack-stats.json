@@ -1,1 +1,118 @@
-{"status":"done","publicPath":"/static/dist/","error":"ModuleBuildError","message":"Module build failed: \r\n\r\n\r\n.nav-tabs>.nav-item>\r\n                  ^\r\nUnrecognised input. Possibly missing something\r\n      in D:\\Documents\\Pycharm\\minalanguage\\src\\main\\less\\dashboard.less (line 36, column 20)","chunks":{"files":[{"name":"files-c4d8a51e53e06a251359.js","publicPath":"/static/dist/files-c4d8a51e53e06a251359.js","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\files-c4d8a51e53e06a251359.js"},{"name":"files-c4d8a51e53e06a251359.css","publicPath":"/static/dist/files-c4d8a51e53e06a251359.css","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\files-c4d8a51e53e06a251359.css"},{"name":"files-c4d8a51e53e06a251359.js.map","publicPath":"/static/dist/files-c4d8a51e53e06a251359.js.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\files-c4d8a51e53e06a251359.js.map"},{"name":"files-c4d8a51e53e06a251359.css.map","publicPath":"/static/dist/files-c4d8a51e53e06a251359.css.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\files-c4d8a51e53e06a251359.css.map"}],"calendar":[{"name":"calendar-c4d8a51e53e06a251359.js","publicPath":"/static/dist/calendar-c4d8a51e53e06a251359.js","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\calendar-c4d8a51e53e06a251359.js"},{"name":"calendar-c4d8a51e53e06a251359.css","publicPath":"/static/dist/calendar-c4d8a51e53e06a251359.css","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\calendar-c4d8a51e53e06a251359.css"},{"name":"calendar-c4d8a51e53e06a251359.js.map","publicPath":"/static/dist/calendar-c4d8a51e53e06a251359.js.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\calendar-c4d8a51e53e06a251359.js.map"},{"name":"calendar-c4d8a51e53e06a251359.css.map","publicPath":"/static/dist/calendar-c4d8a51e53e06a251359.css.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\calendar-c4d8a51e53e06a251359.css.map"}],"outlinetree":[{"name":"outlinetree-c4d8a51e53e06a251359.js","publicPath":"/static/dist/outlinetree-c4d8a51e53e06a251359.js","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\outlinetree-c4d8a51e53e06a251359.js"},{"name":"outlinetree-c4d8a51e53e06a251359.css","publicPath":"/static/dist/outlinetree-c4d8a51e53e06a251359.css","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\outlinetree-c4d8a51e53e06a251359.css"},{"name":"outlinetree-c4d8a51e53e06a251359.js.map","publicPath":"/static/dist/outlinetree-c4d8a51e53e06a251359.js.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\outlinetree-c4d8a51e53e06a251359.js.map"},{"name":"outlinetree-c4d8a51e53e06a251359.css.map","publicPath":"/static/dist/outlinetree-c4d8a51e53e06a251359.css.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\outlinetree-c4d8a51e53e06a251359.css.map"}],"main":[{"name":"main-c4d8a51e53e06a251359.js","publicPath":"/static/dist/main-c4d8a51e53e06a251359.js","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\main-c4d8a51e53e06a251359.js"},{"name":"main-c4d8a51e53e06a251359.css","publicPath":"/static/dist/main-c4d8a51e53e06a251359.css","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\main-c4d8a51e53e06a251359.css"},{"name":"main-c4d8a51e53e06a251359.js.map","publicPath":"/static/dist/main-c4d8a51e53e06a251359.js.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\main-c4d8a51e53e06a251359.js.map"},{"name":"main-c4d8a51e53e06a251359.css.map","publicPath":"/static/dist/main-c4d8a51e53e06a251359.css.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\main-c4d8a51e53e06a251359.css.map"}],"vendor":[{"name":"vendor-c4d8a51e53e06a251359.js","publicPath":"/static/dist/vendor-c4d8a51e53e06a251359.js","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\vendor-c4d8a51e53e06a251359.js"},{"name":"vendor-c4d8a51e53e06a251359.css","publicPath":"/static/dist/vendor-c4d8a51e53e06a251359.css","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\vendor-c4d8a51e53e06a251359.css"},{"name":"vendor-c4d8a51e53e06a251359.js.map","publicPath":"/static/dist/vendor-c4d8a51e53e06a251359.js.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\vendor-c4d8a51e53e06a251359.js.map"},{"name":"vendor-c4d8a51e53e06a251359.css.map","publicPath":"/static/dist/vendor-c4d8a51e53e06a251359.css.map","path":"D:\\Documents\\Pycharm\\minalanguage\\static\\dist\\vendor-c4d8a51e53e06a251359.css.map"}]}}
+{
+  "status": "done",
+  "publicPath": "/static/dist/",
+  "chunks": {
+    "main": [
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.js",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.js",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.js"
+      },
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.css",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.css",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.css"
+      },
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.js.map",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.js.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.js.map"
+      },
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.css.map",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.css.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.css.map"
+      }
+    ],
+    "files": [
+      {
+        "name": "files-ac6c9ef0f65b3b61efa1.js",
+        "publicPath": "/static/dist/files-ac6c9ef0f65b3b61efa1.js",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/files-ac6c9ef0f65b3b61efa1.js"
+      },
+      {
+        "name": "files-ac6c9ef0f65b3b61efa1.css",
+        "publicPath": "/static/dist/files-ac6c9ef0f65b3b61efa1.css",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/files-ac6c9ef0f65b3b61efa1.css"
+      },
+      {
+        "name": "files-ac6c9ef0f65b3b61efa1.js.map",
+        "publicPath": "/static/dist/files-ac6c9ef0f65b3b61efa1.js.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/files-ac6c9ef0f65b3b61efa1.js.map"
+      },
+      {
+        "name": "files-ac6c9ef0f65b3b61efa1.css.map",
+        "publicPath": "/static/dist/files-ac6c9ef0f65b3b61efa1.css.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/files-ac6c9ef0f65b3b61efa1.css.map"
+      }
+    ],
+    "calendar": [
+      {
+        "name": "calendar-ac6c9ef0f65b3b61efa1.js",
+        "publicPath": "/static/dist/calendar-ac6c9ef0f65b3b61efa1.js",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/calendar-ac6c9ef0f65b3b61efa1.js"
+      },
+      {
+        "name": "calendar-ac6c9ef0f65b3b61efa1.css",
+        "publicPath": "/static/dist/calendar-ac6c9ef0f65b3b61efa1.css",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/calendar-ac6c9ef0f65b3b61efa1.css"
+      },
+      {
+        "name": "calendar-ac6c9ef0f65b3b61efa1.js.map",
+        "publicPath": "/static/dist/calendar-ac6c9ef0f65b3b61efa1.js.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/calendar-ac6c9ef0f65b3b61efa1.js.map"
+      },
+      {
+        "name": "calendar-ac6c9ef0f65b3b61efa1.css.map",
+        "publicPath": "/static/dist/calendar-ac6c9ef0f65b3b61efa1.css.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/calendar-ac6c9ef0f65b3b61efa1.css.map"
+      }
+    ],
+    "outlinetree": [
+      {
+        "name": "outlinetree-ac6c9ef0f65b3b61efa1.js",
+        "publicPath": "/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.js",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.js"
+      },
+      {
+        "name": "outlinetree-ac6c9ef0f65b3b61efa1.css",
+        "publicPath": "/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.css",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.css"
+      },
+      {
+        "name": "outlinetree-ac6c9ef0f65b3b61efa1.js.map",
+        "publicPath": "/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.js.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.js.map"
+      },
+      {
+        "name": "outlinetree-ac6c9ef0f65b3b61efa1.css.map",
+        "publicPath": "/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.css.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.css.map"
+      }
+    ],
+    "vendor": [
+      {
+        "name": "vendor-ac6c9ef0f65b3b61efa1.js",
+        "publicPath": "/static/dist/vendor-ac6c9ef0f65b3b61efa1.js",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/vendor-ac6c9ef0f65b3b61efa1.js"
+      },
+      {
+        "name": "vendor-ac6c9ef0f65b3b61efa1.css",
+        "publicPath": "/static/dist/vendor-ac6c9ef0f65b3b61efa1.css",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/vendor-ac6c9ef0f65b3b61efa1.css"
+      },
+      {
+        "name": "vendor-ac6c9ef0f65b3b61efa1.js.map",
+        "publicPath": "/static/dist/vendor-ac6c9ef0f65b3b61efa1.js.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/vendor-ac6c9ef0f65b3b61efa1.js.map"
+      },
+      {
+        "name": "vendor-ac6c9ef0f65b3b61efa1.css.map",
+        "publicPath": "/static/dist/vendor-ac6c9ef0f65b3b61efa1.css.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/vendor-ac6c9ef0f65b3b61efa1.css.map"
+      }
+    ]
+  },
+  "error": "ModuleBuildError",
+  "message": "Module build failed: At-rule without name (5107:3)\n\n  5105 | \t\t-moz-animation-fill-mode: forwards;\n  5106 | \t\tanimation-fill-mode: forwards;\n> 5107 | \t}@\tkeyframes topbar-x {\n       | \t ^\n  5108 | \t\t0% {top: 0px;\n  5109 | \t\ttransform: rotate(0deg);\n  5110 | \t}\n"
+}

@@ -275,7 +275,7 @@ def get_all_meetings(request):
                     "is_admin": request.user.is_staff
                 }
             elif meeting.user == request.user and (
-                        meeting.start + timedelta(hours=2)) > datetime.now() and meeting.repeat is False:
+                meeting.start + timedelta(hours=2)) > datetime.now() and meeting.repeat is False:
                 extendability = {
                     "start": meeting.start.strftime('%Y-%m-%d %H:%M:%S'),
                     "end": meeting.end.strftime('%Y-%m-%d %H:%M:%S'),

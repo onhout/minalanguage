@@ -1,6 +1,6 @@
 class Payment {
     constructor() {
-        this.token_function = function (token) {
+        this.token_function = (token) => {
             console.log(token)
         };
         this.pay_obj = {};
@@ -15,11 +15,9 @@ class Payment {
             token: self.token_function
         });
         self.pay_configure.open(self.pay_obj);
-
-        window.addEventListener('popstate', function () {
+        window.addEventListener('popstate', () => {
             self.pay_configure.close();
         });
     }
 }
-
 export default Payment

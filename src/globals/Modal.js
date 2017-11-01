@@ -9,7 +9,6 @@ class Modal {
             'class': 'title title-up',
             'text': title
         });
-
         this.close_button = $('<button/>', {
             'class': 'btn btn-default btn-raised',
             'data-dismiss': 'modal',
@@ -18,7 +17,7 @@ class Modal {
     }
 
     run_modal(callback) {
-        var self = this;
+        let self = this;
         self.modal = $('<div/>', {
             'class': 'modal fade in',
             'id': 'modal-' + self.id
@@ -56,10 +55,9 @@ class Modal {
                         }).click(callback)))));
         self.modal.appendTo($('body'));
         $('#modal-' + self.id).modal('show');
-        $('#modal-' + self.id).on('hide.bs.modal', function () {
+        $('#modal-' + self.id).on('hide.bs.modal', () => {
             self.modal.remove();
         })
     }
 }
-
 export default Modal

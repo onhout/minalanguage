@@ -2,7 +2,7 @@
 {% load render_bundle from webpack_loader %}
 {% block title %}List meetings{% endblock %}
 {% block user_home %}
-    <h1 class="text-center">Appointment List</h1>
+    <h1>Appointment List</h1>
     {% if meetings %}
         <h4>Upcoming</h4>
         <div class="table-responsive">
@@ -120,6 +120,7 @@
     </table>
     </div>
     {% else %}
-        <h3 class="text-center">Nothing yet! Book some meetings!</h3>
+        <h3 class="text-center">Nothing yet! <a href="{% url 'book_meeting' %}">Book</a> a meeting and start your
+            journey!</h3>
     {% endif %}
 {% endblock %}

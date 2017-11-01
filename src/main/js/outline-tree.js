@@ -1,12 +1,10 @@
-var CSRF_TOKEN = require('../../globals/csrf_token.js').default;
-var MODAL = require('../../globals/Modal.js').default;
-var ALERT = require('../../globals/Alert.js').default;
+const CSRF_TOKEN = require('../../globals/csrf_token.js').default;
+const MODAL = require('../../globals/Modal.js').default;
+const ALERT = require('../../globals/Alert.js').default;
 
-
-$(function () {
-    var csrftoken = CSRF_TOKEN.getCookie('csrftoken');
-
-    var glyph_opts = {
+$(() => {
+    let csrftoken = CSRF_TOKEN.getCookie('csrftoken');
+    let glyph_opts = {
         map: {
             doc: "fa fa-file-o",
             docOpen: "fa fa-file-o",
@@ -24,8 +22,7 @@ $(function () {
             loading: "fa fa-spinner fa-pulse"
         }
     };
-    var tree = $('#tree');
-
+    let tree = $('#tree');
     tree.fancytree({
         checkbox: $('#treeData').data('student_id') > 0,
         selectMode: 3,
@@ -35,7 +32,7 @@ $(function () {
             adjustWidthOfs: 4,
             triggerStart: ["f2", "mac+enter", "shift+click"],
             inputCss: {minWidth: "5em"},
-            beforeEdit: function (event, data) {
+            beforeEdit: (event, data) => {
                 // Return false to prevent edit mode
                 if (data.node.data.inlineedit == false) {
                     return false;
@@ -43,9 +40,9 @@ $(function () {
                     return true;
                 }
             },
-            edit: function (event, data) {
+            edit: (event, data) => {
             },
-            beforeClose: function (event, data) {
+            beforeClose: (event, data) => {
                 // Return false to prevent cancel/save (data.input is available)
                 if (data.originalEvent.type === "mousedown") {
                     // We could prevent the mouse click from generating a blur event
@@ -57,16 +54,15 @@ $(function () {
 //                  data.save = false;
                 }
             },
-            save: function (event, data) {
-                var postData = {
+            save: (event, data) => {
+                let postData = {
                     csrfmiddlewaretoken: csrftoken,
                     name: data.input.val(),
                     program: data.node.parent.data.program,
                     outline_id: data.node.data.nodeid || '',
                     parent: data.node.parent.data.nodeid || ''
-
                 };
-                $.post('/outline/edit/', postData, function (rtdata) {
+                $.post('/outline/edit/', postData, (rtdata) => {
                     if (rtdata.success) {
                         $('.errors').append(new ALERT('Node successfully added', 'success'));
                         data.node.data.program = rtdata.program;
@@ -74,11 +70,10 @@ $(function () {
                     }
                 });
 
-
                 // Save data.input.val() or return false to keep editor open
                 // console.log("save...", this, data);
                 // Simulate to start a slow ajax request...
-                // setTimeout(function () {
+                // setTimeout(() => {
                 //     $(data.node.span).removeClass("pending");
                 //     // Let's pretend the server returned a slightly modified
                 //     // title:
@@ -88,7 +83,7 @@ $(function () {
                 // as title
                 return true;
             },
-            close: function (event, data) {
+            close: (event, data) => {
                 // Editor was removed
                 // if (data.save) {
                 //     // Since we started an async request, mark the node as preliminary
@@ -96,7 +91,6 @@ $(function () {
                 // }
             }
         },
-
         dnd: {
             autoExpandMS: 400,
             draggable: { // modify default jQuery draggable options
@@ -107,15 +101,14 @@ $(function () {
             },
             preventRecursiveMoves: true, // Prevent dropping nodes on own descendants
             preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
-
-            dragStart: function (node, data) {
+            dragStart: (node, data) => {
                 // This function MUST be defined to enable dragging for the tree.
                 // Return false to cancel dragging of node.
 //    if( data.originalEvent.shiftKey ) ...
 //    if( node.isFolder() ) { return false; }
                 return true;
             },
-            dragEnter: function (node, data) {
+            dragEnter: (node, data) => {
                 /* data.otherNode may be null for non-fancytree droppables.
                  * Return false to disallow dropping on node. In this case
                  * dragOver and dragLeave are not called.
@@ -138,22 +131,21 @@ $(function () {
                 // Accept everything:
                 // return true;
             },
-            dragExpand: function (node, data) {
+            dragExpand: (node, data) => {
                 // return false to prevent auto-expanding data.node on hover
             },
-            dragOver: function (node, data) {
+            dragOver: (node, data) => {
             },
-            dragLeave: function (node, data) {
+            dragLeave: (node, data) => {
             },
-            dragStop: function (node, data) {
+            dragStop: (node, data) => {
             },
-            dragDrop: function (node, data) {
+            dragDrop: (node, data) => {
                 // This function MUST be defined to enable dropping of items on the tree.
                 // data.hitMode is 'before', 'after', or 'over'.
                 // We could for example move the source to the new target:
                 if (data.otherNode.data.inlineedit != false) {
-                    var postData = {};
-
+                    let postData = {};
                     if (data.hitMode == "over") {
                         //data.otherNode = node thats being dragged
                         //node = targeting node
@@ -166,7 +158,7 @@ $(function () {
                         };
                     }
                     if (data.otherNode.parent.parent) {
-                        $.post('/outline/edit/', postData, function (rtdata) {
+                        $.post('/outline/edit/', postData, (rtdata) => {
                             if (rtdata.success) {
                                 $('.errors').append(new ALERT('Node successfully moved', 'success'));
                                 data.otherNode.moveTo(node, data.hitMode);
@@ -176,70 +168,65 @@ $(function () {
                         $('.errors').append(new ALERT('Root node cannot move into another root node', 'danger'));
                     }
                 }
-
             }
         },
-        select: function (event, data) {
+        select: (event, data) => {
             function postData(node) {
-                var postData = {
+                let postData = {
                     csrfmiddlewaretoken: csrftoken,
                     student_id: $('#treeData').data('student_id'),
                     outline_id: node.data.nodeid,
                     passed: node.selected
                 };
-                $.post('/progress/edit/', postData, function (data) {
-
+                $.post('/progress/edit/', postData, (data) => {
                 });
             }
 
             postData(data.node);
-
-            data.node.visit(function (node) {
+            data.node.visit((node) => {
                 if (node.data.inlineedit != false) {
                     postData(node)
                 }
             });
         }
     });
-
     $.contextMenu({
         selector: "#tree span.fancytree-title",
         items: {
             "relate_file": {
                 name: "Relate Files", icon: "fa-clone",
-                callback: function (key, opt) {
-                    var node = $.ui.fancytree.getNode(opt.$trigger);
-                    var rootnode = tree.fancytree('getRootNode').getFirstChild();
+                callback: (key, opt) => {
+                    let node = $.ui.fancytree.getNode(opt.$trigger);
+                    let rootnode = tree.fancytree('getRootNode').getFirstChild();
                     if (node.key == rootnode.key) {
                         $('.errors').append(new ALERT('Can\'t add item into root node', 'danger'));
                     } else if ($('#treeData').data('student_id') > 0 && node.data.inlineedit != false) {
-                        var modal_id = 'relate-items';
-                        var modal = new MODAL('Confirm', '', modal_id);
-                        $.get('/outline/get_related_items?student_id=' + $('#treeData').data('student_id'), function (data) {
-                            var related_files = $('<select class="form-control" id="related_files">' +
+                        let modal_id = 'relate-items';
+                        let modal = new MODAL('Confirm', '', modal_id);
+                        $.get('/outline/get_related_items?student_id=' + $('#treeData').data('student_id'), (data) => {
+                            let related_files = $('<select class="form-control" id="related_files">' +
                                 '</select>');
-                            var parsedFiles = JSON.parse(data.related_files);
+                            let parsedFiles = JSON.parse(data.related_files);
                             related_files.append(new Option('---Choose Files---', ''));
-                            $.each(parsedFiles, function (key, val) {
+                            $.each(parsedFiles, (key, val) => {
                                 related_files.append(new Option(val.name, val.id))
                             });
                             modal.modal_body = $('<h4>Choose a file to relate this to</h4>')
                                 .append("<hr>")
                                 .append('<p>Relate Files:</p>')
                                 .append(related_files);
-                            modal.run_modal(function () {
+                            modal.run_modal(() => {
                                 $.post('/outline/add_related/', {
                                     csrfmiddlewaretoken: csrftoken,
                                     student_id: $('#treeData').data('student_id'),
                                     outline_id: node.data.nodeid,
                                     file_id: $('#related_files').val()
-                                }, function (rtdata) {
+                                }, (rtdata) => {
                                     if (rtdata.success) {
                                         window.location.reload()
                                     }
                                 });
                             });
-
                         })
                     } else {
                         $('.errors').append(new ALERT('Cannot associate the current node to a file', 'danger'));
@@ -248,39 +235,38 @@ $(function () {
             },
             "relate_booking": {
                 name: "Relate Booking", icon: "fa-clone",
-                callback: function (key, opt) {
-                    var node = $.ui.fancytree.getNode(opt.$trigger);
-                    var rootnode = tree.fancytree('getRootNode').getFirstChild();
+                callback: (key, opt) => {
+                    let node = $.ui.fancytree.getNode(opt.$trigger);
+                    let rootnode = tree.fancytree('getRootNode').getFirstChild();
                     if (node.key == rootnode.key) {
                         $('.errors').append(new ALERT('Can\'t add item into root node', 'danger'));
                     } else if ($('#treeData').data('student_id') > 0 && node.data.inlineedit != false) {
-                        var modal_id = 'relate-items';
-                        var modal = new MODAL('Confirm', '', modal_id);
-                        $.get('/outline/get_related_items?student_id=' + $('#treeData').data('student_id'), function (data) {
-                            var related_booking = $('<select class="form-control" id="related_booking">' +
+                        let modal_id = 'relate-items';
+                        let modal = new MODAL('Confirm', '', modal_id);
+                        $.get('/outline/get_related_items?student_id=' + $('#treeData').data('student_id'), (data) => {
+                            let related_booking = $('<select class="form-control" id="related_booking">' +
                                 '</select>');
-                            var parsedBooking = JSON.parse(data.related_booking);
+                            let parsedBooking = JSON.parse(data.related_booking);
                             related_booking.append(new Option('---Choose Meetings---', ''));
-                            $.each(parsedBooking, function (key, val) {
+                            $.each(parsedBooking, (key, val) => {
                                 related_booking.append(new Option(val.start + ' to ' + val.end, val.id))
                             });
                             modal.modal_body = $('<h4>Choose a file or a meeting to relate this to</h4>')
                                 .append("<hr>")
                                 .append('<p>Relate Meetings:</p>')
                                 .append(related_booking);
-                            modal.run_modal(function () {
+                            modal.run_modal(() => {
                                 $.post('/outline/add_related/', {
                                     csrfmiddlewaretoken: csrftoken,
                                     student_id: $('#treeData').data('student_id'),
                                     outline_id: node.data.nodeid,
                                     booking_id: $('#related_booking').val()
-                                }, function (rtdata) {
+                                }, (rtdata) => {
                                     if (rtdata.success) {
                                         window.location.reload()
                                     }
                                 });
                             });
-
                         })
                     } else {
                         $('.errors').append(new ALERT('Cannot associate the current node to a meeting', 'danger'));
@@ -290,35 +276,34 @@ $(function () {
             "sep1": "----",
             "edit": {
                 name: "Edit", icon: "edit",
-                callback: function (key, opt) {
-                    var node = $.ui.fancytree.getNode(opt.$trigger);
+                callback: (key, opt) => {
+                    let node = $.ui.fancytree.getNode(opt.$trigger);
                     node.editStart();
                 }
             },
             "delete": {
                 name: "Delete", icon: "delete",
-                callback: function (key, opt) {
-                    var node = $.ui.fancytree.getNode(opt.$trigger);
-                    var rootnode = tree.fancytree('getRootNode').getFirstChild();
-
+                callback: (key, opt) => {
+                    let node = $.ui.fancytree.getNode(opt.$trigger);
+                    let rootnode = tree.fancytree('getRootNode').getFirstChild();
                     if (node.key == rootnode.key) {
                         $('.errors').append(new ALERT('Can\'t remove root node', 'danger'));
                     } else if (node.data.inlineedit != false) {
                         $.post('/outline/remove/', {
                             csrfmiddlewaretoken: csrftoken,
                             outline_id: node.data.nodeid
-                        }, function (rtdata) {
+                        }, (rtdata) => {
                             if (rtdata.success) {
                                 $('.errors').append(new ALERT('Node removed', 'success'));
                                 node.remove();
                             }
                         });
                     } else if (node.data.inlineedit == false) {
-                        var postData = {
+                        let postData = {
                             csrfmiddlewaretoken: csrftoken,
                             related_id: node.data.nodeid
                         };
-                        $.post('/outline/remove_related/', postData, function (rtdata) {
+                        $.post('/outline/remove_related/', postData, (rtdata) => {
                             if (rtdata.success) {
                                 $('.errors').append(new ALERT('Node removed', 'success'));
                                 node.remove();
@@ -329,16 +314,14 @@ $(function () {
             },
         }
     });
-
-    $('#btnAddChild').click(function () {
-        var node = tree.fancytree("getActiveNode");
+    $('#btnAddChild').click(() => {
+        let node = tree.fancytree("getActiveNode");
         if (!node) {
-            var root = tree.fancytree('getRootNode');
+            let root = tree.fancytree('getRootNode');
             root.getFirstChild().editCreateNode("child", "");
         } else {
             node.editCreateNode("child", "");
         }
-
     });
 })
 ;

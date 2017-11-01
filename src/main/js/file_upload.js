@@ -1,30 +1,28 @@
-var csrf_token = require('../../globals/csrf_token').default;
-var Alert = require('../../globals/Alert').default;
-
+const csrf_token = require('../../globals/csrf_token').default;
+const Alert = require('../../globals/Alert').default;
 class FileUpload {
     constructor(element) {
-        var id_file = $(element);
+        let id_file = $(element);
         id_file.click();
-
         id_file.fileupload({
             dataType: 'json',
             sequentialUploads: true,
-            start: function (e) {
+            start: (e) => {
                 $('.progress-container').show();
             },
-            stop: function (e) {
+            stop: (e) => {
                 $('.progress-container').hide();
             },
-            progressall: function (e, data) {  /* UPDATE THE PROGRESS BAR */
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                var strProgress = progress + "%";
+            progressall: (e, data) => {  /* UPDATE THE PROGRESS BAR */
+                let progress = parseInt(data.loaded / data.total * 100, 10);
+                let strProgress = progress + "%";
                 $(".progress-bar").css({"width": strProgress});
                 $(".progress-text").text(strProgress)
             },
-            done: function (e, data) {  /* PROCESS THE RESPONSE FROM THE SERVER */
+            done: (e, data) => {  /* PROCESS THE RESPONSE FROM THE SERVER */
                 if (data.result.status == 'success') {
                     $('.errors').append(new Alert('File successfully uploaded', 'success'));
-                    var fileTableRow = new FileTableRow(data, csrf_token);
+                    let fileTableRow = new FileTableRow(data, csrf_token);
                     $('#file_table tbody').prepend(fileTableRow);
                 }
             }
@@ -32,11 +30,11 @@ class FileUpload {
     }
 
     static deleteFN(file_id, csrftoken, SELF) {
-        return function (e) {
+        return (e) => {
             e.preventDefault();
-            var self = this || SELF;
-            var href = '/file/delete/' + file_id + '/';
-            $.post(href, csrftoken, function (data) {
+            let self = this || SELF;
+            let href = '/file/delete/' + file_id + '/';
+            $.post(href, csrftoken, (data) => {
                 if (data.success) {
                     $('.errors').append(new Alert('File successfully deleted', 'danger'));
                     $(self).closest('tr').remove();
@@ -48,11 +46,9 @@ class FileUpload {
         }
     }
 }
-
 class FileTableRow {
-
     constructor(data, csrfToken) {
-        var self = this;
+        let self = this;
         this.row = $('<tr>');
         this.link = $('<a>', {
             href: data.result.url,
@@ -70,9 +66,7 @@ class FileTableRow {
             .append($('<td>').append(this.link))
             .append(this.updated)
             .append($('<td>').append(this.deleteBtn));
-
         return this._row;
     }
 }
-
 export default FileUpload
