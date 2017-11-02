@@ -2,28 +2,6 @@
   "status": "done",
   "publicPath": "/static/dist/",
   "chunks": {
-    "main": [
-      {
-        "name": "main-ac6c9ef0f65b3b61efa1.js",
-        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.js",
-        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.js"
-      },
-      {
-        "name": "main-ac6c9ef0f65b3b61efa1.css",
-        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.css",
-        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.css"
-      },
-      {
-        "name": "main-ac6c9ef0f65b3b61efa1.js.map",
-        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.js.map",
-        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.js.map"
-      },
-      {
-        "name": "main-ac6c9ef0f65b3b61efa1.css.map",
-        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.css.map",
-        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.css.map"
-      }
-    ],
     "files": [
       {
         "name": "files-ac6c9ef0f65b3b61efa1.js",
@@ -90,6 +68,28 @@
         "path": "/home/onhout/Documents/Minalanguage/static/dist/outlinetree-ac6c9ef0f65b3b61efa1.css.map"
       }
     ],
+    "main": [
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.js",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.js",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.js"
+      },
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.css",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.css",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.css"
+      },
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.js.map",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.js.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.js.map"
+      },
+      {
+        "name": "main-ac6c9ef0f65b3b61efa1.css.map",
+        "publicPath": "/static/dist/main-ac6c9ef0f65b3b61efa1.css.map",
+        "path": "/home/onhout/Documents/Minalanguage/static/dist/main-ac6c9ef0f65b3b61efa1.css.map"
+      }
+    ],
     "vendor": [
       {
         "name": "vendor-ac6c9ef0f65b3b61efa1.js",
@@ -112,7 +112,5 @@
         "path": "/home/onhout/Documents/Minalanguage/static/dist/vendor-ac6c9ef0f65b3b61efa1.css.map"
       }
     ]
-  },
-  "error": "ModuleBuildError",
-  "message": "Module build failed: At-rule without name (5107:3)\n\n  5105 | \t\t-moz-animation-fill-mode: forwards;\n  5106 | \t\tanimation-fill-mode: forwards;\n> 5107 | \t}@\tkeyframes topbar-x {\n       | \t ^\n  5108 | \t\t0% {top: 0px;\n  5109 | \t\ttransform: rotate(0deg);\n  5110 | \t}\n"
+  }
 }
