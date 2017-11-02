@@ -1,10 +1,10 @@
 const csrf_token = require('../../globals/csrf_token').default;
 const Alert = require('../../globals/Alert').default;
 class FileUpload {
-    constructor(element) {
-        let id_file = $(element);
-        id_file.click();
-        id_file.fileupload({
+
+    openDialog(element) {
+        $(element).click();
+        $(element).fileupload({
             dataType: 'json',
             sequentialUploads: true,
             start: (e) => {
@@ -29,10 +29,10 @@ class FileUpload {
         })
     }
 
-    static deleteFN(file_id, csrftoken, SELF) {
+    deleteFN(file_id, csrftoken, SELF) {
         return (e) => {
             e.preventDefault();
-            let self = this || SELF;
+            let self = SELF;
             let href = '/file/delete/' + file_id + '/';
             $.post(href, csrftoken, (data) => {
                 if (data.success) {
@@ -55,13 +55,18 @@ class FileTableRow {
             text: data.result.file_name
         });
         this.updated = $('<td>' + data.result.uploaded_at + '</td>');
+        var newupload = new FileUpload();
         this.deleteBtn = $('<a/>',
             {
                 'href': '#',
                 'class': 'btn btn-danger delete_file',
                 'text': 'Delete'
-            }).click(FileUpload.deleteFN(data.result.file_id,
-            {csrfmiddlewaretoken: '' + csrfToken.getCookie('csrftoken')}));
+            });
+        this.deleteBtn.click(newupload.deleteFN(data.result.file_id,
+            {csrfmiddlewaretoken: '' + csrfToken.getCookie('csrftoken')},
+            this.deleteBtn)
+        );
+
         this._row = this.row
             .append($('<td>').append(this.link))
             .append(this.updated)
