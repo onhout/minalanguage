@@ -7,7 +7,7 @@ class Payment {
     }
 
     create() {
-        var self = this;
+        let self = this;
         this.pay_configure = StripeCheckout.configure({
             key: 'pk_live_FIfPHyXp3JfYXIqWm688dCGB',
             image: 'https://stripe.com/img/documentation/checkout/marketplace.png',

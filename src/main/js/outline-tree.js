@@ -1,6 +1,6 @@
-const CSRF_TOKEN = require('../../globals/csrf_token.js').default;
-const MODAL = require('../../globals/Modal.js').default;
-const ALERT = require('../../globals/Alert.js').default;
+import CSRF_TOKEN from "../../globals/csrf_token.js";
+import MODAL from "../../globals/Modal.js";
+import ALERT from "../../globals/Alert.js";
 
 $(() => {
     let csrftoken = CSRF_TOKEN.getCookie('csrftoken');

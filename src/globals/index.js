@@ -1,4 +1,4 @@
-const MODAL = require('./Modal.js').default;
+import MODAL from "./Modal";
 const navbar = $('nav.navbar');
 
 $(() => {

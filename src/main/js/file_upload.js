@@ -1,5 +1,5 @@
-const csrf_token = require('../../globals/csrf_token').default;
-const Alert = require('../../globals/Alert').default;
+import csrf_token from "../../globals/csrf_token";
+import Alert from "../../globals/Alert";
 class FileUpload {
 
     openDialog(element) {
@@ -55,7 +55,7 @@ class FileTableRow {
             text: data.result.file_name
         });
         this.updated = $('<td>' + data.result.uploaded_at + '</td>');
-        var newupload = new FileUpload();
+        let newupload = new FileUpload();
         this.deleteBtn = $('<a/>',
             {
                 'href': '#',
