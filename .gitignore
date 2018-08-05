@@ -1,5 +1,6 @@
 env
 venv
+wenv
 *.pyc
 node_modules
 .env

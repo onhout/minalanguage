@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^logout$', views.user_logout, name='user_logout'),
     url(r'^send_message/', views.send_message, name='send_message'),
     url(r'^home/', views.user_home, name='user_home'),
+    url(r'^privacy_notice/', views.privacy_notice, name='privacy_notice'),
     url(r'^contact_us/', views.contact_us, name='contact_us'),
     url(r'^consultation/', views.free_consultation, name='free_consultation'),
     url(r'^calendar/$', views.show_calendar, name='show_calendar'),

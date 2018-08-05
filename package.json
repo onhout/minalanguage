@@ -4,6 +4,7 @@
   "description": "Mina Language",
   "main": "index.js",
   "scripts": {
+    "dev": "webpack --config webpack.local.config.js --progress --colors",
     "build": "webpack --config webpack.production.config.js --progress --colors",
     "postbuild": "gulp upload"
   },

@@ -39,6 +39,10 @@ def user_logout(request):
     return redirect('user_login')
 
 
+def privacy_notice(request):
+    return render(request, 'main_parts/privacy_notice.html', {})
+
+
 def send_message(request):
     recaptcha = request.POST.get('g-recaptcha-response')
     r = requests.post('https://www.google.com/recaptcha/api/siteverify', {
@@ -660,3 +664,4 @@ def contact_us(request):
 def free_consultation(request):
     if request.user.profile.new_student:
         return render(request, 'dashboard/free_consultation.html', {})
+
