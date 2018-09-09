@@ -1,3 +1,4 @@
+import '../less/outline-tree.less'
 import CSRF_TOKEN from "../../globals/csrf_token.js";
 import MODAL from "../../globals/Modal.js";
 import ALERT from "../../globals/Alert.js";

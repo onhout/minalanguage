@@ -1,7 +1,9 @@
+import '../less/calendar.less'
 import ALERT from "../../globals/Alert.js";
 import CSRF_TOKEN from "../../globals/csrf_token.js";
 import PAYMENT from "./payment.js";
 import MODAL from "../../globals/Modal.js";
+
 $(() => {
     let totalMinutes = 0;
     let totalHours = 0;

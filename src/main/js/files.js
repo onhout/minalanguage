@@ -1,3 +1,4 @@
+import '../less/files.less'
 import File_Upload from "./file_upload";
 
 $(()=> {

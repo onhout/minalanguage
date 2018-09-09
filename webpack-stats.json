@@ -4,62 +4,14 @@
   "chunks": {
     "vendor": [
       {
-        "name": "vendor-88f7d27ce8bb0db8804e.js",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-88f7d27ce8bb0db8804e.js",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-88f7d27ce8bb0db8804e.js"
+        "name": "vendor-4470b82b4c97ef2d44c4.js",
+        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-4470b82b4c97ef2d44c4.js",
+        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-4470b82b4c97ef2d44c4.js"
       },
       {
-        "name": "vendor-88f7d27ce8bb0db8804e.css",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-88f7d27ce8bb0db8804e.css",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-88f7d27ce8bb0db8804e.css"
-      }
-    ],
-    "main": [
-      {
-        "name": "main-88f7d27ce8bb0db8804e.js",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/main-88f7d27ce8bb0db8804e.js",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\main-88f7d27ce8bb0db8804e.js"
-      },
-      {
-        "name": "main-88f7d27ce8bb0db8804e.css",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/main-88f7d27ce8bb0db8804e.css",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\main-88f7d27ce8bb0db8804e.css"
-      }
-    ],
-    "files": [
-      {
-        "name": "files-88f7d27ce8bb0db8804e.js",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/files-88f7d27ce8bb0db8804e.js",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\files-88f7d27ce8bb0db8804e.js"
-      },
-      {
-        "name": "files-88f7d27ce8bb0db8804e.css",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/files-88f7d27ce8bb0db8804e.css",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\files-88f7d27ce8bb0db8804e.css"
-      }
-    ],
-    "calendar": [
-      {
-        "name": "calendar-88f7d27ce8bb0db8804e.js",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/calendar-88f7d27ce8bb0db8804e.js",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\calendar-88f7d27ce8bb0db8804e.js"
-      },
-      {
-        "name": "calendar-88f7d27ce8bb0db8804e.css",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/calendar-88f7d27ce8bb0db8804e.css",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\calendar-88f7d27ce8bb0db8804e.css"
-      }
-    ],
-    "outlinetree": [
-      {
-        "name": "outlinetree-88f7d27ce8bb0db8804e.js",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/outlinetree-88f7d27ce8bb0db8804e.js",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\outlinetree-88f7d27ce8bb0db8804e.js"
-      },
-      {
-        "name": "outlinetree-88f7d27ce8bb0db8804e.css",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/outlinetree-88f7d27ce8bb0db8804e.css",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\outlinetree-88f7d27ce8bb0db8804e.css"
+        "name": "vendor-4470b82b4c97ef2d44c4.css",
+        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-4470b82b4c97ef2d44c4.css",
+        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-4470b82b4c97ef2d44c4.css"
       }
     ]
   }

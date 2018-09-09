@@ -12,10 +12,6 @@ module.exports = {
     context: __dirname,
     mode: 'production',
     entry: {
-        main: ['main/js/main', 'main/less/dashboard.less'],
-        files: ['main/js/files', 'main/less/files.less'],
-        calendar: ['main/js/calendar', 'main/less/calendar.less'],
-        outlinetree: ['main/js/outline-tree', 'main/less/outline-tree.less'],
         vendor: [
             'jquery',
             'popper.js',
@@ -25,15 +21,15 @@ module.exports = {
             'nouislider',
             'jquery-ui-dist/jquery-ui',
             'jquery-validation',
-            'globals/now-ui-kit.js',
-            'globals/index.js',
-            'globals/index.less',
             'blueimp-file-upload',
             'lodash',
             'moment',
             'fullcalendar',
             'jquery.fancytree/dist/jquery.fancytree-all.js',
-            'jquery-contextmenu'
+            'jquery-contextmenu',
+            'globals/now-ui-kit.js',
+            'globals/index.js',
+            'globals/index.less'
         ]
     }, // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 

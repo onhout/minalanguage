@@ -1,16 +1,36 @@
+import '../main/js/calendar.js'
+import '../main/js/file_upload.js'
+import '../main/js/files.js'
+import '../main/js/main.js'
+import '../main/js/outline-tree.js'
+import '../main/js/payment.js'
 import MODAL from "./Modal";
+
 const navbar = $('nav.navbar');
 
 $(() => {
     $('#contactForm').validate();
-    $('.navbar-nav li a').bind('click', (event) => {
-        let $anchor = $(this);
-        let nav = $($anchor.attr('href') != '#' ? $anchor.attr('href') != '#' : '');
-        if (nav.length) {
-            $('html, body').stop().animate({
-                scrollTop: $($anchor.attr('href')).offset().top
-            }, 1500, 'easeInOutExpo');
-            event.preventDefault();
+    $('.navbar-nav li a:not(a.link)').click(event => {
+        const target = $(this.hash);
+        const self = $(this);
+        event.preventDefault();
+        if (self[0].hash && window.location.pathname == '/') {
+            $('html, body').animate({
+                scrollTop: target.offset().top
+            }, 1500, 'easeInOutExpo', function () {
+                // Callback after animation
+                // Must change focus!F
+                const $target = $(target);
+                $target.focus();
+                if ($target.is(":focus")) { // Checking if the target was focused
+                    return false;
+                } else {
+                    $target.attr('tabindex', '-1'); // Adding tabindex for elements not focusable
+                    $target.focus(); // Set focus again
+                }
+            });
+        } else {
+            window.location.href = self.attr('href');
         }
     });
     // Add smooth scrolling to all links in navbar
