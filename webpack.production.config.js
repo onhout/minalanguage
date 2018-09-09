@@ -3,10 +3,14 @@ const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const S3Plugin = require('webpack-s3-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
+require('dotenv').config();
 
 module.exports = {
     context: __dirname,
-
+    mode: 'production',
     entry: {
         main: ['main/js/main', 'main/less/dashboard.less'],
         files: ['main/js/files', 'main/less/files.less'],
@@ -36,7 +40,6 @@ module.exports = {
     output: {
         path: path.resolve('./static/dist/'),
         publicPath: 'https://s3-us-west-1.amazonaws.com/minalanguage/dist/',
-        chunkFilename: '[id]-[hash].chunk.js',
         filename: "[name]-[hash].js",
     },
 
@@ -55,32 +58,67 @@ module.exports = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: {
-                toplevel: true
+        new S3Plugin({
+            // Exclude uploading of html
+            exclude: /.*\.html$/,
+            // s3Options are required
+            s3Options: {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
             },
-            output: {
-                beautify: false,
-            }
-        }),
-
-        new OptimizeCssAssetsPlugin({
-            cssProcessorOptions: {discardComments: {removeAll: true}},
-        }),
-        new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor-[hash].js', Infinity}),
+            s3UploadOptions: {
+                Bucket: 'minalanguage'
+            },
+            basePath: 'dist'
+        })
     ],
+    optimization: {
+        splitChunks: {
+            chunks: "async",
+            minSize: 30000,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            automaticNameDelimiter: '~',
+            name: true,
+            cacheGroups: {
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
+                },
+                commons: {
+                    chunks: 'initial',
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendor',
+                }
+            }
+        },
+        minimizer: [
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: false // set to true if you want JS source maps
+            }),
+            new OptimizeCssAssetsPlugin({})
+        ]
+    },
 
     module: {
         rules: [
             {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'}, // to transform JSX into JS
             {
                 test: /\.less$/,
-                loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader!less-loader"})
+                loader: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader!less-loader!resolve-url-loader!less-loader?sourceMap"
+                })
             }, //to transform less into CSS
             {test: /\.(jpe|jpg|png|woff|woff2|eot|ttf|gif|svg)(\?.*$|$)/, loader: 'url-loader?limit=100000'},//changed the regex because of an issue of loading less-loader for font-awesome.
             {test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader"})},
         ],
     },
+
 
     resolve: {
         modules: [
