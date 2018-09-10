@@ -4,14 +4,14 @@
   "chunks": {
     "vendor": [
       {
-        "name": "vendor-4470b82b4c97ef2d44c4.js",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-4470b82b4c97ef2d44c4.js",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-4470b82b4c97ef2d44c4.js"
+        "name": "vendor-6ab32671fdfc46aecdcb.js",
+        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-6ab32671fdfc46aecdcb.js",
+        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-6ab32671fdfc46aecdcb.js"
       },
       {
-        "name": "vendor-4470b82b4c97ef2d44c4.css",
-        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-4470b82b4c97ef2d44c4.css",
-        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-4470b82b4c97ef2d44c4.css"
+        "name": "vendor-6ab32671fdfc46aecdcb.css",
+        "publicPath": "https://s3-us-west-1.amazonaws.com/minalanguage/dist/vendor-6ab32671fdfc46aecdcb.css",
+        "path": "C:\\Users\\onhout\\PycharmProjects\\minalanguage\\static\\dist\\vendor-6ab32671fdfc46aecdcb.css"
       }
     ]
   }
