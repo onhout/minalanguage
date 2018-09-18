@@ -57,8 +57,8 @@ requests-oauthlib==0.8.0
 rsa==3.4.2
 s3transfer==0.1.13
 six==1.11.0
-social-auth-app-django==1.1.0
-social-auth-core==1.2.0
+social-auth-app-django==2.1.0
+social-auth-core==1.7.0
 stripe==1.54.0
 tini==3.0.1
 uritemplate==3.0.0
